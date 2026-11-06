@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nutricion_db
+    ports:
+      - '127.0.0.1:5435:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+  db-test:
+    image: postgres:15
+    profiles: ['test']
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nutricion_test
+    ports:
+      - '127.0.0.1:5436:5432'
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d nutricion_test']
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  pgdata:

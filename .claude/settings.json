@@ -1,0 +1,10 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  }
+}
