@@ -22,7 +22,7 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 
 ## 3. Estado actual del repo
 
-- Next.js 16 creado con `create-next-app`, movido a `src/`. La home es un placeholder.
+- Next.js 16 creado con `create-next-app`, movido a `src/`.
 - Base técnica copiada y adaptada de *gestor-empanaderia* (T-1, ADR 0001): `AGENTS.md`, `docs/`, ESLint con
   reglas duras, lefthook, commitlint, CI, Vitest, Stryker, Playwright y las skills propias.
 - Prisma 7 configurado (`prisma/schema.prisma`, `prisma.config.ts`) con un solo modelo, `AdminUser` (T-3).
@@ -33,11 +33,13 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - "Mi cuenta" (US-5): en `/admin/cuenta` el admin cambia su email y su contraseña; cada cambio cierra las demás sesiones.
 - Tokens de `DESIGN.md` en `src/app/tokens.css` (T-2): colores, radios, sombras y Manrope; shadcn/ui inicializado
   sin componentes todavía. ESLint rechaza colores hex en el código.
-- Primer commit (`chore: estructura inicial del proyecto`) en `main` y `develop`, publicado en GitHub
-  (`paginalichi-dot/nutri-pagina`). Sin despliegue.
-- Sprint 1 cargado en `BACKLOG.md` a partir del primer pedido del cliente: hero con su nombre en gigante y su
-  frase (US-1), "Sobre mí" (US-2), scroll suave con aparición de secciones (US-3) y botón flotante "Reservá tu turno" (US-4).
-- La foto del hero ya está: `public/foto-cabecera.png`, recortada y sin fondo.
+- `main` sólo tiene el primer commit; todo lo demás está en `develop`, publicado en GitHub
+  (`paginalichi-dot/nutri-pagina`). `main` no se toca hasta que el dev revise el Sprint 1. Sin despliegue.
+- Sprint 1 hecho en `develop` (en revisión): la home tiene el hero con "LISANDRO LÓPEZ" en gigante detrás de la foto
+  y la frase del cliente en dos esquinas (US-1), "Sobre mí" con placeholder de foto (US-2), el botón flotante
+  "Reservá tu turno" hacia `/reservar` ("Próximamente", US-4) y la aparición de secciones con `data-reveal`, sólo CSS
+  (US-3). Componentes en `src/components/home/`.
+- Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
 
 ## 4. Stack
 

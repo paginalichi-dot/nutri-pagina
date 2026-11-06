@@ -5,9 +5,10 @@ import { Hero } from '@/components/home/hero';
 
 export default function Home(): ReactElement {
   return (
-    <main className='flex flex-1 flex-col bg-muted pb-28 md:pb-36'>
+    <main className='flex flex-1 flex-col'>
       <Hero />
       <About />
+      <div aria-hidden='true' data-testid='espacio-boton-flotante' className='h-28 bg-muted md:h-36' />
       <FloatingBookingButton />
     </main>
   );
