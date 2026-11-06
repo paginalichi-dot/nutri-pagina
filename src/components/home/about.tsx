@@ -24,7 +24,7 @@ export function About(): ReactElement {
       aria-labelledby='sobre-mi-titulo'
       className='rounded-t-hero-mobile bg-muted px-4 py-16 md:rounded-t-hero md:px-20 md:py-[108px]'
     >
-      <div className='mx-auto grid max-w-[1280px] items-start gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16'>
+      <div data-reveal className='mx-auto grid max-w-[1280px] items-start gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16'>
         <PhotoPlaceholder />
         <div className='flex max-w-[34rem] flex-col gap-5'>
           <h2 id='sobre-mi-titulo' className='text-[28px] leading-[1.5] font-medium md:text-[38.4px]'>

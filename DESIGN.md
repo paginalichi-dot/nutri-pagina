@@ -210,6 +210,16 @@ El panel es una herramienta de trabajo diario, así que usa una **versión silen
   cada una con su título 20px/500, los inputs de la tarjeta de login y su píldora Verde Lima "Guardar …". Es la única
   vista con dos píldoras Verde Lima: cada una cierra su propio formulario. El éxito va en una franja `bg-confirmed`.
 
+## Movimiento (US-3)
+
+- Scroll suave en toda la página (`scroll-behavior: smooth`).
+- Las secciones aparecen al entrar en pantalla con un fundido y 24px de desplazamiento, atado al scroll: termina
+  cuando la sección entró 240px. Para sumarlo a una sección nueva, alcanza con poner `data-reveal` en su contenido
+  (no en la banda de fondo). Vive en `src/app/motion.css`.
+- Todo va dentro de `prefers-reduced-motion: no-preference` y `@supports (animation-timeline: view())`: con
+  "reducir movimiento", sin JavaScript o en navegadores sin soporte, el contenido se ve directo.
+- Sólo se animan `opacity` y `transform`. El hero no se anima: es lo primero que se ve.
+
 ## Elevación
 
 - **Halo de píldora:** `rgba(0,0,0,0.05) 0px 6px 34px 0px`

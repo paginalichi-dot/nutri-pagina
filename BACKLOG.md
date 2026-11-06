@@ -302,12 +302,12 @@ El texto es el del pedido, textual, con una sola corrección: «López» con til
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-06 |
 | Tamaño       | S         |
 | Depende de   | US-2      |
-| Plan         | —         |
+| Plan         | [`docs/plans/US-3-scroll-suave.md`](docs/plans/US-3-scroll-suave.md) |
 | Merge        | —         |
 | Horas reales | —         |
 
@@ -316,15 +316,15 @@ aparezcan con un efecto sutil, de forma que la web sea agradable de mirar.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · Los saltos a anclas internas se desplazan con suavidad, con CSS nativo y sin dependencias nuevas en `package.json` · Estimación: 10 min · Completado: —
+- [x] **CA-1** · Los saltos a anclas internas se desplazan con suavidad, con CSS nativo y sin dependencias nuevas en `package.json` · Estimación: 10 min · Completado: 2026-11-06 22:43
 
-- [ ] **CA-2** · Cada sección de la home, salvo el hero, aparece al entrar en pantalla con un fundido y un desplazamiento corto (≤ 24px, ≤ 600 ms) · Estimación: 30 min · Completado: —
+- [x] **CA-2** · Cada sección de la home, salvo el hero, aparece al entrar en pantalla con un fundido y un desplazamiento corto (≤ 24px, atado al scroll: termina cuando la sección entró 240px) · Estimación: 30 min · Completado: 2026-11-06 22:43
 
-- [ ] **CA-3** · Con `prefers-reduced-motion: reduce` no hay desplazamiento animado ni aparición: el contenido se ve directo · Estimación: 15 min · Completado: —
+- [x] **CA-3** · Con `prefers-reduced-motion: reduce` no hay desplazamiento animado ni aparición: el contenido se ve directo · Estimación: 15 min · Completado: 2026-11-06 22:43
 
-- [ ] **CA-4** · Sin JavaScript o en un navegador sin soporte, todo el contenido queda visible: la animación nunca deja texto oculto · Estimación: 15 min · Completado: —
+- [x] **CA-4** · Sin JavaScript o en un navegador sin soporte, todo el contenido queda visible: la animación nunca deja texto oculto · Estimación: 15 min · Completado: 2026-11-06 22:43
 
-- [ ] **CA-5** · Las animaciones sólo usan `opacity` y `transform`, y el CLS de la home queda por debajo de 0.1 · Estimación: 10 min · Completado: —
+- [x] **CA-5** · Las animaciones sólo usan `opacity` y `transform`, y el CLS de la home queda por debajo de 0.1 · Estimación: 10 min · Completado: 2026-11-06 22:43
 
 ### US-4 · Botón flotante "Reservá tu turno"
 
