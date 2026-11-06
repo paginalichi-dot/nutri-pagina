@@ -22,7 +22,7 @@ export function About(): ReactElement {
     <section
       id='sobre-mi'
       aria-labelledby='sobre-mi-titulo'
-      className='mt-16 rounded-t-hero-mobile bg-muted px-4 py-16 md:mt-[108px] md:rounded-t-hero md:px-20 md:py-[108px]'
+      className='rounded-t-hero-mobile bg-muted px-4 py-16 md:rounded-t-hero md:px-20 md:py-[108px]'
     >
       <div className='mx-auto grid max-w-[1280px] items-start gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16'>
         <PhotoPlaceholder />

@@ -55,7 +55,7 @@ function Stage(): ReactElement {
 
 export function Hero(): ReactElement {
   return (
-    <section aria-labelledby='hero-title' className='bg-background p-4 md:p-[35px]'>
+    <section aria-labelledby='hero-title' className='bg-background p-4 pb-16 md:p-[35px] md:pb-[108px]'>
       <div className='relative isolate flex min-h-[calc(100svh-32px)] flex-col overflow-hidden rounded-hero-mobile bg-foreground px-6 pt-10 pb-10 md:h-[calc(100svh-70px)] md:min-h-[620px] md:rounded-hero md:p-0'>
         <Phrase lines={OPENING} className='md:top-14 md:left-16' />
         <Stage />

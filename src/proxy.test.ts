@@ -20,16 +20,17 @@ describe('proxy', () => {
     vi.stubEnv('JWT_SECRET', 'secreto-de-prueba-con-mas-de-32-caracteres');
   });
 
-  it('con un token válido en el panel deja pasar y renueva la cookie por 400 días', async () => {
+  it('al cargar una página del panel con un token válido deja pasar y renueva la cookie por 400 días', async () => {
     const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
-    const response = await proxy(request('/admin/cuenta', token));
+    const response = await proxy(request('/admin/cuenta', token, { headers: { 'sec-fetch-dest': 'document' } }));
     expect(passes(response)).toBe(true);
     expect(response.cookies.get('session')).toMatchObject({ value: token, maxAge: 34_560_000, httpOnly: true, secure: true });
   });
 
   it.each<[string, Init]>([
-    ['un POST (una action)', { method: 'POST' }],
-    ['una precarga o navegación interna (rsc)', { headers: { rsc: '1' } }],
+    ['un POST (una action)', { method: 'POST', headers: { 'sec-fetch-dest': 'document' } }],
+    ['una precarga o navegación interna', { headers: { 'sec-fetch-dest': 'empty', rsc: '1' } }],
+    ['un pedido sin sec-fetch-dest', {}],
   ])('en %s con token válido no renueva la cookie, para no revivir una sesión cerrada', async (_caso, init) => {
     const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
     const response = await proxy(request('/admin', token, init));
@@ -58,6 +59,7 @@ describe('proxy', () => {
   it.each([
     ['el sitio público, aunque haya token', request('/', 'cualquiera')],
     ['una ruta que sólo empieza parecido', request('/administracion', 'cualquiera')],
+    ['/reservar, que es pública', request('/reservar', 'cualquiera')],
   ])('no toca %s', async (_caso, incoming) => {
     const response = await proxy(incoming);
     expect(passes(response)).toBe(true);

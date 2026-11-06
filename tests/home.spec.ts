@@ -24,7 +24,7 @@ test.describe('home', () => {
     test(`"${phrase.slice(0, 24)}…" se lee completa y nada la tapa`, async ({ page }) => {
       await page.goto('/');
       const paragraph = page.locator('p', { hasText: phrase.split(' ').slice(0, 3).join(' ') }).first();
-      await paragraph.scrollIntoViewIfNeeded();
+      await paragraph.evaluate((element) => element.scrollIntoView({ block: 'center' }));
       await expect(paragraph).toBeVisible();
       expect((await paragraph.textContent())?.replace(/\s+/g, ' ').trim()).toBe(phrase);
       expect(await isOnTop(paragraph)).toBe(true);

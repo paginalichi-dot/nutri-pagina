@@ -128,6 +128,13 @@ de la foto y del nombre. En mobile todo va en columna y la foto se funde con Fun
 de sucursal en el hero: la acción de reservar es el botón flotante (US-4). La línea de presentación queda
 "Lisandro López · Licenciado en Nutrición" hasta que llegue la matrícula.
 
+### Botón flotante de reserva (US-4)
+La "Píldora Verde Lima con flecha" fija abajo al centro de la home durante todo el scroll: "Reservá tu turno", 64px
+de alto en mobile y 88px en desktop, disco blanco con flecha y halo de píldora, respetando el área segura de iOS. Lleva
+a `/reservar`. Es la única píldora Verde Lima de la home: reemplaza a la píldora "Reservá tu primera consulta" del hero
+y al botón "RESERVAR TURNO" del nav. La home deja abajo un espacio Hueso más alto que el botón para que nunca tape el
+final. El foco suma un halo blanco y un anillo Verde Bosque, así se ve sobre Verde Bosque y sobre Hueso.
+
 ### Píldora Verde Lima con flecha (CTA principal)
 Relleno Verde Lima, 88px de alto (64px en mobile), radio 9999px, padding 0 37px, label Verde Bosque 18px/500 y un círculo blanco con flecha Verde Bosque en el extremo derecho. Sombra `rgba(0,0,0,0.05) 0 6px 34px`. Sin borde. **Una sola por pantalla.**
 

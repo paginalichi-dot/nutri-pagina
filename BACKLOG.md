@@ -330,12 +330,12 @@ aparezcan con un efecto sutil, de forma que la web sea agradable de mirar.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-06 |
 | Tamaño       | S         |
 | Depende de   | T-2       |
-| Plan         | —         |
+| Plan         | [`docs/plans/US-4-boton-reserva.md`](docs/plans/US-4-boton-reserva.md) |
 | Merge        | —         |
 | Horas reales | —         |
 
@@ -347,15 +347,15 @@ llegue la reserva, esa página pasa a ser el flujo de reserva y el botón no cam
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · En la home, una píldora Verde Lima «Reservá tu turno» con disco de flecha queda fija abajo al centro, visible desde que carga y durante todo el scroll, en 375px y en desktop · Estimación: 30 min · Completado: —
+- [x] **CA-1** · En la home, una píldora Verde Lima «Reservá tu turno» con disco de flecha queda fija abajo al centro, visible desde que carga y durante todo el scroll, en 375px y en desktop · Estimación: 30 min · Completado: 2026-11-06 22:38
 
-- [ ] **CA-2** · El botón nunca tapa contenido: al llegar al final de la página, lo último queda visible por encima del botón (incluido el área segura de iOS) · Estimación: 15 min · Completado: —
+- [x] **CA-2** · El botón nunca tapa contenido: al llegar al final de la página, lo último queda visible por encima del botón (incluido el área segura de iOS) · Estimación: 15 min · Completado: 2026-11-06 22:38
 
-- [ ] **CA-3** · Es un link a `/reservar`, se alcanza con teclado, tiene foco visible en Verde Bosque y un área táctil de al menos 44×44px · Estimación: 10 min · Completado: —
+- [x] **CA-3** · Es un link a `/reservar`, se alcanza con teclado, tiene foco visible en Verde Bosque y un área táctil de al menos 44×44px · Estimación: 10 min · Completado: 2026-11-06 22:38
 
-- [ ] **CA-4** · `/reservar` muestra una página «Próximamente» con un título, una línea que avisa que la reserva online está por llegar y un link para volver al inicio; está registrada en `src/proxy.ts` como pública y no muestra el botón flotante · Estimación: 30 min · Completado: —
+- [x] **CA-4** · `/reservar` muestra una página «Próximamente» con un título, una línea que avisa que la reserva online está por llegar y un link para volver al inicio; está registrada en `src/proxy.ts` como pública y no muestra el botón flotante · Estimación: 30 min · Completado: 2026-11-06 22:38
 
-- [ ] **CA-5** · `DESIGN.md` suma el componente «Botón flotante de reserva» y aclara que reemplaza a la píldora del hero y al botón «RESERVAR TURNO» del nav, para que haya una sola píldora Verde Lima por pantalla · Estimación: 15 min · Completado: —
+- [x] **CA-5** · `DESIGN.md` suma el componente «Botón flotante de reserva» y aclara que reemplaza a la píldora del hero y al botón «RESERVAR TURNO» del nav, para que haya una sola píldora Verde Lima por pantalla · Estimación: 15 min · Completado: 2026-11-06 22:38
 
 **Preguntas abiertas del sprint**
 

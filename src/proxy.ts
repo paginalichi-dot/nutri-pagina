@@ -14,8 +14,8 @@ function adminResponse(request: NextRequest, signedIn: boolean): NextResponse {
   return NextResponse.rewrite(new URL(ACCESS_DENIED, request.url));
 }
 
-// Por qué: renovar en una action o en una precarga (rsc) puede revivir la cookie que "Cerrar sesión" acaba de borrar.
-const isPageLoad = (request: NextRequest): boolean => request.method === 'GET' && !request.headers.has('rsc');
+// Por qué: renovar en una action o en una precarga puede revivir la cookie que "Cerrar sesión" acaba de borrar.
+const isPageLoad = (request: NextRequest): boolean => request.method === 'GET' && request.headers.get('sec-fetch-dest') === 'document';
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   if (!isAdminPath(request.nextUrl.pathname)) return NextResponse.next();

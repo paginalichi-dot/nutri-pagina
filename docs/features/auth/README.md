@@ -6,7 +6,7 @@ Decisión de base: [ADR 0004](../../adr/0004-login-propio-con-jwt.md). Plan: [T-
 
 - El admin entra por `/admin/login` con email y contraseña. No hay registro público ni "olvidé mi contraseña".
 - La sesión es un JWT HS256 (`jose`, `JWT_SECRET`) sin vencimiento, en la cookie `session` (`httpOnly`, `Secure`,
-  `SameSite=Lax`, 400 días). El proxy la renueva en cada carga de página completa de `/admin/**` y la borra si el token es inválido.
+  `SameSite=Lax`, 400 días). El proxy la renueva en cada navegación real del navegador (`sec-fetch-dest: document`) a `/admin/**` y la borra si el token es inválido.
 - El token lleva `sub` (id del admin) y `sv` (`session_version`). `requireAdmin()` verifica la firma y compara
   `sv` con la base: si no coincide, la sesión está cerrada (`SESSION_EXPIRED`). Cambiar email o contraseña (US-5)
   incrementa la `session_version` y cierra las demás sesiones.
