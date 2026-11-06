@@ -25,7 +25,7 @@ Language Support:
 
 # Code Refactoring Skill
 
-## ⚖️ Umbrales de este repo (gestor-empanaderia): reemplazan a todos los de abajo
+## ⚖️ Umbrales de este repo (pagina-lichi): reemplazan a todos los de abajo
 
 `AGENTS.md` fija un tope **estricto de 100 líneas físicas por archivo de código**, tests incluidos, y funciones
 de ≤ 40 líneas con ≤ 3 parámetros. Todo número de esta skill (150/200/300, 300/500/800, etc.) queda reemplazado
@@ -35,11 +35,10 @@ por estos:
 |---|---|
 | < 80 | ✅ OK |
 | 80–100 | ⚠️ Antes de agregar código, planificá cómo partirlo por responsabilidad |
-| > 100 | 🛑 No se commitea (ESLint lo rechaza desde el ítem T-3). Partilo antes de seguir |
+| > 100 | 🛑 No se commitea: ESLint lo rechaza. Partilo antes de seguir |
 
-Los archivos heredados que hoy superan el tope están en la lista de excepción de ESLint. Sólo se arreglan cuando
-un ítem del backlog los toca. Los scripts de `scripts/` y el watcher conservan sus umbrales originales: usalos
-sólo como referencia. La fuente de verdad es ESLint.
+No hay lista de excepción: el tope rige desde el primer commit (ADR 0001). Los scripts de `scripts/` y el watcher
+conservan sus umbrales originales: usalos sólo como referencia. La fuente de verdad es ESLint.
 
 ## 🎯 Purpose: Prevent Complexity Before It Becomes a Problem
 

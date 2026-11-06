@@ -22,7 +22,7 @@ Herramientas: Vitest para unit, tipos, contrato, fuzz, integración y componente
 
 ### Cómo se arma un test de contrato
 
-Una Server Action depende de `next/headers` (cookies), de la sesión de Supabase y de los repositorios. En el test
+Una Server Action depende de `next/headers` (cookies), de la sesión (cookie con JWT) y de los repositorios. En el test
 de contrato:
 
 - La sesión del admin se simula con un helper de `src/test/` (se crea en T-3, junto con el login). `next/headers`

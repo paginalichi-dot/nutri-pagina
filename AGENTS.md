@@ -48,10 +48,10 @@ Las aplican ESLint (`eslint.config.mjs` + `eslint/`), lefthook y el CI, desde el
 | Restricciones | Toda regla de datos que Postgres pueda garantizar va en la base: en `schema.prisma` (`@unique`, `@db.VarChar(n)`, relaciones con `onDelete`) o en SQL de migración si Prisma no la soporta. |
 | Concurrencia | Toda tabla mutable usa `version` (concurrencia optimista). Update/delete filtran por `id` **y** `version`; si afectan 0 filas ⇒ `STALE_VERSION`. |
 | Errores | Toda acción inválida ⇒ `AppError(code)` del catálogo (`src/lib/errors`), con mensaje claro en español. Nunca `throw 'texto'` ni un error crudo al cliente: las Server Actions devuelven `ActionResult`. |
-| Seguridad | Toda Server Action verifica la sesión de Supabase Auth y el rol en el servidor, salvo las acciones públicas, que se listan explícitamente (ver más abajo). Toda página nueva se registra en `src/proxy.ts`. Toda entrada se valida con Zod `strictObject`. Toda respuesta se valida contra su `RowSchema`. |
+| Seguridad | Toda Server Action verifica en el servidor la sesión del admin (`requireAdmin()`, JWT propio; ADR 0004), salvo las acciones públicas, que se listan explícitamente (ver más abajo). Toda página nueva se registra en `src/proxy.ts`. Toda entrada se valida con Zod `strictObject`. Toda respuesta se valida contra su `RowSchema`. |
 | Fechas | Se guardan y viajan en UTC (ISO 8601, `timestamptz`). Se muestran en `America/Argentina/Buenos_Aires` con `formatDateTime`. Nunca se usa la zona horaria del servidor ni del navegador. |
 | Diseño | Solo tokens de `DESIGN.md` (variables CSS o clases de Tailwind). **Cero hex hardcodeados** en componentes. Botones, tabs y toggles siempre en forma de píldora. |
-| Secretos | Jamás se commitea un `.env` real (hook + CI lo bloquean). Cada variable nueva va a `.env.example`. Las claves de servicio (`SUPABASE_SERVICE_ROLE_KEY`, email) solo existen en el servidor. |
+| Secretos | Jamás se commitea un `.env` real (hook + CI lo bloquean). Cada variable nueva va a `.env.example`. Los secretos (`JWT_SECRET`, claves de email) solo existen en el servidor. |
 
 ## Reglas del dominio: turnos
 

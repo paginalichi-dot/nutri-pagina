@@ -39,7 +39,7 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 ## 4. Stack
 
 Next.js 16 (App Router, Cache Components) · React 19 · TypeScript `strict` · Tailwind CSS v4 + shadcn/ui ·
-Zod 4 · Prisma 7 + PostgreSQL (Docker en local, Supabase en producción) · Supabase Auth (sólo el panel) ·
+Zod 4 · Prisma 7 + PostgreSQL (Docker en local, Supabase en producción) · login propio con JWT (`jose`, sólo el panel) ·
 Vercel · Vitest 5 · Testing Library · fast-check · Stryker · Playwright.
 
 ## 5. Arquitectura en un minuto

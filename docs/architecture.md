@@ -12,7 +12,7 @@ Una sola aplicación **Next.js 16 (App Router)** con dos caras:
 | Cara | Rutas | Quién la usa | Cómo renderiza |
 |---|---|---|---|
 | Sitio público | `/` (home), `/servicios`, `/sucursales`, `/reservar`, `/turno/cancelar/[token]` | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
-| Panel | `/admin/**` | Lisandro (único admin), con Supabase Auth | Client Components + Server Actions |
+| Panel | `/admin/**` | Lisandro (único admin), con login propio (JWT) | Client Components + Server Actions |
 
 **Estilo arquitectónico.** En ejecución es cliente-servidor; en despliegue, un monolito modular. El código se
 agrupa por *feature* (`src/features/<feature>`), no por tipo técnico.
@@ -33,7 +33,6 @@ flowchart LR
     RP["Repositories<br/>Prisma"]
   end
   PG[("PostgreSQL<br/>Supabase")]
-  AU[("Supabase Auth")]
   EM[("Email")]
   UI -- "POST (RPC)" --> PX
   PX --> SA
@@ -42,7 +41,6 @@ flowchart LR
   RSC --> SV
   SV --> RP
   RP --> PG
-  SA --> AU
   SV --> EM
 ```
 
@@ -54,7 +52,7 @@ flowchart LR
 | UI | Tailwind CSS v4 + shadcn/ui, íconos Lucide. Tokens y componentes en `DESIGN.md` |
 | Validación | Zod 4: el formulario y la action validan con el **mismo** schema |
 | Datos | PostgreSQL 15 (Docker en local, Supabase en producción) + Prisma 7 con `@prisma/adapter-pg` |
-| Autenticación | Supabase Auth, sólo para el panel (T-3) |
+| Autenticación | Login propio con JWT (`jose`), sólo para el panel (T-3, ADR 0004) |
 | Email | Proveedor a definir (confirmación, recordatorio y link de cancelación) |
 | Calidad | ESLint 9 (`eslint-config-next` + reglas duras en `eslint/`), Prettier, lefthook, commitlint y GitHub Actions |
 | Tests | Vitest 5, Testing Library, fast-check, Stryker y Playwright. Ver [`testing.md`](testing.md) |
@@ -70,7 +68,7 @@ ui (src/app, features/*/ui) → actions → services → repository → db
 |---|---|---|
 | `src/app/**` | `features/*/ui`, `features/*/actions`, `features/*/domain`, `components/`, `hooks/`, `config/`, `lib/utils` | `repository`, `services`, `@/lib/db`, `@/generated/prisma` |
 | `features/<f>/ui` | `domain` y `actions` de cualquier feature, `components/`, `hooks/`, `config/` | `repository`, `services`, `@/lib/db` |
-| `features/<f>/actions` | `services` propios, `domain`, `lib/auth`, `lib/errors`, `lib/action-result` | `repository`, `@/lib/db`, `ui` |
+| `features/<f>/actions` | `services` propios, `requireAdmin` de `features/auth/services` (ADR 0004), `domain`, `lib/auth`, `lib/errors`, `lib/action-result` | `repository`, `@/lib/db`, `ui` |
 | `features/<f>/services` | `repository` propio y, si la operación los abarca, de otros features; `domain`, `lib/errors`, `@/lib/db/transaction` | `actions`, `ui`, `next/*` |
 | `features/<f>/repository` | `@/lib/db`, `@/generated/prisma`, tipos de `domain`, `lib/errors` | `services`, `actions`, `next/*` |
 | `features/<f>/domain` | `zod` | `@/lib/db`, `@/generated/prisma`, `repository`, `next/*` |
@@ -104,7 +102,7 @@ Features previstos: `servicio`, `sucursal`, `disponibilidad`, `turno`, `paciente
 
 | Ruta | Contenido |
 |---|---|
-| `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. Hasta T-3 cierra `/admin` (redirige a `/`). Con T-3 valida la sesión de Supabase. Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
+| `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. Hasta T-3 cierra `/admin` (redirige a `/`). Con T-3 verifica el JWT de la cookie (chequeo optimista, sin base). Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
 | `prisma/schema.prisma`, `prisma/migrations/` | Modelo de datos y migraciones versionadas. Las restricciones que Prisma no expresa (`CHECK`, `EXCLUDE`) van en el SQL de la migración. |
 | `prisma.config.ts` | URL de las migraciones: `LOCAL_DATABASE_URL` en local y en tests; `DIRECT_URL` con `APP_ENV=production`. |
 | `src/lib/db/index.ts` | Cliente Prisma único (`db`) con el adaptador de `pg`. La URL sale de `database-config.ts`: `LOCAL_DATABASE_URL`, o `DATABASE_URL` (pooler) con `APP_ENV=production`. |
@@ -136,7 +134,7 @@ Features previstos: `servicio`, `sucursal`, `disponibilidad`, `turno`, `paciente
 
 | Tema | Implementación |
 |---|---|
-| Autenticación | Supabase Auth, un solo usuario admin (T-3). |
+| Autenticación | Login propio con JWT, un solo usuario admin (T-3, ADR 0004). |
 | Acciones públicas | Lista cerrada en `AGENTS.md`, con rate limiting y honeypot. |
 | Entrada / salida | `z.strictObject` en toda entrada; toda respuesta se parsea con su `*RowSchema`. |
 | Datos personales | Ley 25.326: sólo lo necesario, consentimiento explícito y cero datos en logs. |

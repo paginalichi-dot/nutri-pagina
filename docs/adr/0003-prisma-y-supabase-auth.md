@@ -1,6 +1,6 @@
 # 0003 — Prisma como ORM y Supabase Auth para el panel
 
-- **Estado**: Aceptado (2026-11-06)
+- **Estado**: Aceptado (2026-11-06) · La parte de Supabase Auth la reemplaza [0004](0004-login-propio-con-jwt.md)
 
 ## Contexto
 

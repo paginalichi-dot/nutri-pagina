@@ -112,11 +112,11 @@ los agentes trabajen igual desde el primer commit.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · `AGENTS.md`, `CLAUDE.md`, `docs/` y las skills propias están adaptados al proyecto · Estimación: 30 min · Completado: —
+- [x] **CA-1** · `AGENTS.md`, `CLAUDE.md`, `docs/` y las skills propias están adaptados al proyecto · Estimación: 30 min · Completado: 2026-11-06 19:28
 
-- [ ] **CA-2** · `npm run lint`, `npm run typecheck` y `npm run test:coverage` pasan en verde · Estimación: 30 min · Completado: —
+- [x] **CA-2** · `npm run lint`, `npm run typecheck` y `npm run test:coverage` pasan en verde · Estimación: 30 min · Completado: 2026-11-06 19:28
 
-- [ ] **CA-3** · `docker compose up -d --wait db-test` y `npm run test:int` pasan (migraciones vacías) · Estimación: 20 min · Completado: —
+- [x] **CA-3** · `docker compose up -d --wait db-test` y `npm run test:int` pasan (migraciones vacías) · Estimación: 20 min · Completado: 2026-11-06 19:28
 
 - [ ] **CA-4** · Primer commit en `main`, rama `develop` creada y CI en verde · Estimación: 20 min · Completado: —
 
@@ -129,7 +129,7 @@ los agentes trabajen igual desde el primer commit.
 | Inicio       | —         |
 | Tamaño       | S         |
 | Depende de   | T-1       |
-| Plan         | —         |
+| Plan         | [`docs/plans/T-2-tokens-design.md`](docs/plans/T-2-tokens-design.md) |
 | Merge        | —         |
 | Horas reales | —         |
 
@@ -138,11 +138,49 @@ que ningún componente use colores hardcodeados.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · Tokens de `DESIGN.md` en `globals.css` y shadcn/ui inicializado con ellos · Estimación: 30 min · Completado: —
+- [ ] **CA-1** · Tokens de `DESIGN.md` en `src/app/tokens.css` (importado por `globals.css`) y shadcn/ui inicializado con ellos · Estimación: 30 min · Completado: —
 
 - [ ] **CA-2** · Un test verifica el contraste AA de los pares de color que usa la UI · Estimación: 20 min · Completado: —
 
-### T-3 · Login del panel con Supabase Auth
+- [ ] **CA-3** · ESLint rechaza colores hex escritos en `src/**/*.{ts,tsx}` · Estimación: 15 min · Completado: —
+
+### T-3 · Login del panel con JWT propio
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | Pendiente |
+| Dueño        | —         |
+| Inicio       | —         |
+| Tamaño       | L         |
+| Depende de   | T-1       |
+| Plan         | [`docs/plans/T-3-login-panel.md`](docs/plans/T-3-login-panel.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como Lisandro quiero entrar a un panel privado, de forma que sólo yo administre los turnos.
+
+Decisiones del dev (2026-11-06): se entra con email y contraseña, sin registro público, con un login propio con
+JWT en lugar de Supabase Auth, para probar todo con Docker ([ADR 0004](docs/adr/0004-login-propio-con-jwt.md)).
+La sesión queda iniciada para siempre, hasta "Cerrar sesión". Por ahora hay una sola cuenta admin, de prueba; el
+alta del admin de producción queda para el ítem de despliegue.
+
+**Criterios de aceptación**
+
+- [ ] **CA-1** · `/admin` sin sesión redirige a `/admin/login`; con sesión, entra; "Cerrar sesión" vuelve al login · Estimación: 1 h · Completado: —
+
+- [ ] **CA-2** · Toda action del panel verifica la sesión en el servidor (test de contrato: sin cookie → `UNAUTHENTICATED`, token adulterado o sesión cerrada → `SESSION_EXPIRED`) · Estimación: 40 min · Completado: —
+
+- [ ] **CA-3** · Un email o una contraseña incorrectos muestran `INVALID_CREDENTIALS`, con el mismo tiempo de respuesta exista o no el email · Estimación: 30 min · Completado: —
+
+- [ ] **CA-4** · 5 intentos fallidos seguidos bloquean el login 15 minutos (`RATE_LIMITED`), y el bloqueo se guarda en la base · Estimación: 30 min · Completado: —
+
+- [ ] **CA-5** · La contraseña se guarda con `scrypt` y ni ella ni su hash salen nunca del servidor · Estimación: 20 min · Completado: —
+
+- [ ] **CA-6** · `npm run db:seed` crea una cuenta admin de prueba con datos ficticios (y se niega con `APP_ENV=production`), y el login se prueba completo con Docker: integración y E2E con esa cuenta · Estimación: 40 min · Completado: —
+
+- [ ] **CA-7** · La sesión no vence: la cookie dura 400 días y se renueva en cada visita al panel; sólo se cierra con "Cerrar sesión" o cuando cambia la `session_version` (US-5) · Estimación: 30 min · Completado: —
+
+### US-5 · El admin cambia su email y su contraseña
 
 | Campo        | Valor     |
 | ------------ | --------- |
@@ -150,22 +188,23 @@ que ningún componente use colores hardcodeados.
 | Dueño        | —         |
 | Inicio       | —         |
 | Tamaño       | M         |
-| Depende de   | T-1       |
-| Plan         | —         |
+| Depende de   | T-3       |
+| Plan         | [`docs/plans/US-5-cuenta-admin.md`](docs/plans/US-5-cuenta-admin.md) |
 | Merge        | —         |
 | Horas reales | —         |
 
-**Historia**: Como Lisandro quiero entrar a un panel privado, de forma que sólo yo administre los turnos.
+**Historia**: Como admin quiero cambiar mi email y mi contraseña desde el panel, de forma que la cuenta de prueba
+pase a ser mía sin tocar la base a mano.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · `/admin` sin sesión redirige al login; con sesión, entra · Estimación: 40 min · Completado: —
+- [ ] **CA-1** · En `/admin/cuenta` el admin cambia su email, confirmando con su contraseña actual, y desde ese momento entra con el email nuevo · Estimación: 40 min · Completado: —
 
-- [ ] **CA-2** · Toda action del panel verifica la sesión en el servidor (test de contrato sin sesión → `UNAUTHENTICATED`) · Estimación: 30 min · Completado: —
+- [ ] **CA-2** · En `/admin/cuenta` el admin cambia su contraseña: actual, nueva (8 a 128 caracteres) y repetición; desde ese momento entra con la nueva · Estimación: 40 min · Completado: —
 
-**Preguntas abiertas**
+- [ ] **CA-3** · Contraseña actual incorrecta → `WRONG_PASSWORD` sin cambiar nada; repetición distinta o email inválido → `VALIDATION` con el mensaje del campo · Estimación: 20 min · Completado: —
 
-- ¿Login con email y contraseña, o con link mágico por email?
+- [ ] **CA-4** · Cualquiera de los dos cambios cierra las demás sesiones abiertas; la sesión desde la que se hizo el cambio sigue activa · Estimación: 30 min · Completado: —
 
 ## Sprint 1 · Sitio de presentación
 
@@ -331,3 +370,5 @@ llegue la reserva, esa página pasa a ser el flujo de reserva y el botón no cam
 - ¿Los turnos se confirman solos o los confirma Lisandro?
 - ¿Cuánto dura cada tipo de consulta? ¿Con cuántas horas de anticipación se puede reservar o cancelar?
 - ¿Qué proveedor de email se usa?
+- ¿Los pacientes van a poder tener cuenta e iniciar sesión? Si es así, ¿qué acciones lo requieren? Hoy `AGENTS.md` dice que
+  reservan sin crear cuenta; si cambia, va con un ADR.
