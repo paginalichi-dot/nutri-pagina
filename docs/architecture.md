@@ -12,7 +12,7 @@ Una sola aplicación **Next.js 16 (App Router)** con dos caras:
 | Cara | Rutas | Quién la usa | Cómo renderiza |
 |---|---|---|---|
 | Sitio público | `/` (home), `/servicios`, `/sucursales`, `/reservar`, `/turno/cancelar/[token]` | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
-| Panel | `/admin/**` | [Nombre] (único admin), con Supabase Auth | Client Components + Server Actions |
+| Panel | `/admin/**` | Lisandro (único admin), con Supabase Auth | Client Components + Server Actions |
 
 **Estilo arquitectónico.** En ejecución es cliente-servidor; en despliegue, un monolito modular. El código se
 agrupa por *feature* (`src/features/<feature>`), no por tipo técnico.

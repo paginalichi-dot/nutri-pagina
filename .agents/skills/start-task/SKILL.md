@@ -23,7 +23,7 @@ Si la tarea toca UI, leé también `DESIGN.md`.
 Hacele al dev las preguntas de `docs/workflow.md` §2 que **no** estén respondidas por la US, las specs
 (`docs/requerimientos/specs.md`) o la doc del feature. Agrupalas en un solo mensaje, numeradas. Como mínimo cubrí:
 
-1. Quién ejecuta cada acción (paciente sin cuenta o [Nombre] en el panel) y qué pasa sin sesión.
+1. Quién ejecuta cada acción (paciente sin cuenta o Lisandro en el panel) y qué pasa sin sesión.
 2. Campos de entrada/salida con tipo, obligatoriedad, largo, formato, rango y unicidad.
 3. Acciones inválidas → código de error y mensaje en español.
 4. Concurrencia (¿dos pacientes reservando el mismo horario?) y fechas (UTC guardado, Argentina mostrado).

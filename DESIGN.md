@@ -1,4 +1,4 @@
-# [Nombre] Nutrición — Style Reference
+# Lisandro López Nutrición — Style Reference
 > Una cinta verde lima sobre un delantal verde bosque. La web de un nutricionista enmarcada en verde profundo, blanco hueso y gris suave, donde una sola píldora, cinta o subrayado verde lima atrae la mirada por vez.
 
 **Tema:** claro
@@ -11,7 +11,7 @@ Sistema visual adaptado de la referencia "VOLDOG Food". Se conserva su esencia: 
 
 - **Cercano, no clínico.** Nada de blanco hospital, azules médicos ni íconos de estetoscopio. La salud se comunica como algo rico, alegre y alcanzable.
 - **Comida real.** La fotografía de alimentos frescos hace el trabajo decorativo, igual que los packs de producto en la referencia.
-- **Persona primero.** [Nombre] es la cara de la marca: su foto ocupa el lugar protagónico que en la referencia ocupaba el perro.
+- **Persona primero.** Lisandro es la cara de la marca: su foto ocupa el lugar protagónico que en la referencia ocupaba el perro.
 - **Juguetón con medida.** Los garabatos y la cinta verde lima aportan energía, pero nunca compiten con la información de turnos.
 
 ## Colores
@@ -22,7 +22,7 @@ Sistema visual adaptado de la referencia "VOLDOG Food". Se conserva su esencia: 
 |---|---|---|
 | ~60% | Blanco Hueso `#f6f5ef` + Papel `#ffffff` | El claro tranquilo: fondos, bandas y tarjetas |
 | ~30% | Verde Bosque `#1f3d2b` | El oscuro tranquilo: todo el texto, footer y secciones oscuras |
-| ~10% | Verde Lima `#a3e635` | El protagonista: el color que identifica a [Nombre] |
+| ~10% | Verde Lima `#a3e635` | El protagonista: el color que identifica a Lisandro |
 
 El Verde Lima es el color de identidad, pero ocupa poca superficie. Es tan intenso que en áreas grandes satura la vista, y con un 10% de la pantalla sigue siendo lo primero que se ve. Si pasa de ese 10%, deja de rematar y empieza a gritar.
 
@@ -116,10 +116,10 @@ La referencia usa Peridot PE (licencia comercial). Usamos **Manrope** (Google Fo
 ## Componentes — sitio público
 
 ### Nav con logo centrado
-Barra Papel con borde inferior gris de 1px al hacer scroll (transparente con texto blanco sobre el hero). A la izquierda, links en mayúsculas 15px/600 con +1px de tracking: SOBRE MÍ · SERVICIOS · SUCURSALES · PREGUNTAS. Al centro, el logotipo de [Nombre] en Verde Bosque. A la derecha, el botón Verde Lima "RESERVAR TURNO" (radio 50px, padding 15px 35px). En mobile: logo a la izquierda, botón Verde Lima redondo de menú a la derecha y "Reservar" fijo abajo.
+Barra Papel con borde inferior gris de 1px al hacer scroll (transparente con texto blanco sobre el hero). A la izquierda, links en mayúsculas 15px/600 con +1px de tracking: SOBRE MÍ · SERVICIOS · SUCURSALES · PREGUNTAS. Al centro, el logotipo de Lisandro en Verde Bosque. A la derecha, el botón Verde Lima "RESERVAR TURNO" (radio 50px, padding 15px 35px). En mobile: logo a la izquierda, botón Verde Lima redondo de menú a la derecha y "Reservar" fijo abajo.
 
 ### Hero enmarcado
-Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y radio de 88px alrededor de un fondo de color plano Verde Bosque (recomendado: el recorte de [Nombre] resalta y el detalle puede ir en Verde Lima) o Hueso. **[Nombre] recortado, sin fondo** (de cintura para arriba, sonriente, con ropa de color liso), parado delante de su nombre o del logotipo gigante en blanco. Garabatos dibujados a mano alrededor: blancos o Verde Lima sobre Verde Bosque, Zanahoria sobre Hueso. Abajo a la izquierda, una píldora Papel con flecha: "Reservá tu primera consulta". Abajo a la derecha, el selector de sucursal. Debajo del hero va una línea de presentación, porque el nombre solo no alcanza para explicar qué hace: "Licenciado en Nutrición · MN [número]".
+Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y radio de 88px alrededor de un fondo de color plano Verde Bosque (recomendado: el recorte de Lisandro resalta y el detalle puede ir en Verde Lima) o Hueso. **Lisandro recortado, sin fondo** (de cintura para arriba, sonriente, con ropa de color liso), parado delante de su nombre o del logotipo gigante en blanco. Garabatos dibujados a mano alrededor: blancos o Verde Lima sobre Verde Bosque, Zanahoria sobre Hueso. Abajo a la izquierda, una píldora Papel con flecha: "Reservá tu primera consulta". Abajo a la derecha, el selector de sucursal. Debajo del hero va una línea de presentación, porque el nombre solo no alcanza para explicar qué hace: "Licenciado en Nutrición · MN [número]".
 
 ### Píldora Verde Lima con flecha (CTA principal)
 Relleno Verde Lima, 88px de alto (64px en mobile), radio 9999px, padding 0 37px, label Verde Bosque 18px/500 y un círculo blanco con flecha Verde Bosque en el extremo derecho. Sombra `rgba(0,0,0,0.05) 0 6px 34px`. Sin borde. **Una sola por pantalla.**
@@ -146,7 +146,7 @@ Tarjeta Gris Nube con radio 30px. Arriba, un mapa estático o embebido con esqui
 Tarjeta Papel con radio 29px, padding 33px 34px, borde `1px rgba(10,0,0,0.09)` y sombra `rgba(0,0,0,0.01) 0 12px 18px -6px`. Disco Verde Lima de 25px con tilde, título 19px/500 y nota 17px/500. Flotan alrededor de una foto cenital de un plato saludable. Ej: "Plan a tu medida", "Sin dietas extremas", "Seguimiento real", "Recetas simples".
 
 ### Cinta Verde Lima con slogan
-Una banda Verde Lima gruesa que cruza en curva todo el ancho de una sección Hueso, como una bufanda, con el slogan repetido en blanco bold a lo largo del recorrido, detrás de un título centrado de 38.4px. Slogan: "[Nombre] ✱ [slogan, ej. comer rico también es comer bien]". Se anima con un desplazamiento lento. Respeta `prefers-reduced-motion`.
+Una banda Verde Lima gruesa que cruza en curva todo el ancho de una sección Hueso, como una bufanda, con el slogan repetido en blanco bold a lo largo del recorrido, detrás de un título centrado de 38.4px. Slogan: "Lisandro López ✱ [slogan, ej. comer rico también es comer bien]". Se anima con un desplazamiento lento. Respeta `prefers-reduced-motion`.
 
 ### Garabatos a mano
 Trazos sueltos junto a los títulos o debajo de ellos: subrayado Verde Lima bajo las palabras en 700, y flechas, rulos y chispas de tres líneas en Zanahoria. Solo trazos, nunca rellenos, y sin sombra. Se dibujan al hacer scroll (SVG `stroke-dashoffset`). Son decorativos: llevan `aria-hidden`.
@@ -158,10 +158,10 @@ Tarjeta Papel con radio 8px y padding 25px: avatar redondo (o inicial sobre Hues
 Fila a todo el ancho con la pregunta Verde Bosque 20px/500, una línea de 2px `rgba(31,61,43,0.11)` debajo y un disco Gris Nube de radio 100px con un "+" a la derecha. Va en la columna derecha, junto a un título de 38.4px. Ej: ¿Atendés por obra social? · ¿Qué llevo a la primera consulta? · ¿Hacés consultas online? · ¿Cómo cancelo un turno?
 
 ### Bloque CTA con foto en arco
-Foto a todo el ancho con el borde superior en arco y Fundido Bosque hacia `#1f3d2b` abajo: [Nombre] en consultorio, conversando con un paciente o cocinando. Título Hueso 38.4px/500 a la izquierda con las palabras clave en Verde Lima 700 ("Empecemos por **algo simple**"), píldora Verde Lima a la derecha y una línea `1px rgba(255,255,255,0.39)` que da paso al footer.
+Foto a todo el ancho con el borde superior en arco y Fundido Bosque hacia `#1f3d2b` abajo: Lisandro en consultorio, conversando con un paciente o cocinando. Título Hueso 38.4px/500 a la izquierda con las palabras clave en Verde Lima 700 ("Empecemos por **algo simple**"), píldora Verde Lima a la derecha y una línea `1px rgba(255,255,255,0.39)` que da paso al footer.
 
 ### Footer Verde Bosque
-Fondo `#1f3d2b` con cuatro columnas: [Nombre] y una bio breve · Sucursales (direcciones) · Navegación · Contacto (WhatsApp, email, Instagram). Títulos de columna en blanco 19px/500 y links en Niebla 14px/500. Discos Verde Lima redondos para redes sociales. En el texto legal (12.8px/500), la **matrícula profesional (MN/MP)** y la política de privacidad.
+Fondo `#1f3d2b` con cuatro columnas: Lisandro y una bio breve · Sucursales (direcciones) · Navegación · Contacto (WhatsApp, email, Instagram). Títulos de columna en blanco 19px/500 y links en Niebla 14px/500. Discos Verde Lima redondos para redes sociales. En el texto legal (12.8px/500), la **matrícula profesional (MN/MP)** y la política de privacidad.
 
 ### Disco Verde Lima de carrusel
 Círculo Verde Lima de unos 92px (56px en mobile) con flecha Verde Bosque, superpuesto al borde derecho del carrusel. Sin borde ni sombra.
@@ -206,7 +206,7 @@ El panel es una herramienta de trabajo diario, así que usa una **versión silen
 
 Tres tipos de imagen cargan la página:
 
-1. **Retratos de [Nombre]:** uno recortado y sin fondo para el hero (PNG/WebP con transparencia, alta resolución), uno en contexto para el bloque de cierre (atendiendo, cocinando, en el consultorio) y uno cercano para "Sobre mí". Luz natural y cálida, expresión amable, ropa de color liso que contraste con el fondo Verde Bosque o Hueso (evitar ropa verde o lima, que se pierde contra la paleta).
+1. **Retratos de Lisandro:** uno recortado y sin fondo para el hero (PNG/WebP con transparencia, alta resolución), uno en contexto para el bloque de cierre (atendiendo, cocinando, en el consultorio) y uno cercano para "Sobre mí". Luz natural y cálida, expresión amable, ropa de color liso que contraste con el fondo Verde Bosque o Hueso (evitar ropa verde o lima, que se pierde contra la paleta).
 2. **Comida fresca:** platos vistos desde arriba sobre Hueso, con ingredientes sueltos alrededor (hojas verdes, legumbres, frutas, semillas). Colores naturales y vivos, nunca la típica foto de dieta con cinta métrica.
 3. **Objetos recortados** para las tarjetas de servicio: flotan sobre Gris Nube, igual que los packs de producto en la referencia.
 
@@ -217,7 +217,7 @@ Todas las imágenes llevan `alt` descriptivo y se sirven con `next/image`.
 ## Estructura de la home
 
 1. Nav
-2. Hero enmarcado con [Nombre] + línea de presentación
+2. Hero enmarcado con Lisandro + línea de presentación
 3. Título centrado + barra de reserva
 4. Selector de sucursal + grilla de 3 tarjetas de servicio
 5. Sobre mí (Hueso, borde curvo): foto + texto, título con énfasis 700 y garabato

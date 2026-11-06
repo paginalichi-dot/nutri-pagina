@@ -5,13 +5,13 @@ Fuente **canónica** de reglas del repo. `CLAUDE.md` solo la importa (Claude Cod
 
 ## Contexto
 
-Web profesional y sistema de turnos de [Nombre], Licenciado en Nutrición, en [ciudad]. Tiene tres objetivos:
+Web profesional y sistema de turnos de Lisandro López, Licenciado en Nutrición, en [ciudad]. Tiene tres objetivos:
 
 1. Presentarlo.
 2. Mostrar sus sucursales.
-3. Gestionar turnos: los pacientes reservan online sin crear cuenta, y [Nombre] administra la agenda desde un panel privado.
+3. Gestionar turnos: los pacientes reservan online sin crear cuenta, y Lisandro administra la agenda desde un panel privado.
 
-El backlog vigente está en [`BACKLOG.md`](BACKLOG.md). Lo que pide el cliente, textual, está en
+El backlog vigente está en [`BACKLOG.md`](BACKLOG.md). Lo que pide el cliente, está en
 [`docs/requerimientos/specs.md`](docs/requerimientos/specs.md). Cómo se ve está en [`DESIGN.md`](DESIGN.md).
 
 Idioma:
@@ -58,7 +58,7 @@ Las aplican ESLint (`eslint.config.mjs` + `eslint/`), lefthook y el CI, desde el
 Detalle completo en `docs/features/turno/README.md`.
 
 - **Sin doble reserva.** Un horario de una sucursal no puede tener dos turnos activos. Se garantiza en la base (restricción `EXCLUDE` o `UNIQUE` parcial en la migración), y además se crea el turno dentro de una transacción. Si hay choque ⇒ `SLOT_TAKEN`.
-- **Disponibilidad.** Se calcula a partir de los horarios de cada sucursal, la duración del servicio, los turnos activos y los bloqueos que cargue [Nombre]. Es lógica de `service`, con tests de nivel 3.
+- **Disponibilidad.** Se calcula a partir de los horarios de cada sucursal, la duración del servicio, los turnos activos y los bloqueos que cargue Lisandro. Es lógica de `service`, con tests de nivel 3.
 - **Límites de reserva.** No se puede reservar en el pasado ni con menos de [X] horas de anticipación ⇒ `SLOT_TOO_SOON`.
 - **Estados.** `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`, y `CANCELADO` desde `PENDIENTE` o `CONFIRMADO`. Un turno cancelado libera el horario.
 - **Cancelación por el paciente.** Se hace con un link de un solo uso y con vencimiento, que llega en el email de confirmación. No requiere cuenta.
