@@ -124,9 +124,9 @@ los agentes trabajen igual desde el primer commit.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
+| Estado       | En progreso |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-06 |
 | Tamaño       | S         |
 | Depende de   | T-1       |
 | Plan         | [`docs/plans/T-2-tokens-design.md`](docs/plans/T-2-tokens-design.md) |
