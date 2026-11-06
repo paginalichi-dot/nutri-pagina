@@ -6,6 +6,7 @@ describe('catálogo de errores', () => {
     { code: 'VALIDATION', message: 'Revisá los datos ingresados.' },
     { code: 'UNAUTHENTICATED', message: 'Iniciá sesión para continuar.' },
     { code: 'INVALID_CREDENTIALS', message: 'El email o la contraseña no son correctos.' },
+    { code: 'WRONG_PASSWORD', message: 'La contraseña actual no es correcta.' },
     { code: 'SESSION_EXPIRED', message: 'Tu sesión venció. Volvé a iniciar sesión.' },
     { code: 'FORBIDDEN', message: 'No tenés permiso para hacer esto.' },
     { code: 'NOT_FOUND', message: 'El turno ya no existe.' },

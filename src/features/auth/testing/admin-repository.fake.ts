@@ -10,20 +10,29 @@ export type FakeAdminRepository = AdminRepository & { admins: Map<string, FakeAd
 export function createFakeAdminRepository(seed: FakeAdmin[] = []): FakeAdminRepository {
   const admins = new Map(seed.map((admin) => [admin.email, { ...admin }]));
   const byId = (id: string): FakeAdmin | undefined => [...admins.values()].find((admin) => admin.id === id);
+  const credentials = (admin: FakeAdmin | undefined): AdminCredentialsRow | null => (admin ? AdminCredentialsRowSchema.parse(admin) : null);
+
+  function versioned(id: string, version: number): FakeAdmin {
+    const admin = byId(id);
+    if (!admin || admin.version !== version) throw new AppError('STALE_VERSION');
+    admin.version += 1;
+    return admin;
+  }
 
   return {
     admins,
-    async findCredentialsByEmail(email) {
-      const admin = admins.get(email);
-      return admin ? AdminCredentialsRowSchema.parse(admin) : null;
-    },
-    async findSessionVersion(id) {
-      return byId(id)?.sessionVersion ?? null;
-    },
+    findCredentialsByEmail: async (email) => credentials(admins.get(email)),
+    findCredentialsById: async (id) => credentials(byId(id)),
+    findSessionVersion: async (id) => byId(id)?.sessionVersion ?? null,
     async saveLoginState({ id, version, failedAttempts, lockedUntil }) {
-      const admin = byId(id);
-      if (!admin || admin.version !== version) throw new AppError('STALE_VERSION');
-      Object.assign(admin, { failedAttempts, lockedUntil, version: version + 1 });
+      Object.assign(versioned(id, version), { failedAttempts, lockedUntil });
+    },
+    async updateCredentials({ id, version, email, passwordHash }) {
+      if (email !== undefined && admins.get(email) && admins.get(email)?.id !== id) throw new AppError('DUPLICATE');
+      const admin = versioned(id, version);
+      admins.delete(admin.email);
+      Object.assign(admin, { email: email ?? admin.email, passwordHash: passwordHash ?? admin.passwordHash, sessionVersion: admin.sessionVersion + 1 });
+      admins.set(admin.email, admin);
     },
     async upsertAdmin({ email, passwordHash }) {
       const existing = admins.get(email);

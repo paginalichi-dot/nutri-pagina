@@ -32,6 +32,8 @@ test.describe('panel del admin', () => {
     await page.getByRole('button', { name: 'Cerrar sesión' }).click();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ingresá al panel');
     await expect(page).toHaveURL(/\/admin\/login$/);
+    await page.goto('/admin');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Acceso denegado');
   });
 
   test('con sesión, /admin/login lleva directo al panel', async ({ page }) => {

@@ -5,8 +5,11 @@ import { proxy } from './proxy';
 
 const ADMIN_ID = '7d3f8a3e-2f4b-4c1d-9a7e-1b2c3d4e5f60';
 
-function request(path: string, token?: string): NextRequest {
-  return new NextRequest(`http://localhost${path}`, { headers: token ? { cookie: `session=${token}` } : {} });
+type Init = { method?: string; headers?: Record<string, string> };
+
+function request(path: string, token?: string, init: Init = {}): NextRequest {
+  const cookie: Record<string, string> = token ? { cookie: `session=${token}` } : {};
+  return new NextRequest(`http://localhost${path}`, { method: init.method ?? 'GET', headers: { ...cookie, ...init.headers } });
 }
 
 const passes = (response: Response): boolean => response.headers.get('x-middleware-next') === '1';
@@ -22,6 +25,16 @@ describe('proxy', () => {
     const response = await proxy(request('/admin/cuenta', token));
     expect(passes(response)).toBe(true);
     expect(response.cookies.get('session')).toMatchObject({ value: token, maxAge: 34_560_000, httpOnly: true, secure: true });
+  });
+
+  it.each<[string, Init]>([
+    ['un POST (una action)', { method: 'POST' }],
+    ['una precarga o navegación interna (rsc)', { headers: { rsc: '1' } }],
+  ])('en %s con token válido no renueva la cookie, para no revivir una sesión cerrada', async (_caso, init) => {
+    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
+    const response = await proxy(request('/admin', token, init));
+    expect(passes(response)).toBe(true);
+    expect(response.cookies.get('session')).toBeUndefined();
   });
 
   it('sin sesión, /admin/login pasa y no toca la cookie', async () => {

@@ -22,7 +22,7 @@ se puede convertir en la de Lisandro sin tocar la base a mano.
 - **Concurrencia**: update por `id` y `version`; si chocan ⇒ `STALE_VERSION`.
 - **Estados de UI**: dos formularios separados en la misma página; mientras envía, "Guardando…"; al terminar, un
   aviso "Listo, se guardó el cambio."; si falla, el mensaje arriba del botón, con ícono y texto en Pimentón.
-- **Diseño**: versión silenciosa del panel; los mismos inputs de la tarjeta de login (T-3) y píldora Verde Lima
+- **Diseño**: versión silenciosa del panel, tarjetas Papel con radio 16px; los mismos inputs de la tarjeta de login (T-3, ahora en `form-parts.tsx`) y píldora Verde Lima
   "Guardar" (una por formulario: son dos formularios distintos dentro de una vista de trabajo).
 
 ## Cambios por capa
@@ -30,8 +30,8 @@ se puede convertir en la de Lisandro sin tocar la base a mano.
 | Capa | Archivos | Cambio |
 |---|---|---|
 | domain | `src/features/auth/domain/account.schema.ts` | `ChangeEmailInputSchema`, `ChangePasswordInputSchema` (con `refine` de repetición). |
-| errores | `src/lib/errors/codes.ts` | `WRONG_PASSWORD`: "La contraseña actual no es correcta." |
-| repository | `src/features/auth/repository/admin.repository.ts` | `updateEmail` y `updatePassword` por `id` y `version`, incrementando `session_version`. |
+| errores | `src/lib/errors/codes.ts`, `src/lib/action-result.ts` | `WRONG_PASSWORD`: "La contraseña actual no es correcta." `failValidation(mensaje)` devuelve `VALIDATION` con el mensaje del campo. |
+| repository | `src/features/auth/repository/admin.repository.ts` | `findCredentialsById` y `updateCredentials` (email y/o hash) por `id` y `version`, incrementando `session_version`. |
 | service | `src/features/auth/services/account.service.ts` | Verifica la contraseña actual, aplica el cambio y devuelve la nueva `session_version`. |
 | actions | `src/features/auth/actions/change-email.ts`, `change-password.ts` | `requireAdmin()` → validación → service → cookie nueva → `ActionResult`. |
 | ui | `src/app/admin/(panel)/cuenta/page.tsx`, `src/features/auth/ui/components/change-email-form.tsx`, `change-password-form.tsx` | Página "Mi cuenta" y link desde el panel. |

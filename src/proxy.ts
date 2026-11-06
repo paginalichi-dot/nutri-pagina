@@ -14,13 +14,16 @@ function adminResponse(request: NextRequest, signedIn: boolean): NextResponse {
   return NextResponse.rewrite(new URL(ACCESS_DENIED, request.url));
 }
 
+// Por qué: renovar en una action o en una precarga (rsc) puede revivir la cookie que "Cerrar sesión" acaba de borrar.
+const isPageLoad = (request: NextRequest): boolean => request.method === 'GET' && !request.headers.has('rsc');
+
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   if (!isAdminPath(request.nextUrl.pathname)) return NextResponse.next();
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   const signedIn = token !== undefined && (await verifySession(token)) !== null;
   const response = adminResponse(request, signedIn);
-  if (signedIn && token) response.cookies.set(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
-  else if (token !== undefined) response.cookies.delete(SESSION_COOKIE);
+  if (signedIn && token && isPageLoad(request)) response.cookies.set(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
+  else if (token !== undefined && !signedIn) response.cookies.delete(SESSION_COOKIE);
   return response;
 }
 

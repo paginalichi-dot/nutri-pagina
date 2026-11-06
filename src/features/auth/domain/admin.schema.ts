@@ -14,3 +14,5 @@ export type AdminCredentialsRow = z.infer<typeof AdminCredentialsRowSchema>;
 export type LoginState = Pick<AdminCredentialsRow, 'id' | 'version' | 'failedAttempts' | 'lockedUntil'>;
 
 export type SessionClaims = { adminId: string; sessionVersion: number };
+
+export type CredentialsChange = Pick<AdminCredentialsRow, 'id' | 'version'> & { email?: string; passwordHash?: string };

@@ -186,9 +186,9 @@ alta del admin de producción queda para el ítem de despliegue. Quien escriba `
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-06 |
 | Tamaño       | M         |
 | Depende de   | T-3       |
 | Plan         | [`docs/plans/US-5-cuenta-admin.md`](docs/plans/US-5-cuenta-admin.md) |
@@ -200,13 +200,13 @@ pase a ser mía sin tocar la base a mano.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · En `/admin/cuenta` el admin cambia su email, confirmando con su contraseña actual, y desde ese momento entra con el email nuevo · Estimación: 40 min · Completado: —
+- [x] **CA-1** · En `/admin/cuenta` el admin cambia su email, confirmando con su contraseña actual, y desde ese momento entra con el email nuevo · Estimación: 40 min · Completado: 2026-11-06 21:58
 
-- [ ] **CA-2** · En `/admin/cuenta` el admin cambia su contraseña: actual, nueva (8 a 128 caracteres) y repetición; desde ese momento entra con la nueva · Estimación: 40 min · Completado: —
+- [x] **CA-2** · En `/admin/cuenta` el admin cambia su contraseña: actual, nueva (8 a 128 caracteres) y repetición; desde ese momento entra con la nueva · Estimación: 40 min · Completado: 2026-11-06 21:58
 
-- [ ] **CA-3** · Contraseña actual incorrecta → `WRONG_PASSWORD` sin cambiar nada; repetición distinta o email inválido → `VALIDATION` con el mensaje del campo · Estimación: 20 min · Completado: —
+- [x] **CA-3** · Contraseña actual incorrecta → `WRONG_PASSWORD` sin cambiar nada; repetición distinta o email inválido → `VALIDATION` con el mensaje del campo · Estimación: 20 min · Completado: 2026-11-06 21:58
 
-- [ ] **CA-4** · Cualquiera de los dos cambios cierra las demás sesiones abiertas; la sesión desde la que se hizo el cambio sigue activa · Estimación: 30 min · Completado: —
+- [x] **CA-4** · Cualquiera de los dos cambios cierra las demás sesiones abiertas; la sesión desde la que se hizo el cambio sigue activa · Estimación: 30 min · Completado: 2026-11-06 21:58
 
 ## Sprint 1 · Sitio de presentación
 

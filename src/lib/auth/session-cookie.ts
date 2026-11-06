@@ -1,6 +1,6 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { SESSION_COOKIE, SESSION_COOKIE_OPTIONS } from './session-token';
+import { SESSION_COOKIE, SESSION_COOKIE_OPTIONS, type SessionToken, signSession } from './session-token';
 
 export async function readSessionToken(): Promise<string | undefined> {
   return (await cookies()).get(SESSION_COOKIE)?.value;
@@ -12,4 +12,8 @@ export async function writeSessionCookie(token: string): Promise<void> {
 
 export async function clearSessionCookie(): Promise<void> {
   (await cookies()).delete(SESSION_COOKIE);
+}
+
+export async function startSession(session: SessionToken): Promise<void> {
+  await writeSessionCookie(await signSession(session));
 }

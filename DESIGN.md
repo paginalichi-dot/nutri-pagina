@@ -192,6 +192,9 @@ El panel es una herramienta de trabajo diario, así que usa una **versión silen
 - **Acceso denegado (T-3):** la ve cualquiera que entre a `/admin/**` sin sesión, así que usa el lenguaje del sitio
   público: banda Hueso, tarjeta Papel, título "Acceso **denegado**" con subrayado Verde Lima, la línea "Esta sección
   es privada." y la píldora Verde Lima "Volver al inicio" con disco de flecha. Ningún link al login.
+- **Mi cuenta (US-5):** sobre Hueso, dos tarjetas Papel con radio 16px ("Cambiar el email" y "Cambiar la contraseña"),
+  cada una con su título 20px/500, los inputs de la tarjeta de login y su píldora Verde Lima "Guardar …". Es la única
+  vista con dos píldoras Verde Lima: cada una cierra su propio formulario. El éxito va en una franja `bg-confirmed`.
 
 ## Elevación
 

@@ -30,6 +30,7 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   Prisma y `withTransaction`.
 - Login del panel (T-3): JWT propio en la cookie `session`, sesión permanente, cuenta de prueba con `npm run db:seed`.
   `/admin/**` sin sesión muestra "Acceso denegado" (`noindex`); el login vive en `/admin/login`. Primera tabla: `admin_user`.
+- "Mi cuenta" (US-5): en `/admin/cuenta` el admin cambia su email y su contraseña; cada cambio cierra las demás sesiones.
 - Tokens de `DESIGN.md` en `src/app/tokens.css` (T-2): colores, radios, sombras y Manrope; shadcn/ui inicializado
   sin componentes todavía. ESLint rechaza colores hex en el código.
 - Primer commit (`chore: estructura inicial del proyecto`) en `main` y `develop`, publicado en GitHub
