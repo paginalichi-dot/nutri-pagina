@@ -29,7 +29,8 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - `src/lib/`: catálogo de errores, `ActionResult`, `db-errors`, `format-date-time`, `database-config`, cliente
   Prisma y `withTransaction`.
 - `src/proxy.ts` cierra `/admin` hasta que exista el login (T-3).
-- `DESIGN.md` define la identidad visual, pero los tokens todavía no están en `globals.css` (T-2).
+- Tokens de `DESIGN.md` en `src/app/tokens.css` (T-2): colores, radios, sombras y Manrope; shadcn/ui inicializado
+  sin componentes todavía. ESLint rechaza colores hex en el código.
 - Primer commit (`chore: estructura inicial del proyecto`) en `main` y `develop`, publicado en GitHub
   (`paginalichi-dot/nutri-pagina`). Sin despliegue.
 - Sprint 1 cargado en `BACKLOG.md` a partir del primer pedido del cliente: hero con su nombre en gigante y su

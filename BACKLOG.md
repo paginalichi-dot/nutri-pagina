@@ -124,7 +124,7 @@ los agentes trabajen igual desde el primer commit.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En progreso |
+| Estado       | En revisión |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | S         |
@@ -138,11 +138,11 @@ que ningún componente use colores hardcodeados.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · Tokens de `DESIGN.md` en `src/app/tokens.css` (importado por `globals.css`) y shadcn/ui inicializado con ellos · Estimación: 30 min · Completado: —
+- [x] **CA-1** · Tokens de `DESIGN.md` en `src/app/tokens.css` (importado por `globals.css`) y shadcn/ui inicializado con ellos · Estimación: 30 min · Completado: 2026-11-06 20:26
 
-- [ ] **CA-2** · Un test verifica el contraste AA de los pares de color que usa la UI · Estimación: 20 min · Completado: —
+- [x] **CA-2** · Un test verifica el contraste AA de los pares de color que usa la UI · Estimación: 20 min · Completado: 2026-11-06 20:26
 
-- [ ] **CA-3** · ESLint rechaza colores hex escritos en `src/**/*.{ts,tsx}` · Estimación: 15 min · Completado: —
+- [x] **CA-3** · ESLint rechaza colores hex escritos en `src/**/*.{ts,tsx}` · Estimación: 15 min · Completado: 2026-11-06 20:26
 
 ### T-3 · Login del panel con JWT propio
 

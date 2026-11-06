@@ -257,6 +257,23 @@ Las secciones alternan Papel y Hueso con bordes curvos amplios. Los títulos van
 
 Solo tema claro. No se implementa modo oscuro en esta etapa.
 
+### Dónde viven y cómo se usan (T-2)
+
+- La fuente de verdad es `src/app/tokens.css`: además de los de arriba, suma `--confirmed` (`#d9ead3`),
+  `--card`/`--popover` (Papel) para shadcn, `--benefit-border`, `--line-on-dark` y `--gradient-forest` (Fundido
+  Bosque). `globals.css` sólo lo importa. Si `shadcn add` escribe variables nuevas en `globals.css`, se mueven ahí.
+- Colores como clases de Tailwind: `bg-primary`, `text-foreground`, `bg-muted`, `bg-secondary`, `text-price`,
+  `stroke-scribble`, `text-footer-text`, `bg-confirmed`, `border-border`, `border-benefit-border`.
+- Radios: `rounded-card` (30px), `rounded-benefit` (29px), `rounded-input` (25px), `rounded-hero` (88px) y
+  `rounded-hero-mobile` (40px), `rounded-header-button` (50px), `rounded-toggle` (100px), `rounded-testimonial`
+  (8px), `rounded-panel` (16px). Las píldoras usan `rounded-full`.
+- Sombras: `shadow-halo`, `shadow-glow`, `shadow-toggle`, `shadow-benefit`, `shadow-modal`.
+- Fuente: Manrope con `next/font/google` (`--font-manrope`), aplicada como `font-sans`.
+- `npm run lint` rechaza cualquier color hex escrito en `src/**/*.{ts,tsx}`, y `src/app/tokens.test.ts` verifica
+  el contraste AA de cada par de colores de texto.
+- `cn` (de `@/lib/utils`) combina clases. Si se agregan tamaños de texto propios (`text-lead`, `text-title`), hay
+  que declararlos en `cn/config`: si no, los confunde con colores.
+
 ## Hacer
 
 - Usar Verde Bosque para todos los títulos, textos, labels e íconos. El sitio nunca usa negro.

@@ -4,6 +4,12 @@ const RAW_SQL = {
   selector: 'MemberExpression[property.name=/^\\$(query|execute)Raw(Unsafe)?$/]',
   message: 'Prohibido SQL plano: usá la API de Prisma Client. El SQL a mano va sólo en las migraciones.',
 };
+const HEX = '/#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})(?![\\w-])/';
+const HEX_MESSAGE = 'Prohibido escribir colores hex: usá los tokens de DESIGN.md (src/app/tokens.css).';
+const HEX_COLOR = [
+  { selector: `Literal[value=${HEX}]`, message: HEX_MESSAGE },
+  { selector: `TemplateElement[value.raw=${HEX}]`, message: HEX_MESSAGE },
+];
 
 const forbid = (group, message) => ({ group, message });
 
@@ -21,7 +27,7 @@ const FEATURES = forbid(['@/features', '@/features/**'], 'Esta capa no importa f
 function restrict(patterns) {
   return {
     'no-restricted-imports': ['error', { paths: [PG, ADAPTER], patterns }],
-    'no-restricted-syntax': ['error', RAW_SQL],
+    'no-restricted-syntax': ['error', RAW_SQL, ...HEX_COLOR],
   };
 }
 

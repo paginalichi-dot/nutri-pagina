@@ -102,6 +102,7 @@ Features previstos: `servicio`, `sucursal`, `disponibilidad`, `turno`, `paciente
 
 | Ruta | Contenido |
 |---|---|
+| `src/app/tokens.css` | Tokens de `DESIGN.md` (colores, radios, sombras, fuente) para Tailwind y shadcn. Único lugar con hex; lo controla ESLint y su contraste lo prueba `tokens.test.ts`. |
 | `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. Hasta T-3 cierra `/admin` (redirige a `/`). Con T-3 verifica el JWT de la cookie (chequeo optimista, sin base). Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
 | `prisma/schema.prisma`, `prisma/migrations/` | Modelo de datos y migraciones versionadas. Las restricciones que Prisma no expresa (`CHECK`, `EXCLUDE`) van en el SQL de la migración. |
 | `prisma.config.ts` | URL de las migraciones: `LOCAL_DATABASE_URL` en local y en tests; `DIRECT_URL` con `APP_ENV=production`. |
