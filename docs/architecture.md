@@ -68,7 +68,7 @@ ui (src/app, features/*/ui) → actions → services → repository → db
 |---|---|---|
 | `src/app/**` | `features/*/ui`, `features/*/actions`, `features/*/domain`, `components/`, `hooks/`, `config/`, `lib/utils` | `repository`, `services`, `@/lib/db`, `@/generated/prisma` |
 | `features/<f>/ui` | `domain` y `actions` de cualquier feature, `components/`, `hooks/`, `config/` | `repository`, `services`, `@/lib/db` |
-| `features/<f>/actions` | `services` propios, `requireAdmin` de `features/auth/services` (ADR 0004), `domain`, `lib/auth`, `lib/errors`, `lib/action-result` | `repository`, `@/lib/db`, `ui` |
+| `features/<f>/actions` | `services` propios, `requireAdmin` de `features/auth/actions/require-admin` (ADR 0004), `domain`, `lib/auth`, `lib/errors`, `lib/action-result` | `repository`, `@/lib/db`, `ui` |
 | `features/<f>/services` | `repository` propio y, si la operación los abarca, de otros features; `domain`, `lib/errors`, `@/lib/db/transaction` | `actions`, `ui`, `next/*` |
 | `features/<f>/repository` | `@/lib/db`, `@/generated/prisma`, tipos de `domain`, `lib/errors` | `services`, `actions`, `next/*` |
 | `features/<f>/domain` | `zod` | `@/lib/db`, `@/generated/prisma`, `repository`, `next/*` |
@@ -103,7 +103,7 @@ Features previstos: `servicio`, `sucursal`, `disponibilidad`, `turno`, `paciente
 | Ruta | Contenido |
 |---|---|
 | `src/app/tokens.css` | Tokens de `DESIGN.md` (colores, radios, sombras, fuente) para Tailwind y shadcn. Único lugar con hex; lo controla ESLint y su contraste lo prueba `tokens.test.ts`. |
-| `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. Hasta T-3 cierra `/admin` (redirige a `/`). Con T-3 verifica el JWT de la cookie (chequeo optimista, sin base). Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
+| `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. En `/admin/**` verifica la firma del JWT de la cookie (sin base): si es válido renueva la cookie; si es inválido la borra; sin sesión, todo `/admin/**` salvo `/admin/login` se reescribe a `/acceso-denegado` (la URL no cambia; `noindex`). Responde 200: con Cache Components ni `forbidden()` ni una reescritura pueden fijar un 403. Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
 | `prisma/schema.prisma`, `prisma/migrations/` | Modelo de datos y migraciones versionadas. Las restricciones que Prisma no expresa (`CHECK`, `EXCLUDE`) van en el SQL de la migración. |
 | `prisma.config.ts` | URL de las migraciones: `LOCAL_DATABASE_URL` en local y en tests; `DIRECT_URL` con `APP_ENV=production`. |
 | `src/lib/db/index.ts` | Cliente Prisma único (`db`) con el adaptador de `pg`. La URL sale de `database-config.ts`: `LOCAL_DATABASE_URL`, o `DATABASE_URL` (pooler) con `APP_ENV=production`. |

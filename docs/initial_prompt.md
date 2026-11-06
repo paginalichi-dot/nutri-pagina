@@ -25,10 +25,11 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - Next.js 16 creado con `create-next-app`, movido a `src/`. La home es un placeholder.
 - Base técnica copiada y adaptada de *gestor-empanaderia* (T-1, ADR 0001): `AGENTS.md`, `docs/`, ESLint con
   reglas duras, lefthook, commitlint, CI, Vitest, Stryker, Playwright y las skills propias.
-- Prisma 7 configurado (`prisma/schema.prisma`, `prisma.config.ts`) **sin modelos todavía**.
+- Prisma 7 configurado (`prisma/schema.prisma`, `prisma.config.ts`) con un solo modelo, `AdminUser` (T-3).
 - `src/lib/`: catálogo de errores, `ActionResult`, `db-errors`, `format-date-time`, `database-config`, cliente
   Prisma y `withTransaction`.
-- `src/proxy.ts` cierra `/admin` hasta que exista el login (T-3).
+- Login del panel (T-3): JWT propio en la cookie `session`, sesión permanente, cuenta de prueba con `npm run db:seed`.
+  `/admin/**` sin sesión muestra "Acceso denegado" (`noindex`); el login vive en `/admin/login`. Primera tabla: `admin_user`.
 - Tokens de `DESIGN.md` en `src/app/tokens.css` (T-2): colores, radios, sombras y Manrope; shadcn/ui inicializado
   sin componentes todavía. ESLint rechaza colores hex en el código.
 - Primer commit (`chore: estructura inicial del proyecto`) en `main` y `develop`, publicado en GitHub

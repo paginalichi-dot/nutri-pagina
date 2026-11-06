@@ -5,6 +5,7 @@ const capitalize = (text: string): string => text.charAt(0).toUpperCase() + text
 const CATALOG = {
   VALIDATION: () => 'Revisá los datos ingresados.',
   UNAUTHENTICATED: () => 'Iniciá sesión para continuar.',
+  INVALID_CREDENTIALS: () => 'El email o la contraseña no son correctos.',
   SESSION_EXPIRED: () => 'Tu sesión venció. Volvé a iniciar sesión.',
   FORBIDDEN: () => 'No tenés permiso para hacer esto.',
   NOT_FOUND: (entity: string) => `${capitalize(entity)} ya no existe.`,

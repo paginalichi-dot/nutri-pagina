@@ -1,13 +1,27 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { SESSION_COOKIE, SESSION_COOKIE_OPTIONS, verifySession } from '@/lib/auth/session-token';
 
-const ADMIN_PATHS = ['/admin'];
+const ADMIN = '/admin';
+const ADMIN_LOGIN = '/admin/login';
+const ACCESS_DENIED = '/acceso-denegado';
 
-const matches = (paths: string[], pathname: string): boolean => paths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+const isAdminPath = (pathname: string): boolean => pathname === ADMIN || pathname.startsWith(`${ADMIN}/`);
 
-export function proxy(request: NextRequest): NextResponse {
-  if (matches(ADMIN_PATHS, request.nextUrl.pathname)) return NextResponse.redirect(new URL('/', request.url));
-  return NextResponse.next();
+// Por qué: con Cache Components la página empieza a enviarse antes que el layout del panel; el proxy decide primero.
+function adminResponse(request: NextRequest, signedIn: boolean): NextResponse {
+  if (signedIn || request.nextUrl.pathname === ADMIN_LOGIN) return NextResponse.next();
+  return NextResponse.rewrite(new URL(ACCESS_DENIED, request.url));
+}
+
+export async function proxy(request: NextRequest): Promise<NextResponse> {
+  if (!isAdminPath(request.nextUrl.pathname)) return NextResponse.next();
+  const token = request.cookies.get(SESSION_COOKIE)?.value;
+  const signedIn = token !== undefined && (await verifySession(token)) !== null;
+  const response = adminResponse(request, signedIn);
+  if (signedIn && token) response.cookies.set(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
+  else if (token !== undefined) response.cookies.delete(SESSION_COOKIE);
+  return response;
 }
 
 export const config = {

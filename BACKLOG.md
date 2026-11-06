@@ -148,9 +148,9 @@ que ningún componente use colores hardcodeados.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-06 |
 | Tamaño       | L         |
 | Depende de   | T-1       |
 | Plan         | [`docs/plans/T-3-login-panel.md`](docs/plans/T-3-login-panel.md) |
@@ -162,23 +162,25 @@ que ningún componente use colores hardcodeados.
 Decisiones del dev (2026-11-06): se entra con email y contraseña, sin registro público, con un login propio con
 JWT en lugar de Supabase Auth, para probar todo con Docker ([ADR 0004](docs/adr/0004-login-propio-con-jwt.md)).
 La sesión queda iniciada para siempre, hasta "Cerrar sesión". Por ahora hay una sola cuenta admin, de prueba; el
-alta del admin de producción queda para el ítem de despliegue.
+alta del admin de producción queda para el ítem de despliegue. Quien escriba `/admin` sin la sesión del admin ve
+"Acceso denegado": el login vive sólo en `/admin/login` y ningún link lleva ahí.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · `/admin` sin sesión redirige a `/admin/login`; con sesión, entra; "Cerrar sesión" vuelve al login · Estimación: 1 h · Completado: —
+- [x] **CA-1** · `/admin/login` con email y contraseña correctos entra a `/admin`; con sesión, `/admin/login` lleva a `/admin`; "Cerrar sesión" vuelve a `/admin/login` · Estimación: 1 h · Completado: 2026-11-06 21:33
 
-- [ ] **CA-2** · Toda action del panel verifica la sesión en el servidor (test de contrato: sin cookie → `UNAUTHENTICATED`, token adulterado o sesión cerrada → `SESSION_EXPIRED`) · Estimación: 40 min · Completado: —
+- [x] **CA-2** · Toda action del panel verifica la sesión en el servidor (test de contrato: sin cookie o token adulterado → `UNAUTHENTICATED`, sesión cerrada → `SESSION_EXPIRED`) · Estimación: 40 min · Completado: 2026-11-06 21:16
+- [x] **CA-3** · Un email o una contraseña incorrectos muestran `INVALID_CREDENTIALS`, con el mismo tiempo de respuesta exista o no el email · Estimación: 30 min · Completado: 2026-11-06 21:16
 
-- [ ] **CA-3** · Un email o una contraseña incorrectos muestran `INVALID_CREDENTIALS`, con el mismo tiempo de respuesta exista o no el email · Estimación: 30 min · Completado: —
+- [x] **CA-4** · 5 intentos fallidos seguidos bloquean el login 15 minutos (`RATE_LIMITED`), y el bloqueo se guarda en la base · Estimación: 30 min · Completado: 2026-11-06 21:16
 
-- [ ] **CA-4** · 5 intentos fallidos seguidos bloquean el login 15 minutos (`RATE_LIMITED`), y el bloqueo se guarda en la base · Estimación: 30 min · Completado: —
+- [x] **CA-5** · La contraseña se guarda con `scrypt` y ni ella ni su hash salen nunca del servidor · Estimación: 20 min · Completado: 2026-11-06 21:16
 
-- [ ] **CA-5** · La contraseña se guarda con `scrypt` y ni ella ni su hash salen nunca del servidor · Estimación: 20 min · Completado: —
+- [x] **CA-6** · `npm run db:seed` crea una cuenta admin de prueba con datos ficticios (y se niega con `APP_ENV=production`), y el login se prueba completo con Docker: integración y E2E con esa cuenta · Estimación: 40 min · Completado: 2026-11-06 21:33
 
-- [ ] **CA-6** · `npm run db:seed` crea una cuenta admin de prueba con datos ficticios (y se niega con `APP_ENV=production`), y el login se prueba completo con Docker: integración y E2E con esa cuenta · Estimación: 40 min · Completado: —
+- [x] **CA-7** · La sesión no vence: la cookie dura 400 días y se renueva en cada visita al panel; sólo se cierra con "Cerrar sesión" o cuando cambia la `session_version` (US-5) · Estimación: 30 min · Completado: 2026-11-06 21:16
 
-- [ ] **CA-7** · La sesión no vence: la cookie dura 400 días y se renueva en cada visita al panel; sólo se cierra con "Cerrar sesión" o cuando cambia la `session_version` (US-5) · Estimación: 30 min · Completado: —
+- [x] **CA-8** · `/admin` y cualquier `/admin/**` sin sesión de admin muestran "Acceso denegado" (la URL no cambia, `noindex`) con un botón "Volver al inicio", sin link al login · Estimación: 40 min · Completado: 2026-11-06 21:33
 
 ### US-5 · El admin cambia su email y su contraseña
 

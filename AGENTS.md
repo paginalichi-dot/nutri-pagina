@@ -62,7 +62,7 @@ Detalle completo en `docs/features/turno/README.md`.
 - **Límites de reserva.** No se puede reservar en el pasado ni con menos de [X] horas de anticipación ⇒ `SLOT_TOO_SOON`.
 - **Estados.** `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`, y `CANCELADO` desde `PENDIENTE` o `CONFIRMADO`. Un turno cancelado libera el horario.
 - **Cancelación por el paciente.** Se hace con un link de un solo uso y con vencimiento, que llega en el email de confirmación. No requiere cuenta.
-- **Acciones públicas (sin sesión).** Solo estas: leer servicios, sucursales y disponibilidad; crear una reserva; cancelar con token. Llevan rate limiting y honeypot.
+- **Acciones públicas (sin sesión).** Solo estas: leer servicios, sucursales y disponibilidad; crear una reserva; cancelar con token; iniciar sesión en el panel (`login`). Llevan rate limiting (el login, bloqueo por intentos) y honeypot.
 
 ## Datos personales
 

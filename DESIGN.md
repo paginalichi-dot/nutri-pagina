@@ -186,6 +186,12 @@ El panel es una herramienta de trabajo diario, así que usa una **versión silen
 - **Tabla de turnos:** filas Papel con separadores Línea Salvia, chips de estado como píldoras y acciones (confirmar, reprogramar, cancelar) en un menú de tres puntos.
 - **Bloquear disponibilidad:** modal Papel con radio 30px, selector de fechas y la píldora Verde Lima "Bloquear".
 - **Mobile:** la sidebar pasa a una barra inferior con 4 íconos y la agenda muestra un día por vez.
+- **Tarjeta de login (T-3):** fondo Hueso, tarjeta Papel con radio 30px, título 38.4px/28px "Ingresá al **panel**",
+  inputs del formulario de reserva (radio 25px, Gris Nube, label 15px/600, foco Verde Bosque de 2px con halo Verde
+  Lima de 4px) y la píldora Verde Lima "Entrar" a todo el ancho. El error va arriba del botón, en Pimentón con ícono.
+- **Acceso denegado (T-3):** la ve cualquiera que entre a `/admin/**` sin sesión, así que usa el lenguaje del sitio
+  público: banda Hueso, tarjeta Papel, título "Acceso **denegado**" con subrayado Verde Lima, la línea "Esta sección
+  es privada." y la píldora Verde Lima "Volver al inicio" con disco de flecha. Ningún link al login.
 
 ## Elevación
 

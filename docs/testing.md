@@ -25,7 +25,8 @@ Herramientas: Vitest para unit, tipos, contrato, fuzz, integración y componente
 Una Server Action depende de `next/headers` (cookies), de la sesión (cookie con JWT) y de los repositorios. En el test
 de contrato:
 
-- La sesión del admin se simula con un helper de `src/test/` (se crea en T-3, junto con el login). `next/headers`
+- La sesión del admin se arma con `signSession` y `cookieJar.set('session', token)`; el repositorio se reemplaza por el
+  fake con `vi.mock(…, fakeRepositoryModule)` y `next/navigation` con `navigationMock` (`features/auth/testing/module-mocks.ts`). `next/headers`
   está simulado para todos los tests por `src/test/setup/next-headers.setup.ts`, que además limpia cookies, spies y
   variables después de cada test.
 - En el proyecto unit, `src/test/setup/no-database.setup.ts` reemplaza `@/lib/db` por un objeto que falla al

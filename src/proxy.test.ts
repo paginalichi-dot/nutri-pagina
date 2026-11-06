@@ -1,0 +1,53 @@
+import { NextRequest } from 'next/server';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { signSession } from '@/lib/auth/session-token';
+import { proxy } from './proxy';
+
+const ADMIN_ID = '7d3f8a3e-2f4b-4c1d-9a7e-1b2c3d4e5f60';
+
+function request(path: string, token?: string): NextRequest {
+  return new NextRequest(`http://localhost${path}`, { headers: token ? { cookie: `session=${token}` } : {} });
+}
+
+const passes = (response: Response): boolean => response.headers.get('x-middleware-next') === '1';
+const rewrittenTo = (response: Response): string | null => response.headers.get('x-middleware-rewrite');
+
+describe('proxy', () => {
+  beforeEach(() => {
+    vi.stubEnv('JWT_SECRET', 'secreto-de-prueba-con-mas-de-32-caracteres');
+  });
+
+  it('con un token válido en el panel deja pasar y renueva la cookie por 400 días', async () => {
+    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
+    const response = await proxy(request('/admin/cuenta', token));
+    expect(passes(response)).toBe(true);
+    expect(response.cookies.get('session')).toMatchObject({ value: token, maxAge: 34_560_000, httpOnly: true, secure: true });
+  });
+
+  it('sin sesión, /admin/login pasa y no toca la cookie', async () => {
+    const response = await proxy(request('/admin/login'));
+    expect(passes(response)).toBe(true);
+    expect(response.cookies.get('session')).toBeUndefined();
+  });
+
+  it.each(['/admin', '/admin/cuenta'])('sin sesión, %s muestra "Acceso denegado"', async (path) => {
+    const response = await proxy(request(path));
+    expect(rewrittenTo(response)).toBe('http://localhost/acceso-denegado');
+  });
+
+  it('con un token adulterado borra la cookie y lo trata como sin sesión', async () => {
+    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
+    const response = await proxy(request('/admin/agenda', `${token}x`));
+    expect(rewrittenTo(response)).toBe('http://localhost/acceso-denegado');
+    expect(response.cookies.get('session')?.value).toBe('');
+  });
+
+  it.each([
+    ['el sitio público, aunque haya token', request('/', 'cualquiera')],
+    ['una ruta que sólo empieza parecido', request('/administracion', 'cualquiera')],
+  ])('no toca %s', async (_caso, incoming) => {
+    const response = await proxy(incoming);
+    expect(passes(response)).toBe(true);
+    expect(response.cookies.get('session')).toBeUndefined();
+  });
+});
