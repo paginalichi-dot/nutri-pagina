@@ -30,4 +30,24 @@ test.describe('home', () => {
       expect(await isOnTop(paragraph)).toBe(true);
     });
   }
+
+  test('"Sobre mí" se ve al bajar, con líneas de menos de 75 caracteres y sin scroll horizontal', async ({ page }) => {
+    await page.goto('/');
+    const section = page.locator('#sobre-mi');
+    await section.scrollIntoViewIfNeeded();
+    await expect(section.getByRole('heading', { level: 2 })).toHaveText('Sobre mí');
+    const longest = section.locator('p', { hasText: 'Entiendo la nutrición' });
+    await expect(longest).toBeVisible();
+    const fitsSeventyFive = await longest.evaluate((paragraph) => {
+      const probe = document.createElement('span');
+      probe.style.whiteSpace = 'nowrap';
+      probe.textContent = (paragraph.textContent ?? '').slice(0, 75);
+      paragraph.append(probe);
+      const fits = probe.getBoundingClientRect().width <= paragraph.clientWidth;
+      probe.remove();
+      return fits;
+    });
+    expect(fitsSeventyFive).toBe(false);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
 });

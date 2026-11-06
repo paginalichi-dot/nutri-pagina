@@ -269,12 +269,12 @@ el selector de sucursal, que llega con la US de sucursales.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-06 |
 | Tamaño       | S         |
 | Depende de   | T-2       |
-| Plan         | —         |
+| Plan         | [`docs/plans/US-2-sobre-mi.md`](docs/plans/US-2-sobre-mi.md) |
 | Merge        | —         |
 | Horas reales | —         |
 
@@ -285,18 +285,18 @@ El texto es el del pedido, textual, con una sola corrección: «López» con til
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · Debajo del hero hay una banda Hueso con borde curvo (`DESIGN.md`, "Sobre mí") con los cinco párrafos del pedido, textuales, desde «Soy Lisandro López, Licenciado en Nutrición por la Universidad Favaloro.» hasta «…con atención, dedicación y profesionalismo.» · Estimación: 30 min · Completado: —
+- [x] **CA-1** · Debajo del hero hay una banda Hueso con borde curvo (`DESIGN.md`, "Sobre mí") con los cinco párrafos del pedido, textuales, desde «Soy Lisandro López, Licenciado en Nutrición por la Universidad Favaloro.» hasta «…con atención, dedicación y profesionalismo.» · Estimación: 30 min · Completado: 2026-11-06 22:30
 
-- [ ] **CA-2** · La sección tiene un `h2` con la firma tipográfica de `DESIGN.md` (peso 500, palabras clave en 700 con subrayado Verde Lima); el texto del título lo confirma el dev · Estimación: 15 min · Completado: —
+- [x] **CA-2** · La sección tiene un `h2` con la firma tipográfica de `DESIGN.md` (peso 500, palabras clave en 700 con subrayado Verde Lima); el texto del título lo confirma el dev · Estimación: 15 min · Completado: 2026-11-06 22:30
 
-- [ ] **CA-3** · Una foto de Lisandro acompaña el texto, servida con `next/image` y `alt` descriptivo (placeholder visible `[Completar: foto Sobre mí]` mientras no esté) · Estimación: 20 min · Completado: —
+- [x] **CA-3** · Una foto de Lisandro acompaña el texto, servida con `next/image` y `alt` descriptivo (placeholder visible `[Completar: foto Sobre mí]` mientras no esté) · Estimación: 20 min · Completado: 2026-11-06 22:30
 
-- [ ] **CA-4** · En desktop las líneas del texto no pasan de 75 caracteres; en 375px se lee sin scroll horizontal · Estimación: 10 min · Completado: —
+- [x] **CA-4** · En desktop las líneas del texto no pasan de 75 caracteres; en 375px se lee sin scroll horizontal · Estimación: 10 min · Completado: 2026-11-06 22:30
 
 **Preguntas abiertas**
 
-- Título de la sección. Propuesta: «Sobre mí».
-- ¿Hay una segunda foto, más cercana o en contexto, o se reutiliza la del hero?
+- Título de la sección: se usó la propuesta «Sobre mí»; se cambia si Lisandro prefiere otro.
+- Falta la foto de Lisandro para esta sección (hoy, placeholder visible por decisión del dev).
 
 ### US-3 · Scroll suave y secciones que aparecen al bajar
 
