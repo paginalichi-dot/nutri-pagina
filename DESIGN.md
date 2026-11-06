@@ -121,6 +121,13 @@ Barra Papel con borde inferior gris de 1px al hacer scroll (transparente con tex
 ### Hero enmarcado
 Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y radio de 88px alrededor de un fondo de color plano Verde Bosque (recomendado: el recorte de Lisandro resalta y el detalle puede ir en Verde Lima) o Hueso. **Lisandro recortado, sin fondo** (de cintura para arriba, sonriente, con ropa de color liso), parado delante de su nombre o del logotipo gigante en blanco. Garabatos dibujados a mano alrededor: blancos o Verde Lima sobre Verde Bosque, Zanahoria sobre Hueso. Abajo a la izquierda, una píldora Papel con flecha: "Reservá tu primera consulta". Abajo a la derecha, el selector de sucursal. Debajo del hero va una línea de presentación, porque el nombre solo no alcanza para explicar qué hace: "Licenciado en Nutrición · MN [número]".
 
+**Disposición vigente (US-1):** el nombre "LISANDRO LÓPEZ" en blanco, en gigante y en una línea (dos en mobile), con
+la foto delante tapando apenas la parte de abajo de las letras. La frase del cliente va en dos partes: arriba a la
+izquierda y abajo a la derecha, en tamaño lead (Hueso, con las palabras clave en Verde Lima 700), siempre por encima
+de la foto y del nombre. En mobile todo va en columna y la foto se funde con Fundido Bosque. Sin píldora ni selector
+de sucursal en el hero: la acción de reservar es el botón flotante (US-4). La línea de presentación queda
+"Lisandro López · Licenciado en Nutrición" hasta que llegue la matrícula.
+
 ### Píldora Verde Lima con flecha (CTA principal)
 Relleno Verde Lima, 88px de alto (64px en mobile), radio 9999px, padding 0 37px, label Verde Bosque 18px/500 y un círculo blanco con flecha Verde Bosque en el extremo derecho. Sombra `rgba(0,0,0,0.05) 0 6px 34px`. Sin borde. **Una sola por pantalla.**
 

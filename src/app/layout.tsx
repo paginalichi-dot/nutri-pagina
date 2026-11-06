@@ -6,7 +6,7 @@ import './globals.css';
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' });
 
 export const metadata: Metadata = {
-  title: '[Nombre] · Nutrición',
+  title: 'Lisandro López · Nutrición',
   description: 'Licenciado en Nutrición. Reservá tu turno online.',
 };
 

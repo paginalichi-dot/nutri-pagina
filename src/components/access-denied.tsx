@@ -1,24 +1,6 @@
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-
-function ArrowDisc(): ReactElement {
-  return (
-    <span className='flex size-10 items-center justify-center rounded-full bg-background text-foreground'>
-      <svg
-        aria-hidden='true'
-        viewBox='0 0 24 24'
-        className='size-5'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth='2'
-        strokeLinecap='round'
-        strokeLinejoin='round'
-      >
-        <path d='M5 12h14M13 6l6 6-6 6' />
-      </svg>
-    </span>
-  );
-}
+import { ArrowDisc } from './arrow-disc';
 
 export function AccessDenied(): ReactElement {
   return (

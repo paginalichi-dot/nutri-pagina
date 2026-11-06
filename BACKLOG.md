@@ -227,12 +227,12 @@ contacto por WhatsApp. Se cargan como `US-N` después del descubrimiento (`docs/
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-06 |
 | Tamaño       | M         |
 | Depende de   | T-2       |
-| Plan         | —         |
+| Plan         | [`docs/plans/US-1-hero.md`](docs/plans/US-1-hero.md) |
 | Merge        | —         |
 | Horas reales | —         |
 
@@ -249,17 +249,17 @@ el selector de sucursal, que llega con la US de sucursales.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · Hero enmarcado según `DESIGN.md` (borde Papel 35px/16px, radio 88px/40px, fondo Verde Bosque) con `public/foto-cabecera.png` al centro y grande, servida con `next/image` (`priority`) y `alt` descriptivo · Estimación: 45 min · Completado: —
+- [x] **CA-1** · Hero enmarcado según `DESIGN.md` (borde Papel 35px/16px, radio 88px/40px, fondo Verde Bosque) con `public/foto-cabecera.png` al centro y grande, servida con `next/image` (`priority`) y `alt` descriptivo · Estimación: 45 min · Completado: 2026-11-06 22:25
 
-- [ ] **CA-2** · Detrás de la foto va «LISANDRO LÓPEZ» en gigante y en blanco, como `h1` de la página; la foto puede tapar la parte de abajo de las letras, pero el nombre se lee completo en 375px y en desktop · Estimación: 30 min · Completado: —
+- [x] **CA-2** · Detrás de la foto va «LISANDRO LÓPEZ» en gigante y en blanco, como `h1` de la página; la foto puede tapar la parte de abajo de las letras, pero el nombre se lee completo en 375px y en desktop · Estimación: 30 min · Completado: 2026-11-06 22:25
 
-- [ ] **CA-3** · En desktop, «La alimentación nos atraviesa durante toda nuestra vida» va arriba a la izquierda y «Y aprender a transformarla en un buen hábito es la base de tu salud» abajo a la derecha, en tamaño lead, sin tapar el nombre ni la cara · Estimación: 30 min · Completado: —
+- [x] **CA-3** · En desktop, «La alimentación nos atraviesa durante toda nuestra vida» va arriba a la izquierda y «Y aprender a transformarla en un buen hábito es la base de tu salud» abajo a la derecha, en tamaño lead, sin tapar el nombre ni la cara · Estimación: 30 min · Completado: 2026-11-06 22:25
 
-- [ ] **CA-4** · En 375px las dos partes de la frase se leen completas y en ese orden, sin que la foto ni el nombre las tapen; el nombre y la frase cumplen contraste AA sobre el fondo · Estimación: 20 min · Completado: —
+- [x] **CA-4** · En 375px las dos partes de la frase se leen completas y en ese orden, sin que la foto ni el nombre las tapen; el nombre y la frase cumplen contraste AA sobre el fondo · Estimación: 20 min · Completado: 2026-11-06 22:25
 
-- [ ] **CA-5** · Debajo del hero va la línea de presentación «Lisandro López · Licenciado en Nutrición · MN [Completar: matrícula]», y el `<title>` de la página es «Lisandro López · Nutrición» · Estimación: 10 min · Completado: —
+- [x] **CA-5** · Debajo del hero va la línea de presentación «Lisandro López · Licenciado en Nutrición» (sin matrícula hasta que llegue: decisión del dev), y el `<title>` de la página es «Lisandro López · Nutrición» · Estimación: 10 min · Completado: 2026-11-06 22:25
 
-- [ ] **CA-6** · Garabatos del hero en SVG con `aria-hidden`; si se animan, respetan `prefers-reduced-motion` · Estimación: 20 min · Completado: —
+- [x] **CA-6** · Garabatos del hero en SVG con `aria-hidden`; si se animan, respetan `prefers-reduced-motion` · Estimación: 20 min · Completado: 2026-11-06 22:25
 
 **Preguntas abiertas**
 
