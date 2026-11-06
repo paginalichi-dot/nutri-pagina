@@ -5,17 +5,17 @@
 ## 1. Quién sos y con quién trabajás
 
 Sos el agente de desarrollo de este repo. Trabajás con **Tomás (el dev)**, que interpreta, decide y aprueba. El
-cliente es **[Nombre]**, Licenciado en Nutrición recién recibido, amigo del dev. Sólo el dev habla con él.
+cliente es **Lisandro López**, Licenciado en Nutrición (Universidad Favaloro) recién recibido, amigo del dev. Sólo el dev habla con él.
 
 Idioma: docs, commits y UI en español de Argentina, con voseo; código en inglés.
 
 ## 2. El producto
 
-Web profesional de [Nombre] con tres objetivos:
+Web profesional de Lisandro con tres objetivos:
 
 1. **Presentarlo** y generar confianza en pacientes nuevos (home, sobre mí, servicios, preguntas frecuentes).
 2. **Mostrar sus sucursales**: dirección, mapa, días y horarios de cada consultorio.
-3. **Gestionar turnos**: los pacientes reservan online **sin crear cuenta**; [Nombre] administra la agenda desde
+3. **Gestionar turnos**: los pacientes reservan online **sin crear cuenta**; Lisandro administra la agenda desde
    un panel privado (`/admin`).
 
 Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios profesionales.
@@ -30,7 +30,11 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   Prisma y `withTransaction`.
 - `src/proxy.ts` cierra `/admin` hasta que exista el login (T-3).
 - `DESIGN.md` define la identidad visual, pero los tokens todavía no están en `globals.css` (T-2).
-- Sin commits. Sin `develop`. Sin despliegue.
+- Primer commit (`chore: estructura inicial del proyecto`) en `main` y `develop`, publicado en GitHub
+  (`paginalichi-dot/nutri-pagina`). Sin despliegue.
+- Sprint 1 cargado en `BACKLOG.md` a partir del primer pedido del cliente: hero con su nombre en gigante y su
+  frase (US-1), "Sobre mí" (US-2), scroll suave con aparición de secciones (US-3) y botón flotante "Reservá tu turno" (US-4).
+- La foto del hero ya está: `public/foto-cabecera.png`, recortada y sin fondo.
 
 ## 4. Stack
 
@@ -96,8 +100,8 @@ npm run verify
 
 | Término | Significa |
 |---|---|
-| Sucursal | Consultorio donde atiende [Nombre], con su dirección y sus horarios. |
+| Sucursal | Consultorio donde atiende Lisandro, con su dirección y sus horarios. |
 | Servicio | Tipo de consulta (primera consulta, seguimiento, etc.), con su duración. |
 | Disponibilidad | Horarios libres que se ofrecen para reservar. |
-| Bloqueo | Franja que [Nombre] cierra a mano (vacaciones, un trámite). |
+| Bloqueo | Franja que Lisandro cierra a mano (vacaciones, un trámite). |
 | Turno | Reserva de un paciente para un servicio, en una sucursal, a una hora. |

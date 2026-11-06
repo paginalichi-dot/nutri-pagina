@@ -1,4 +1,4 @@
-/# Backlog
+# Backlog
 
 > Estado vigente de todo el trabajo del proyecto. **Si no está acá, no se programa.**
 >
@@ -17,7 +17,7 @@
 
 | ID      | Qué es                                                                                   | Ejemplo                          |
 | ------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| `US-N`  | **Historia de usuario**: algo que un paciente o [Nombre] ven y usan                      | Reservar un turno                |
+| `US-N`  | **Historia de usuario**: algo que un paciente o Lisandro ven y usan                      | Reservar un turno                |
 | `T-N`   | **Habilitador técnico**: no aporta nada visible, pero hace falta para construir lo demás | Login del panel                  |
 | `BUG-N` | **Defecto**: algo que funciona mal                                                       | Un turno duplicado               |
 
@@ -155,7 +155,7 @@ que ningún componente use colores hardcodeados.
 | Merge        | —         |
 | Horas reales | —         |
 
-**Historia**: Como [Nombre] quiero entrar a un panel privado, de forma que sólo yo administre los turnos.
+**Historia**: Como Lisandro quiero entrar a un panel privado, de forma que sólo yo administre los turnos.
 
 **Criterios de aceptación**
 
@@ -169,10 +169,20 @@ que ningún componente use colores hardcodeados.
 
 ## Sprint 1 · Sitio de presentación
 
-Ítems a definir con [Nombre]: home, sobre mí, servicios, sucursales con mapa, preguntas frecuentes y contacto por
-WhatsApp. Se cargan como `US-N` después del descubrimiento (`docs/workflow.md` §0).
+Origen: primer pedido del cliente en `docs/requerimientos/specs.md` (2026-11-06). Decisiones del dev en el
+descubrimiento:
 
-### US-1 · Hero de la home con la frase de [Nombre]
+- El nombre se escribe **Lisandro López**, con tilde.
+- La foto del hero es `public/foto-cabecera.png`, ya recortada y sin fondo.
+- El hero lleva el nombre en gigante detrás de la foto; la frase del cliente va más chica, en las
+  esquinas que pidió (arriba a la izquierda y abajo a la derecha).
+- El scroll suave y la aparición de secciones se hacen con CSS y APIs nativas del navegador, sin librerías.
+- Hasta que exista la reserva online (Sprint 2), el botón "Reservá tu turno" lleva a una página "Próximamente".
+
+Quedan por definir con Lisandro, más adelante: servicios, sucursales con mapa, preguntas frecuentes, footer y
+contacto por WhatsApp. Se cargan como `US-N` después del descubrimiento (`docs/workflow.md` §0).
+
+### US-1 · Hero de la home con el nombre y la frase de Lisandro
 
 | Campo        | Valor     |
 | ------------ | --------- |
@@ -185,35 +195,132 @@ WhatsApp. Se cargan como `US-N` después del descubrimiento (`docs/workflow.md` 
 | Merge        | —         |
 | Horas reales | —         |
 
-**Historia**: Como paciente que entra a la web quiero ver a [Nombre] y leer su frase sobre la alimentación, de
+**Historia**: Como paciente que entra a la web quiero ver a Lisandro y leer su frase sobre la alimentación, de
 forma que entienda de entrada cómo trabaja.
 
-Origen: `docs/requerimientos/specs.md` (pedido de la foto-cabecera y la frase). La forma y la ubicación las define
-el "Hero enmarcado" de `DESIGN.md`. El pedido define solo el texto que se tiene que leer.
+El pedido define la foto al centro y grande, y la frase partida en dos. El dev decidió que el protagonista sea el
+nombre en gigante detrás de la foto, como en el "Hero enmarcado" de `DESIGN.md`, y que la frase se reacomode
+alrededor, más chica, para no competir con el nombre, en las esquinas que pidió el cliente (arriba a la izquierda
+y abajo a la derecha). La disposición se valida con un boceto en el plan, y `DESIGN.md` se actualiza con ella.
 
-Fuera de alcance: la píldora "Reservá tu primera consulta" y el selector de sucursal del hero. Se agregan con las
-US de reserva y de sucursales.
+Fuera de alcance: la píldora "Reservá tu primera consulta" del hero, que la reemplaza el botón flotante (US-4), y
+el selector de sucursal, que llega con la US de sucursales.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · Hero enmarcado según `DESIGN.md` (borde Papel 35px/16px, radio 88px/40px, fondo Verde Bosque) con la foto recortada de [Nombre] al centro, servida con `next/image` y `alt` descriptivo (placeholder visible `[Completar: foto hero]` mientras no esté) · Estimación: 45 min · Completado: —
+- [ ] **CA-1** · Hero enmarcado según `DESIGN.md` (borde Papel 35px/16px, radio 88px/40px, fondo Verde Bosque) con `public/foto-cabecera.png` al centro y grande, servida con `next/image` (`priority`) y `alt` descriptivo · Estimación: 45 min · Completado: —
 
-- [ ] **CA-2** · La frase se lee completa y textual, sin que la foto la tape, en 375px y en desktop: «La alimentación nos atraviesa durante toda nuestra vida» y «Y aprender a transformarla en un buen hábito es la base de tu salud» · Estimación: 30 min · Completado: —
+- [ ] **CA-2** · Detrás de la foto va «LISANDRO LÓPEZ» en gigante y en blanco, como `h1` de la página; la foto puede tapar la parte de abajo de las letras, pero el nombre se lee completo en 375px y en desktop · Estimación: 30 min · Completado: —
 
-- [ ] **CA-3** · La frase cumple contraste AA sobre el fondo del hero y es el `h1` de la página · Estimación: 10 min · Completado: —
+- [ ] **CA-3** · En desktop, «La alimentación nos atraviesa durante toda nuestra vida» va arriba a la izquierda y «Y aprender a transformarla en un buen hábito es la base de tu salud» abajo a la derecha, en tamaño lead, sin tapar el nombre ni la cara · Estimación: 30 min · Completado: —
 
-- [ ] **CA-4** · Debajo del hero va la línea de presentación "Licenciado en Nutrición · MN [Completar: matrícula]" · Estimación: 10 min · Completado: —
+- [ ] **CA-4** · En 375px las dos partes de la frase se leen completas y en ese orden, sin que la foto ni el nombre las tapen; el nombre y la frase cumplen contraste AA sobre el fondo · Estimación: 20 min · Completado: —
 
-- [ ] **CA-5** · Garabatos del hero en SVG con `aria-hidden`; si se animan, respetan `prefers-reduced-motion` · Estimación: 20 min · Completado: —
+- [ ] **CA-5** · Debajo del hero va la línea de presentación «Lisandro López · Licenciado en Nutrición · MN [Completar: matrícula]», y el `<title>` de la página es «Lisandro López · Nutrición» · Estimación: 10 min · Completado: —
+
+- [ ] **CA-6** · Garabatos del hero en SVG con `aria-hidden`; si se animan, respetan `prefers-reduced-motion` · Estimación: 20 min · Completado: —
 
 **Preguntas abiertas**
 
-- Foto recortada de [Nombre] para el hero (sin fondo, de la cintura para arriba, ropa lisa que no sea verde).
-- Nombre profesional y matrícula para la línea de presentación.
+- Matrícula (MN/MP) para la línea de presentación.
+
+### US-2 · Sección "Sobre mí"
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | Pendiente |
+| Dueño        | —         |
+| Inicio       | —         |
+| Tamaño       | S         |
+| Depende de   | T-2       |
+| Plan         | —         |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente que baja por la home quiero leer quién es Lisandro y cómo trabaja, de forma que
+confíe en él antes de pedir un turno.
+
+El texto es el del pedido, textual, con una sola corrección: «López» con tilde.
+
+**Criterios de aceptación**
+
+- [ ] **CA-1** · Debajo del hero hay una banda Hueso con borde curvo (`DESIGN.md`, "Sobre mí") con los cinco párrafos del pedido, textuales, desde «Soy Lisandro López, Licenciado en Nutrición por la Universidad Favaloro.» hasta «…con atención, dedicación y profesionalismo.» · Estimación: 30 min · Completado: —
+
+- [ ] **CA-2** · La sección tiene un `h2` con la firma tipográfica de `DESIGN.md` (peso 500, palabras clave en 700 con subrayado Verde Lima); el texto del título lo confirma el dev · Estimación: 15 min · Completado: —
+
+- [ ] **CA-3** · Una foto de Lisandro acompaña el texto, servida con `next/image` y `alt` descriptivo (placeholder visible `[Completar: foto Sobre mí]` mientras no esté) · Estimación: 20 min · Completado: —
+
+- [ ] **CA-4** · En desktop las líneas del texto no pasan de 75 caracteres; en 375px se lee sin scroll horizontal · Estimación: 10 min · Completado: —
+
+**Preguntas abiertas**
+
+- Título de la sección. Propuesta: «Sobre mí».
+- ¿Hay una segunda foto, más cercana o en contexto, o se reutiliza la del hero?
+
+### US-3 · Scroll suave y secciones que aparecen al bajar
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | Pendiente |
+| Dueño        | —         |
+| Inicio       | —         |
+| Tamaño       | S         |
+| Depende de   | US-2      |
+| Plan         | —         |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente que recorre la home quiero que el desplazamiento sea suave y que las secciones
+aparezcan con un efecto sutil, de forma que la web sea agradable de mirar.
+
+**Criterios de aceptación**
+
+- [ ] **CA-1** · Los saltos a anclas internas se desplazan con suavidad, con CSS nativo y sin dependencias nuevas en `package.json` · Estimación: 10 min · Completado: —
+
+- [ ] **CA-2** · Cada sección de la home, salvo el hero, aparece al entrar en pantalla con un fundido y un desplazamiento corto (≤ 24px, ≤ 600 ms) · Estimación: 30 min · Completado: —
+
+- [ ] **CA-3** · Con `prefers-reduced-motion: reduce` no hay desplazamiento animado ni aparición: el contenido se ve directo · Estimación: 15 min · Completado: —
+
+- [ ] **CA-4** · Sin JavaScript o en un navegador sin soporte, todo el contenido queda visible: la animación nunca deja texto oculto · Estimación: 15 min · Completado: —
+
+- [ ] **CA-5** · Las animaciones sólo usan `opacity` y `transform`, y el CLS de la home queda por debajo de 0.1 · Estimación: 10 min · Completado: —
+
+### US-4 · Botón flotante "Reservá tu turno"
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | Pendiente |
+| Dueño        | —         |
+| Inicio       | —         |
+| Tamaño       | S         |
+| Depende de   | T-2       |
+| Plan         | —         |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente quiero tener siempre a mano un botón para reservar, de forma que pueda pedir un turno
+en cualquier momento mientras recorro la home.
+
+Hasta que exista la reserva online (Sprint 2), el botón lleva a `/reservar`, que muestra "Próximamente". Cuando
+llegue la reserva, esa página pasa a ser el flujo de reserva y el botón no cambia.
+
+**Criterios de aceptación**
+
+- [ ] **CA-1** · En la home, una píldora Verde Lima «Reservá tu turno» con disco de flecha queda fija abajo al centro, visible desde que carga y durante todo el scroll, en 375px y en desktop · Estimación: 30 min · Completado: —
+
+- [ ] **CA-2** · El botón nunca tapa contenido: al llegar al final de la página, lo último queda visible por encima del botón (incluido el área segura de iOS) · Estimación: 15 min · Completado: —
+
+- [ ] **CA-3** · Es un link a `/reservar`, se alcanza con teclado, tiene foco visible en Verde Bosque y un área táctil de al menos 44×44px · Estimación: 10 min · Completado: —
+
+- [ ] **CA-4** · `/reservar` muestra una página «Próximamente» con un título, una línea que avisa que la reserva online está por llegar y un link para volver al inicio; está registrada en `src/proxy.ts` como pública y no muestra el botón flotante · Estimación: 30 min · Completado: —
+
+- [ ] **CA-5** · `DESIGN.md` suma el componente «Botón flotante de reserva» y aclara que reemplaza a la píldora del hero y al botón «RESERVAR TURNO» del nav, para que haya una sola píldora Verde Lima por pantalla · Estimación: 15 min · Completado: —
 
 **Preguntas abiertas del sprint**
 
-- Nombre profesional, matrícula, slogan, servicios (con o sin aranceles), sucursales y horarios, obras sociales.
+- Matrícula, slogan, servicios (con o sin aranceles), sucursales y horarios, obras sociales.
+- WhatsApp, email e Instagram de contacto.
+- Ciudad donde atiende.
 
 ## Sprint 2 · Turnos
 
@@ -221,6 +328,6 @@ US de reserva y de sucursales.
 
 **Preguntas abiertas**
 
-- ¿Los turnos se confirman solos o los confirma [Nombre]?
+- ¿Los turnos se confirman solos o los confirma Lisandro?
 - ¿Cuánto dura cada tipo de consulta? ¿Con cuántas horas de anticipación se puede reservar o cancelar?
 - ¿Qué proveedor de email se usa?
