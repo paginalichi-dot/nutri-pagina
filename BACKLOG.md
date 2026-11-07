@@ -398,6 +398,39 @@ cinta de temas y la matrícula.
 
 - [x] **CA-7** · Revisado con `impeccable` (detector, `critique` y `polish`) a 1440, 1280 y 375px · Estimación: 30 min · Completado: 2026-11-07 01:39 (detector limpio; critique en una sola pasada propia con capturas por cuadro, sin las dos revisiones independientes)
 
+### US-7 · Intro de marca con máscara de revelado
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-07 |
+| Tamaño       | M         |
+| Depende de   | US-3, US-6 |
+| Plan         | [`docs/plans/US-7-intro-de-marca.md`](docs/plans/US-7-intro-de-marca.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente que entra a la web quiero una presentación breve de Lisandro antes de ver la home, de forma
+que la web se sienta cuidada y propia desde el primer segundo.
+
+Origen: pedido del dev (2026-11-07). La entrada del hero cambia de dirección respecto de US-3: las frases entran desde
+los bordes y la foto crece desde el centro.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Al entrar o recargar la home, una caja Verde Bosque chica al centro de una pantalla Papel muestra «Lic. Lisandro López», que entra subiendo desde una máscara; no hay spinner ni pantalla vacía · Estimación: 40 min · Completado: 2026-11-07 03:32
+
+- [x] **CA-2** · El nombre se mantiene unos instantes, espera a que estén la fuente y la foto del hero (con tope) y sale con un fundido suave · Estimación: 30 min · Completado: 2026-11-07 03:32
+
+- [x] **CA-3** · La caja se expande en ancho y alto como máscara de revelado y termina exactamente en el marco del hero; al terminar no queda ninguna capa encima y el scroll se libera · Estimación: 1 h · Completado: 2026-11-07 03:32
+
+- [x] **CA-4** · Durante la expansión, «La alimentación…» entra desde la izquierda, «Y aprender…» desde la derecha, el nombre desde arriba y la foto desde el centro, y cada parte termina en su lugar · Estimación: 30 min · Completado: 2026-11-07 03:32
+
+- [x] **CA-5** · La intro no se repite al volver a la home desde otra página del sitio; siempre empieza arriba de la home · Estimación: 20 min · Completado: 2026-11-07 03:32
+
+- [x] **CA-6** · Con "reducir movimiento", sin JavaScript o si el JS tarda más de 2.5 s, no hay intro y la home se ve entera · Estimación: 20 min · Completado: 2026-11-07 03:32
+
 **Preguntas abiertas del sprint**
 
 - Matrícula, slogan, servicios (con o sin aranceles), sucursales y horarios, obras sociales.

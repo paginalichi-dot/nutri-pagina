@@ -1,22 +1,9 @@
 'use client';
 
 import { type ReactElement, type ReactNode, useRef } from 'react';
-import { EASE_OUT, gsap, MOTION_OK, SplitText, useGSAP } from './gsap';
-import { releaseMotionGate } from './motion-gate';
-
-function intro(root: HTMLElement): void {
-  const q = gsap.utils.selector(root);
-  const [opening, closing] = q('[data-hero-phrase]');
-  const name = SplitText.create(q('[data-hero-name]'), { type: 'chars' });
-  const button = document.querySelector('[data-booking-button]');
-  const timeline = gsap.timeline({ defaults: { ease: EASE_OUT } });
-  timeline
-    .from(q('[data-hero-photo]'), { yPercent: 45, scale: 0.9, autoAlpha: 0, duration: 1.4 }, 0)
-    .from(name.chars, { yPercent: -120, autoAlpha: 0, duration: 1, stagger: 0.035 }, 0.15)
-    .from(opening ?? [], { x: 120, autoAlpha: 0, duration: 1.1 }, 0.45)
-    .from(closing ?? [], { x: -120, autoAlpha: 0, duration: 1.1 }, 0.5);
-  if (button) timeline.from(button, { yPercent: 160, autoAlpha: 0, duration: 0.9 }, 0.9);
-}
+import { gsap, MOTION_OK, useGSAP } from './gsap';
+import { introReady, introTimeline } from './intro-timeline';
+import { claimIntro, finishIntro, releaseMotionGate } from './motion-gate';
 
 function scrollScene(root: HTMLElement): void {
   const q = gsap.utils.selector(root);
@@ -29,19 +16,31 @@ function scrollScene(root: HTMLElement): void {
     .to(frame, { scale: 0.94, transformOrigin: '50% 0%' }, 0);
 }
 
+function playIntro(root: HTMLElement, isCancelled: () => boolean): void {
+  const timeline = introTimeline(root, finishIntro);
+  if (!timeline) return finishIntro();
+  void introReady(root.querySelector('[data-hero-photo] img')).then(() => {
+    if (!isCancelled()) timeline.play();
+  });
+}
+
 export function HeroMotion({ children }: { children: ReactNode }): ReactElement {
   const scope = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
+      let cancelled = false;
       const media = gsap.matchMedia();
       media.add(MOTION_OK, () => {
         if (!scope.current) return;
-        intro(scope.current);
+        if (claimIntro()) playIntro(scope.current, () => cancelled);
         scrollScene(scope.current);
       });
       releaseMotionGate();
-      return () => media.revert();
+      return () => {
+        cancelled = true;
+        media.revert();
+      };
     },
     { scope }
   );

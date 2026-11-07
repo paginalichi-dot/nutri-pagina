@@ -133,6 +133,22 @@ Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y r
   `clamp(1.25rem, 5.2vw, 1.875rem)`.
 - Sin garabatos, sin píldora del hero ni selector de sucursal: reservar es el botón flotante.
 
+### Intro de marca (US-7)
+Al entrar o recargar la home (no al volver desde otra página del sitio) aparece una presentación breve, de unos 3.5 s:
+
+1. Pantalla Papel con una caja Verde Bosque al centro (`min(80vw, 440px)` × 120px, radio 25px). Adentro sube desde una
+   máscara «Lic. Lisandro López»: «Lic.» en Niebla 500 y el nombre en Hueso 600.
+2. El nombre se mantiene al menos hasta 1.6 s desde que empezó la carga, y además espera a que estén listas la fuente
+   y la foto del hero (con un tope de 2.5 s). Después sube y se funde.
+3. La caja se expande (`power4.inOut`, 1.2 s) como máscara de revelado (`clip-path` sobre `<main>`) y termina
+   exactamente en el marco del hero, con su radio: la caja se convierte en el hero. El borde Papel del marco coincide
+   con el fondo Papel, así que no hay corte.
+4. Durante la expansión entra el hero (ver «Movimiento»). Al terminar, el preloader desaparece y se libera el scroll.
+
+Nunca es un spinner ni una pantalla vacía: la caja y el nombre están en el HTML y se animan con CSS desde el primer
+pintado. Con "reducir movimiento", sin JavaScript o si se entra a un ancla (`/#sobre-mi`), no hay intro. Durante la
+intro la página empieza siempre arriba.
+
 ### Botón flotante de reserva (US-4, rediseñado en US-6)
 Píldora Verde Lima fija abajo al centro de la home durante todo el scroll, como en el wireframe: ícono de calendario
 (Lucide `CalendarCheck`), "Reservá tu turno" en 600 y un disco Verde Bosque con una flecha `ArrowUpRight` Verde Lima
@@ -224,22 +240,27 @@ El panel es una herramienta de trabajo diario, así que usa una **versión silen
 
 ## Movimiento (US-3)
 
-Tesis: "el hilo que atraviesa". Un solo momento de autor, la entrada del hero; el resto acompaña el scroll.
+Tesis: "el hilo que atraviesa". Un solo momento de autor, la intro de marca que se convierte en el hero; el resto
+acompaña el scroll.
 
-- **Scroll con inercia** (Lenis, `src/components/motion/smooth-scroll.tsx`) sólo en la home y sólo sin "reducir
-  movimiento". En touch el scroll es el nativo del celular. ScrollTrigger se actualiza con cada scroll de Lenis.
-- **Entrada del hero** (`hero-motion.tsx`, ~1.6 s, `expo.out`), cada parte desde su lado (pedido del dev):
-  la foto sube desde el fondo y crece (0.9 → 1); las letras del nombre bajan desde arriba de a una (desfase de 0.035
-  s); la frase de la izquierda entra de derecha a izquierda y la de la derecha de izquierda a derecha; al final sube
-  el botón flotante.
+- **Scroll con inercia** (Lenis, `src/components/motion/smooth-scroll.tsx`) sólo en la home, sólo sin "reducir
+  movimiento" y recién cuando termina la intro. En touch el scroll es el nativo del celular. ScrollTrigger se
+  actualiza con cada scroll de Lenis.
+- **Intro de marca** (US-7, ver «Intro de marca»): al entrar o recargar la home, la caja con «Lic. Lisandro López» se
+  expande hasta ser el marco del hero, y durante la expansión entra el hero, cada parte desde su lado (pedido del dev,
+  2026-11-07): la foto crece desde el centro (0.6 → 1); las letras del nombre bajan desde arriba de a una (desfase de
+  0.035 s); «La alimentación…» entra desde la izquierda y «Y aprender…» desde la derecha; al final sube el botón
+  flotante. Todo con `expo.out`, en `intro-timeline.ts`.
 - **Escena del hero al scrollear** (`scrub`): la foto sigue creciendo (hasta 1.08) y baja más lento, el nombre sube
   más rápido y se apaga a 0.25, y el marco se achica a 0.94. La frase no se mueve: el texto no lleva parallax.
 - **"Sobre mí"** (`about-motion.tsx`): el título sube palabra por palabra y el párrafo display línea por línea, con
   máscara (SplitText); el marco en arco se revela de abajo hacia arriba con `clip-path`; el subrayado Verde Lima y la
   flecha Zanahoria se dibujan con el scroll (DrawSVG): es "el hilo".
-- **Sin parpadeo y sin contenido perdido**: un script mínimo en `<head>` oculta sólo lo marcado con `data-intro`
-  mientras la intro no arrancó; la intro lo libera al empezar y, si el JS falla, se libera solo a los 2.5 s.
-- **Reducir movimiento / sin JavaScript**: sin Lenis, sin intro y sin escenas; todo se ve quieto, con los trazos
+- **Sin parpadeo y sin contenido perdido**: un script mínimo en `<head>`, sólo en `/` y sin ancla en la URL, marca
+  `motion-pending`: el CSS muestra la caja y oculta lo marcado con `data-intro` desde el primer pintado, antes de que
+  cargue el JS. La intro toma el control al montar (`data-intro-state='playing'`) y, si el JS no llega, el gate se
+  libera solo a los 2.5 s y la home se ve sin intro.
+- **Reducir movimiento / sin JavaScript**: sin Lenis, sin preloader, sin intro y sin escenas; todo se ve quieto, con los trazos
   dibujados.
 - Para animar una sección nueva: un componente cliente como `about-motion.tsx` que envuelva la sección, con
   `gsap.matchMedia(MOTION_OK)`. Sólo `transform`, `opacity`, `clip-path` y trazos SVG.

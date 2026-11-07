@@ -1,6 +1,6 @@
 # Prompt inicial: contexto completo de pagina-lichi
 
-> Foto del proyecto al **2026-11-06**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
+> Foto del proyecto al **2026-11-07**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
 
 ## 1. Quién sos y con quién trabajás
 
@@ -35,10 +35,13 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   sin componentes todavía. ESLint rechaza colores hex en el código.
 - `main` sólo tiene el primer commit; todo lo demás está en `develop`, publicado en GitHub
   (`paginalichi-dot/nutri-pagina`). `main` no se toca hasta que el dev revise el Sprint 1. Sin despliegue.
-- Sprint 1 hecho en `develop` (en revisión): la home tiene el hero con "LISANDRO LÓPEZ" en gigante detrás de la foto
-  y la frase del cliente en dos esquinas (US-1), "Sobre mí" con placeholder de foto (US-2), el botón flotante
-  "Reservá tu turno" hacia `/reservar` ("Próximamente", US-4) y la aparición de secciones con `data-reveal`, sólo CSS
-  (US-3). Componentes en `src/components/home/`.
+- Sprint 1 hecho en `develop` (en revisión):
+  - Hero según el wireframe del dev (US-1 y US-6): «LISANDRO LÓPEZ» en gigante, la foto tapando la base del nombre y
+    la frase del cliente a los costados.
+  - "Sobre mí" con placeholder de foto (US-2) y botón flotante "Reservá tu turno" hacia `/reservar` ("Próximamente",
+    US-4).
+  - Movimiento con Lenis + GSAP (US-3) e intro de marca (US-7): una caja con «Lic. Lisandro López» que se expande
+    hasta ser el hero. Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
 - Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
 
 ## 4. Stack
