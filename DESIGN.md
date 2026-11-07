@@ -128,8 +128,9 @@ Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y r
 - Foto recortada al centro, apoyada abajo y grande: la cabeza tapa cerca del 45% de abajo de las letras.
 - Frase del cliente en dos bloques a los costados de la foto, abajo, en Hueso con las palabras clave en Verde Lima
   700. El ancho de cada bloque es el espacio libre entre el borde y la foto (`--phrase-w` en `hero.tsx`) y el tamaño
-  de letra sale de ese ancho, así la frase llena el costado sin tocar la foto. Debajo de 1024px va en columna, debajo
-  de la foto.
+  de letra sale de ese ancho (`--phrase-w / 9.2`): la frase ocupa el costado con aire, grande pero sin competir con el
+  nombre (pedido del dev, 2026-11-07). Debajo de 1024px va en columna, debajo de la foto, a
+  `clamp(1.25rem, 5.2vw, 1.875rem)`.
 - Sin garabatos, sin píldora del hero ni selector de sucursal: reservar es el botón flotante.
 
 ### Botón flotante de reserva (US-4, rediseñado en US-6)

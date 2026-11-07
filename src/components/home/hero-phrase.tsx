@@ -5,7 +5,7 @@ function Mark({ children }: { children: ReactNode }): ReactElement {
 }
 
 const BASE =
-  'relative z-20 max-w-[22rem] text-[clamp(1.5rem,6.2vw,2.25rem)] leading-[1.15] font-medium text-balance text-muted lg:absolute lg:text-pretty lg:bottom-[clamp(48px,8%,88px)] lg:w-(--phrase-w) lg:max-w-none lg:text-[calc(var(--phrase-w)/7.4)] lg:leading-[1.12]';
+  'relative z-20 max-w-[22rem] text-[clamp(1.25rem,5.2vw,1.875rem)] leading-[1.15] font-medium text-balance text-muted lg:absolute lg:text-pretty lg:bottom-[clamp(48px,8%,88px)] lg:w-(--phrase-w) lg:max-w-none lg:text-[calc(var(--phrase-w)/9.2)] lg:leading-[1.12]';
 
 export function HeroPhraseOpening(): ReactElement {
   return (

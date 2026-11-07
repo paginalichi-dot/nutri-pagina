@@ -390,7 +390,7 @@ cinta de temas y la matrícula.
 
 - [x] **CA-3** · La foto ocupa cerca del 80% del alto del hero en desktop y su cabeza tapa cerca del 40% de abajo de las letras centrales del nombre · Estimación: 30 min · Completado: 2026-11-07 01:26
 
-- [x] **CA-4** · La frase textual del cliente va a los costados de la foto y llena el espacio libre entre el borde y la foto (pedido del dev), con corte de línea natural, sin tocar la foto y legible en 375px · Estimación: 20 min · Completado: 2026-11-07 01:26
+- [x] **CA-4** · La frase textual del cliente va a los costados de la foto y llena el espacio libre entre el borde y la foto (pedido del dev), con corte de línea natural, sin tocar la foto y legible en 375px · Estimación: 20 min · Completado: 2026-11-07 01:26 · Ajuste del dev (2026-11-07): letra cerca de 20% más chica, grande pero sin llenar todo el costado
 
 - [x] **CA-5** · El botón flotante lleva un ícono de calendario, un disco Verde Bosque con flecha Verde Lima y un halo Verde Lima suave · Estimación: 20 min · Completado: 2026-11-07 01:26
 
