@@ -9,8 +9,10 @@ describe('FloatingBookingButton', () => {
     expect(container.firstElementChild?.className).toMatch(/\bfixed\b.*\bbottom-0\b/);
   });
 
-  it('la flecha es decorativa', () => {
+  it('el calendario y la flecha son decorativos', () => {
     const { container } = render(<FloatingBookingButton />);
-    expect(container.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+    const icons = [...container.querySelectorAll('svg')];
+    expect(icons).toHaveLength(2);
+    expect(icons.every((icon) => icon.getAttribute('aria-hidden') === 'true')).toBe(true);
   });
 });

@@ -302,29 +302,35 @@ El texto es el del pedido, textual, con una sola corrección: «López» con til
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Pendiente |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
-| Tamaño       | S         |
-| Depende de   | US-2      |
+| Tamaño       | L         |
+| Depende de   | US-6      |
 | Plan         | [`docs/plans/US-3-scroll-suave.md`](docs/plans/US-3-scroll-suave.md) |
 | Merge        | —         |
 | Horas reales | —         |
 
-**Historia**: Como paciente que recorre la home quiero que el desplazamiento sea suave y que las secciones
-aparezcan con un efecto sutil, de forma que la web sea agradable de mirar.
+**Historia**: Como paciente que recorre la home quiero que el desplazamiento sea suave y que las cosas se desplieguen
+con efecto, de forma que la web sea agradable de mirar.
+
+**Rechazo del dev (2026-11-06)**: la primera versión (CSS nativo: un fundido de 24px por sección) "no tiene nada de
+premium: todo baja lo más normal". Se rehace con Lenis + GSAP y la dirección "Hilo que atraviesa", elegida por el dev.
+Los CA anteriores quedan reemplazados por estos.
 
 **Criterios de aceptación**
 
-- [x] **CA-1** · Los saltos a anclas internas se desplazan con suavidad, con CSS nativo y sin dependencias nuevas en `package.json` · Estimación: 10 min · Completado: 2026-11-06 22:43
+- [ ] **CA-1** · En desktop el scroll tiene inercia (Lenis), sin romper el teclado, las anclas ni el scroll táctil nativo del celular · Estimación: 40 min · Completado: —
 
-- [x] **CA-2** · Cada sección de la home, salvo el hero, aparece al entrar en pantalla con un fundido y un desplazamiento corto (≤ 24px, atado al scroll: termina cuando la sección entró 240px) · Estimación: 30 min · Completado: 2026-11-06 22:43
+- [ ] **CA-2** · El hero entra coreografiado en menos de 1.8 s: la foto crece, las letras del nombre suben y al final la cabeza tapa la base del nombre · Estimación: 1 h · Completado: —
 
-- [x] **CA-3** · Con `prefers-reduced-motion: reduce` no hay desplazamiento animado ni aparición: el contenido se ve directo · Estimación: 15 min · Completado: 2026-11-06 22:43
+- [ ] **CA-3** · Al bajar, el hero tiene una escena atada al scroll: la foto sigue creciendo, el nombre sube más rápido y el marco se achica levemente · Estimación: 45 min · Completado: —
 
-- [x] **CA-4** · Sin JavaScript o en un navegador sin soporte, todo el contenido queda visible: la animación nunca deja texto oculto · Estimación: 15 min · Completado: 2026-11-06 22:43
+- [ ] **CA-4** · En "Sobre mí", el título y el párrafo principal se descubren con máscara, y el subrayado Verde Lima y la flecha Zanahoria se dibujan con el scroll · Estimación: 45 min · Completado: —
 
-- [x] **CA-5** · Las animaciones sólo usan `opacity` y `transform`, y el CLS de la home queda por debajo de 0.1 · Estimación: 10 min · Completado: 2026-11-06 22:43
+- [ ] **CA-5** · Con "reducir movimiento", sin JavaScript o si GSAP falla, todo el contenido queda visible y quieto · Estimación: 30 min · Completado: —
+
+- [ ] **CA-6** · El CLS de la home queda por debajo de 0.1 y las capturas de la intro y del scroll no muestran saltos · Estimación: 20 min · Completado: —
 
 ### US-4 · Botón flotante "Reservá tu turno"
 
@@ -356,6 +362,41 @@ llegue la reserva, esa página pasa a ser el flujo de reserva y el botón no cam
 - [x] **CA-4** · `/reservar` muestra una página «Próximamente» con un título, una línea que avisa que la reserva online está por llegar y un link para volver al inicio; está registrada en `src/proxy.ts` como pública y no muestra el botón flotante · Estimación: 30 min · Completado: 2026-11-06 22:38
 
 - [x] **CA-5** · `DESIGN.md` suma el componente «Botón flotante de reserva» y aclara que reemplaza a la píldora del hero y al botón «RESERVAR TURNO» del nav, para que haya una sola píldora Verde Lima por pantalla · Estimación: 15 min · Completado: 2026-11-06 22:38
+
+### US-6 · Hero y Sobre mí según el wireframe del dev
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En progreso |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-06 |
+| Tamaño       | M         |
+| Depende de   | US-1, US-2, US-4 |
+| Plan         | [`docs/plans/US-6-hero-wireframe.md`](docs/plans/US-6-hero-wireframe.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente que entra a la web quiero un hero y un "Sobre mí" con presencia, de forma que la web se
+sienta profesional y propia de Lisandro.
+
+Origen: `docs/wireframes/ejemplo-presentacion.png` (wireframe del dev, 2026-11-06). Fuera por ahora: "Ver planes", la
+cinta de temas y la matrícula.
+
+**Criterios de aceptación**
+
+- [x] ~~**CA-1** · Arriba del hero, una píldora «Licenciado en Nutrición» con un punto Verde Lima, sin matrícula~~ · Descartado por el dev (2026-11-07): sin píldora
+
+- [x] **CA-2** · El `h1` «LISANDRO LÓPEZ» en Manrope 800 sin tracking negativo: «LISANDRO» blanco macizo y «LÓPEZ» en contorno Verde Lima; una línea en desktop, dos en 375px · Estimación: 30 min · Completado: 2026-11-07 01:26
+
+- [x] **CA-3** · La foto ocupa cerca del 80% del alto del hero en desktop y su cabeza tapa cerca del 40% de abajo de las letras centrales del nombre · Estimación: 30 min · Completado: 2026-11-07 01:26
+
+- [x] **CA-4** · La frase textual del cliente va a los costados de la foto y llena el espacio libre entre el borde y la foto (pedido del dev), con corte de línea natural, sin tocar la foto y legible en 375px · Estimación: 20 min · Completado: 2026-11-07 01:26
+
+- [x] **CA-5** · El botón flotante lleva un ícono de calendario, un disco Verde Bosque con flecha Verde Lima y un halo Verde Lima suave · Estimación: 20 min · Completado: 2026-11-07 01:26
+
+- [x] **CA-6** · "Sobre mí" tiene el título con subrayado a mano Verde Lima, el primer párrafo en tamaño display, el placeholder en un marco en arco y el resto del texto en dos columnas en desktop · Estimación: 45 min · Completado: 2026-11-07 01:26
+
+- [ ] **CA-7** · Revisado con `impeccable` (detector, `critique` y `polish`) a 1440, 1280 y 375px · Estimación: 30 min · Completado: — (el detector ya corrió limpio; `critique` y `polish` se hacen junto con US-3, sobre la home final)
 
 **Preguntas abiertas del sprint**
 

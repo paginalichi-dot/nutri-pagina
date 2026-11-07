@@ -20,8 +20,15 @@ describe('Sobre mí', () => {
     expect(paragraphs[4]).toBe('Mi compromiso es acompañarte en cada etapa de ese proceso, con atención, dedicación y profesionalismo.');
   });
 
-  it('mientras no llegue la foto, muestra el placeholder visible', () => {
+  it('mientras no llegue la foto, muestra el placeholder visible en el marco en arco', () => {
     render(<About />);
-    expect(screen.getByText('[Completar: foto Sobre mí]')).toBeDefined();
+    expect(screen.getByText('[Completar: foto Sobre mí]').className).toMatch(/rounded-t-full/);
+  });
+
+  it('los trazos a mano son decorativos', () => {
+    const { container } = render(<About />);
+    const strokes = [...container.querySelectorAll('svg')];
+    expect(strokes.length).toBeGreaterThan(0);
+    expect(strokes.every((svg) => svg.getAttribute('aria-hidden') === 'true')).toBe(true);
   });
 });

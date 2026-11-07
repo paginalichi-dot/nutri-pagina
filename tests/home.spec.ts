@@ -17,7 +17,15 @@ test.describe('home', () => {
     const photo = page.getByRole('img', { name: /^Lisandro López, licenciado en nutrición/ });
     await expect(photo).toBeVisible();
     expect(await photo.evaluate((image) => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0)).toBe(true);
-    await expect(page.getByText('Lisandro López · Licenciado en Nutrición')).toBeVisible();
+  });
+
+  test('la cabeza de Lisandro tapa la base del nombre, y el nombre se sigue leyendo', async ({ page }) => {
+    await page.goto('/');
+    const [name, photo] = await Promise.all([page.locator('[data-hero-name]').boundingBox(), page.locator('[data-hero-photo]').boundingBox()]);
+    const nameBottom = (name?.y ?? 0) + (name?.height ?? 0);
+    const covered = nameBottom - (photo?.y ?? 0);
+    expect(covered).toBeGreaterThan((name?.height ?? 0) * 0.15);
+    expect(photo?.y ?? 0).toBeGreaterThan(name?.y ?? 0);
   });
 
   for (const phrase of ['La alimentación nos atraviesa durante toda nuestra vida', 'Y aprender a transformarla en un buen hábito es la base de tu salud']) {
@@ -40,9 +48,9 @@ test.describe('home', () => {
     await expect(longest).toBeVisible();
     const fitsSeventyFive = await longest.evaluate((paragraph) => {
       const probe = document.createElement('span');
-      probe.style.whiteSpace = 'nowrap';
+      Object.assign(probe.style, { position: 'absolute', visibility: 'hidden', whiteSpace: 'nowrap', font: getComputedStyle(paragraph).font });
       probe.textContent = (paragraph.textContent ?? '').slice(0, 75);
-      paragraph.append(probe);
+      document.body.append(probe);
       const fits = probe.getBoundingClientRect().width <= paragraph.clientWidth;
       probe.remove();
       return fits;

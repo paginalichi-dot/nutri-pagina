@@ -121,19 +121,30 @@ Barra Papel con borde inferior gris de 1px al hacer scroll (transparente con tex
 ### Hero enmarcado
 Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y radio de 88px alrededor de un fondo de color plano Verde Bosque (recomendado: el recorte de Lisandro resalta y el detalle puede ir en Verde Lima) o Hueso. **Lisandro recortado, sin fondo** (de cintura para arriba, sonriente, con ropa de color liso), parado delante de su nombre o del logotipo gigante en blanco. Garabatos dibujados a mano alrededor: blancos o Verde Lima sobre Verde Bosque, Zanahoria sobre Hueso. Abajo a la izquierda, una píldora Papel con flecha: "Reservá tu primera consulta". Abajo a la derecha, el selector de sucursal. Debajo del hero va una línea de presentación, porque el nombre solo no alcanza para explicar qué hace: "Licenciado en Nutrición · MN [número]".
 
-**Disposición vigente (US-1):** el nombre "LISANDRO LÓPEZ" en blanco, en gigante y en una línea (dos en mobile), con
-la foto delante tapando apenas la parte de abajo de las letras. La frase del cliente va en dos partes: arriba a la
-izquierda y abajo a la derecha, en tamaño lead (Hueso, con las palabras clave en Verde Lima 700), siempre por encima
-de la foto y del nombre. En mobile todo va en columna y la foto se funde con Fundido Bosque. Sin píldora ni selector
-de sucursal en el hero: la acción de reservar es el botón flotante (US-4). La línea de presentación queda
-"Lisandro López · Licenciado en Nutrición" hasta que llegue la matrícula.
+**Disposición vigente (US-6, según `docs/wireframes/ejemplo-presentacion.png`):**
+- Nombre en Manrope 800, sin tracking negativo: "LISANDRO" blanco macizo y "LÓPEZ" en contorno Verde Lima (relleno
+  transparente). Una línea desde 1024px, dos en pantallas más chicas. Sin píldora de credencial arriba (descartada
+  por el dev) y sin matrícula por ahora.
+- Foto recortada al centro, apoyada abajo y grande: la cabeza tapa cerca del 45% de abajo de las letras.
+- Frase del cliente en dos bloques a los costados de la foto, abajo, en Hueso con las palabras clave en Verde Lima
+  700. El ancho de cada bloque es el espacio libre entre el borde y la foto (`--phrase-w` en `hero.tsx`) y el tamaño
+  de letra sale de ese ancho, así la frase llena el costado sin tocar la foto. Debajo de 1024px va en columna, debajo
+  de la foto.
+- Sin garabatos, sin píldora del hero ni selector de sucursal: reservar es el botón flotante.
 
-### Botón flotante de reserva (US-4)
-La "Píldora Verde Lima con flecha" fija abajo al centro de la home durante todo el scroll: "Reservá tu turno", 64px
-de alto en mobile y 88px en desktop, disco blanco con flecha y halo de píldora, respetando el área segura de iOS. Lleva
-a `/reservar`. Es la única píldora Verde Lima de la home: reemplaza a la píldora "Reservá tu primera consulta" del hero
-y al botón "RESERVAR TURNO" del nav. La home deja abajo un espacio Hueso más alto que el botón para que nunca tape el
-final. El foco suma un halo blanco y un anillo Verde Bosque, así se ve sobre Verde Bosque y sobre Hueso.
+### Botón flotante de reserva (US-4, rediseñado en US-6)
+Píldora Verde Lima fija abajo al centro de la home durante todo el scroll, como en el wireframe: ícono de calendario
+(Lucide `CalendarCheck`), "Reservá tu turno" en 600 y un disco Verde Bosque con una flecha `ArrowUpRight` Verde Lima
+que gira 45° al pasar el mouse. 64px de alto en mobile y 72px en desktop, con un halo Verde Lima suave hacia abajo y
+el área segura de iOS. Lleva a `/reservar`. Es la única píldora Verde Lima de la home. La home deja abajo un espacio
+Hueso más alto que el botón para que nunca tape el final. El foco suma un halo blanco y un anillo Verde Bosque.
+
+### Sobre mí (US-6)
+Banda Hueso con borde curvo arriba. A la izquierda, la foto en un marco en arco (arriba redondo, abajo radio 30px);
+mientras falta, el placeholder `[Completar: foto Sobre mí]` con borde punteado. A la derecha: el `h2` «Sobre **mí**»
+con un subrayado Verde Lima dibujado a mano y una flecha Zanahoria a mano que baja hacia la foto (desde 1024px); el
+primer párrafo en display (28px/38.4px, 500, con «Licenciado en Nutrición» y «Universidad Favaloro» en 700) y el
+resto del texto en dos columnas desde 768px, con menos de 75 caracteres por línea.
 
 ### Píldora Verde Lima con flecha (CTA principal)
 Relleno Verde Lima, 88px de alto (64px en mobile), radio 9999px, padding 0 37px, label Verde Bosque 18px/500 y un círculo blanco con flecha Verde Bosque en el extremo derecho. Sombra `rgba(0,0,0,0.05) 0 6px 34px`. Sin borde. **Una sola por pantalla.**

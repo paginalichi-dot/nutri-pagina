@@ -10,8 +10,14 @@
   }
   html {
     @apply font-sans;
+    scrollbar-color: var(--foreground) var(--muted);
+    caret-color: var(--foreground);
   }
   body {
     @apply bg-background text-foreground;
+  }
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
   }
 }
