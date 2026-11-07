@@ -431,6 +431,36 @@ los bordes y la foto crece desde el centro.
 
 - [x] **CA-6** · Con "reducir movimiento", sin JavaScript o si el JS tarda más de 2.5 s, no hay intro y la home se ve entera · Estimación: 20 min · Completado: 2026-11-07 03:32
 
+### US-8 · Scroll con profundidad entre secciones
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-07 |
+| Tamaño       | M         |
+| Depende de   | US-3      |
+| Plan         | [`docs/plans/US-8-scroll-profundidad.md`](docs/plans/US-8-scroll-profundidad.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente que recorre la home quiero que las secciones se sucedan como capas, de forma que el
+recorrido se sienta inmersivo y no un scroll plano.
+
+Origen: pedido del dev (2026-11-07).
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Al bajar, la sección actual queda en su lugar y se aleja hacia el fondo: se achica y pierde opacidad de forma progresiva, atada al scroll · Estimación: 45 min · Completado: 2026-11-07 03:40
+
+- [x] **CA-2** · La sección siguiente sube desde abajo, por encima, y termina tapando a la anterior, sin saltos ni cortes · Estimación: 30 min · Completado: 2026-11-07 03:40
+
+- [x] **CA-3** · Funciona en 375px y en desktop; las secciones más altas que la pantalla se ven enteras antes de que las tape la siguiente · Estimación: 30 min · Completado: 2026-11-07 03:40
+
+- [x] **CA-4** · Con "reducir movimiento" no hay fijado ni escala: el scroll es normal · Estimación: 10 min · Completado: 2026-11-07 03:40
+
+- [x] **CA-5** · El CLS de la home sigue por debajo de 0.1 y sólo se animan `transform` y `opacity` · Estimación: 10 min · Completado: 2026-11-07 03:40
+
 **Preguntas abiertas del sprint**
 
 - Matrícula, slogan, servicios (con o sin aranceles), sucursales y horarios, obras sociales.

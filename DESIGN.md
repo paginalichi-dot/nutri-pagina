@@ -238,7 +238,7 @@ El panel es una herramienta de trabajo diario, así que usa una **versión silen
   cada una con su título 20px/500, los inputs de la tarjeta de login y su píldora Verde Lima "Guardar …". Es la única
   vista con dos píldoras Verde Lima: cada una cierra su propio formulario. El éxito va en una franja `bg-confirmed`.
 
-## Movimiento (US-3)
+## Movimiento (US-3, US-7 y US-8)
 
 Tesis: "el hilo que atraviesa". Un solo momento de autor, la intro de marca que se convierte en el hero; el resto
 acompaña el scroll.
@@ -251,8 +251,13 @@ acompaña el scroll.
   2026-11-07): la foto crece desde el centro (0.6 → 1); las letras del nombre bajan desde arriba de a una (desfase de
   0.035 s); «La alimentación…» entra desde la izquierda y «Y aprender…» desde la derecha; al final sube el botón
   flotante. Todo con `expo.out`, en `intro-timeline.ts`.
-- **Escena del hero al scrollear** (`scrub`): la foto sigue creciendo (hasta 1.08) y baja más lento, el nombre sube
-  más rápido y se apaga a 0.25, y el marco se achica a 0.94. La frase no se mueve: el texto no lleva parallax.
+- **Profundidad entre secciones** (US-8, `depth.ts`): al bajar, la sección actual queda fija (`pin` de ScrollTrigger,
+  desde que se ve entera hasta abajo) y se aleja hacia el fondo: su tarjeta se achica a 0.9 y se apaga a 0.5. La
+  siguiente sube con el scroll, por encima (`relative z-10`), y la tapa; su borde curvo deja ver la capa de atrás.
+  Todo atado al scroll (`scrub`), sin animaciones sueltas. Se usa `pin` y no `position: sticky` porque el hero en
+  mobile y "Sobre mí" son más altos que la pantalla: con `sticky; top: 0` su parte de abajo nunca se vería.
+- **Escena del hero al scrollear** (dentro de la misma profundidad): la foto sigue creciendo (hasta 1.08, desde
+  abajo) y el nombre sube más rápido y se apaga a 0.25. La frase no se mueve: el texto no lleva parallax.
 - **"Sobre mí"** (`about-motion.tsx`): el título sube palabra por palabra y el párrafo display línea por línea, con
   máscara (SplitText); el marco en arco se revela de abajo hacia arriba con `clip-path`; el subrayado Verde Lima y la
   flecha Zanahoria se dibujan con el scroll (DrawSVG): es "el hilo".
@@ -260,10 +265,12 @@ acompaña el scroll.
   `motion-pending`: el CSS muestra la caja y oculta lo marcado con `data-intro` desde el primer pintado, antes de que
   cargue el JS. La intro toma el control al montar (`data-intro-state='playing'`) y, si el JS no llega, el gate se
   libera solo a los 2.5 s y la home se ve sin intro.
-- **Reducir movimiento / sin JavaScript**: sin Lenis, sin preloader, sin intro y sin escenas; todo se ve quieto, con los trazos
-  dibujados.
+- **Reducir movimiento / sin JavaScript**: sin Lenis, sin preloader, sin intro, sin profundidad y sin escenas; todo
+  se ve quieto, con los trazos dibujados.
 - Para animar una sección nueva: un componente cliente como `about-motion.tsx` que envuelva la sección, con
-  `gsap.matchMedia(MOTION_OK)`. Sólo `transform`, `opacity`, `clip-path` y trazos SVG.
+  `gsap.matchMedia(MOTION_OK)`. Sólo `transform`, `opacity`, `clip-path` y trazos SVG. Para sumarla a la
+  profundidad, la sección anterior llama a `depthScene({ layer, next, content })` con su envoltorio, el de la
+  siguiente y su tarjeta visible, y la sección nueva va `relative` con un `z-index` mayor.
 
 ## Elevación
 

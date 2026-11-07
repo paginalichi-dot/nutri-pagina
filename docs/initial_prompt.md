@@ -40,8 +40,8 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
     la frase del cliente a los costados.
   - "Sobre mí" con placeholder de foto (US-2) y botón flotante "Reservá tu turno" hacia `/reservar` ("Próximamente",
     US-4).
-  - Movimiento con Lenis + GSAP (US-3) e intro de marca (US-7): una caja con «Lic. Lisandro López» que se expande
-    hasta ser el hero. Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
+  - Movimiento con Lenis + GSAP (US-3), intro de marca (US-7: una caja con «Lic. Lisandro López» que se expande
+    hasta ser el hero) y scroll con profundidad (US-8: cada sección se aleja al fondo y la siguiente la tapa). Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
 - Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
 
 ## 4. Stack

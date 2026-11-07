@@ -12,6 +12,19 @@ test.describe('movimiento de la home', () => {
     await expect.poll(async () => (await transformOf(page, '[data-hero-photo] img')).scale).toBeGreaterThan(1);
   });
 
+  test('al bajar, el hero se aleja hacia el fondo y "Sobre mí" sube y lo tapa', async ({ page }) => {
+    await page.goto('/');
+    await introDone(page);
+    const hero = '[data-hero-frame]';
+    await page.evaluate(() => window.scrollTo({ top: window.innerHeight * 0.6, behavior: 'instant' }));
+    await expect.poll(async () => (await transformOf(page, hero)).scale).toBeLessThan(0.99);
+    await expect.poll(() => page.locator(hero).evaluate((element) => Number(getComputedStyle(element).opacity))).toBeLessThan(1);
+    await page.evaluate(() => window.scrollTo({ top: document.getElementById('sobre-mi')?.offsetTop ?? 0, behavior: 'instant' }));
+    const onTop = (): Promise<boolean> =>
+      page.evaluate(() => Boolean(document.elementFromPoint(innerWidth / 2, innerHeight / 2)?.closest('#sobre-mi')));
+    await expect.poll(onTop).toBe(true);
+  });
+
   test('el trazo de "Sobre mí" se dibuja con el scroll', async ({ page }) => {
     await page.goto('/');
     await introDone(page);
@@ -26,6 +39,9 @@ test.describe('movimiento de la home', () => {
     await expect(page.locator('html')).not.toHaveClass(/lenis|motion-pending/);
     expect((await transformOf(page, '[data-hero-photo]')).scale).toBe(1);
     await expect(page.locator('[data-hero-name]')).toHaveCSS('opacity', '1');
+    await page.evaluate(() => window.scrollTo({ top: window.innerHeight * 0.6, behavior: 'instant' }));
+    expect((await transformOf(page, '[data-hero-frame]')).scale).toBe(1);
+    await expect(page.locator('.pin-spacer')).toHaveCount(0);
     await context.close();
   });
 

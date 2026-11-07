@@ -1,19 +1,18 @@
 'use client';
 
 import { type ReactElement, type ReactNode, useRef } from 'react';
+import { depthScene } from './depth';
 import { gsap, MOTION_OK, useGSAP } from './gsap';
 import { introReady, introTimeline } from './intro-timeline';
 import { claimIntro, finishIntro, releaseMotionGate } from './motion-gate';
 
 function scrollScene(root: HTMLElement): void {
   const q = gsap.utils.selector(root);
-  const frame = q('[data-hero-frame]')[0];
-  if (!frame) return;
-  gsap
-    .timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: frame, start: 'top top', end: 'bottom top', scrub: 0.8 } })
-    .to(q('[data-hero-photo] img'), { scale: 1.08, yPercent: 8, transformOrigin: '50% 100%' }, 0)
-    .to(q('[data-hero-name]'), { yPercent: -45, autoAlpha: 0.25 }, 0)
-    .to(frame, { scale: 0.94, transformOrigin: '50% 0%' }, 0);
+  const [frame, next] = [q('[data-hero-frame]')[0], root.nextElementSibling];
+  if (!frame || !next) return;
+  depthScene({ layer: root, next, content: frame })
+    .to(q('[data-hero-photo] img'), { scale: 1.08, transformOrigin: '50% 100%' }, 0)
+    .to(q('[data-hero-name]'), { yPercent: -45, autoAlpha: 0.25 }, 0);
 }
 
 function playIntro(root: HTMLElement, isCancelled: () => boolean): void {

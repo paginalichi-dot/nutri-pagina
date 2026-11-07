@@ -21,7 +21,7 @@ function ArchFrame(): ReactElement {
 
 export function About(): ReactElement {
   return (
-    <section id='sobre-mi' aria-labelledby='sobre-mi-titulo' className='rounded-t-hero-mobile bg-muted px-4 py-16 md:rounded-t-hero md:px-20 md:py-[108px]'>
+    <section id='sobre-mi' aria-labelledby='sobre-mi-titulo' className='relative z-10 rounded-t-hero-mobile bg-muted px-4 py-16 md:rounded-t-hero md:px-20 md:py-[108px]'>
       <div className='mx-auto grid max-w-[1280px] items-start gap-12 md:grid-cols-12 md:gap-x-10'>
         <div className='md:col-span-5'>
           <ArchFrame />
