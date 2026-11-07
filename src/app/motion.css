@@ -1,7 +1,6 @@
 :root {
   --intro-box-w: min(80vw, 440px);
   --intro-box-h: 120px;
-  scrollbar-gutter: stable;
 }
 
 .motion-pending [data-intro] {
@@ -10,6 +9,7 @@
 
 :root:is(.motion-pending, [data-intro-state='playing']) {
   overflow: hidden;
+  scrollbar-gutter: stable;
 }
 
 :root:is(.motion-pending, [data-intro-state='playing']) [data-reveal-mask] {

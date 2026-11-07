@@ -10,7 +10,7 @@ describe('motion.css', () => {
   });
 
   it('mientras corre la intro, la página no scrollea y se ve sólo por la caja del centro', () => {
-    expect(css).toContain(`${RUNNING} { overflow: hidden; }`);
+    expect(css).toContain(`${RUNNING} { overflow: hidden; scrollbar-gutter: stable; }`);
     expect(css).toContain(`${RUNNING} [data-reveal-mask] { clip-path: inset(`);
   });
 
@@ -19,7 +19,7 @@ describe('motion.css', () => {
     expect(css).toContain(`${RUNNING} [data-preloader] { display: grid; }`);
   });
 
-  it('al liberar el scroll, la barra no corre el layout', () => {
-    expect(css).toContain('scrollbar-gutter: stable;');
+  it('fuera de la intro no se reserva lugar para la barra de scroll', () => {
+    expect(css.match(/scrollbar-gutter/g)).toHaveLength(1);
   });
 });
