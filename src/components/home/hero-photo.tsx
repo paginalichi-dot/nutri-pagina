@@ -5,6 +5,7 @@ export function HeroPhoto(): ReactElement {
   return (
     <div
       data-hero-photo
+      data-intro
       className='relative z-10 -mt-[11vw] w-full max-w-[460px] lg:absolute lg:bottom-0 lg:left-1/2 lg:mt-0 lg:h-[calc(100%-48px-var(--name-size)*0.5)] lg:w-auto lg:max-w-none lg:-translate-x-1/2'
     >
       <Image

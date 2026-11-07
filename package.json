@@ -27,11 +27,14 @@
     "verify": "npm run lint && npm run typecheck && npm run test:coverage && npm run test:int && npm run test:mutation && dotenv -e .env.test -v NEXT_DIST_DIR=.next-e2e -- next build"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
     "cn": "^0.5.2",
     "dotenv": "^17.3.1",
+    "gsap": "^3.15.1",
     "jose": "^6.2.15",
+    "lenis": "^1.3.27",
     "lucide-react": "^1.70.0",
     "next": "16.4.5",
     "pg": "^8.20.0",

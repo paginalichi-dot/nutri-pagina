@@ -223,13 +223,25 @@ El panel es una herramienta de trabajo diario, así que usa una **versión silen
 
 ## Movimiento (US-3)
 
-- Scroll suave en toda la página (`scroll-behavior: smooth`).
-- Las secciones aparecen al entrar en pantalla con un fundido y 24px de desplazamiento, atado al scroll: termina
-  cuando la sección entró 240px. Para sumarlo a una sección nueva, alcanza con poner `data-reveal` en su contenido
-  (no en la banda de fondo). Vive en `src/app/motion.css`.
-- Todo va dentro de `prefers-reduced-motion: no-preference` y `@supports (animation-timeline: view())`: con
-  "reducir movimiento", sin JavaScript o en navegadores sin soporte, el contenido se ve directo.
-- Sólo se animan `opacity` y `transform`. El hero no se anima: es lo primero que se ve.
+Tesis: "el hilo que atraviesa". Un solo momento de autor, la entrada del hero; el resto acompaña el scroll.
+
+- **Scroll con inercia** (Lenis, `src/components/motion/smooth-scroll.tsx`) sólo en la home y sólo sin "reducir
+  movimiento". En touch el scroll es el nativo del celular. ScrollTrigger se actualiza con cada scroll de Lenis.
+- **Entrada del hero** (`hero-motion.tsx`, ~1.6 s, `expo.out`), cada parte desde su lado (pedido del dev):
+  la foto sube desde el fondo y crece (0.9 → 1); las letras del nombre bajan desde arriba de a una (desfase de 0.035
+  s); la frase de la izquierda entra de derecha a izquierda y la de la derecha de izquierda a derecha; al final sube
+  el botón flotante.
+- **Escena del hero al scrollear** (`scrub`): la foto sigue creciendo (hasta 1.08) y baja más lento, el nombre sube
+  más rápido y se apaga a 0.25, y el marco se achica a 0.94. La frase no se mueve: el texto no lleva parallax.
+- **"Sobre mí"** (`about-motion.tsx`): el título sube palabra por palabra y el párrafo display línea por línea, con
+  máscara (SplitText); el marco en arco se revela de abajo hacia arriba con `clip-path`; el subrayado Verde Lima y la
+  flecha Zanahoria se dibujan con el scroll (DrawSVG): es "el hilo".
+- **Sin parpadeo y sin contenido perdido**: un script mínimo en `<head>` oculta sólo lo marcado con `data-intro`
+  mientras la intro no arrancó; la intro lo libera al empezar y, si el JS falla, se libera solo a los 2.5 s.
+- **Reducir movimiento / sin JavaScript**: sin Lenis, sin intro y sin escenas; todo se ve quieto, con los trazos
+  dibujados.
+- Para animar una sección nueva: un componente cliente como `about-motion.tsx` que envuelva la sección, con
+  `gsap.matchMedia(MOTION_OK)`. Sólo `transform`, `opacity`, `clip-path` y trazos SVG.
 
 ## Elevación
 

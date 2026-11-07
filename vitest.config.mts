@@ -3,7 +3,7 @@ import { configDefaults, defineConfig } from 'vitest/config';
 
 const emptyModule = fileURLToPath(new URL('./src/test/empty-module.ts', import.meta.url));
 
-const NOT_COVERED = ['eslint/**', 'scripts/**', 'prisma/**', 'src/generated/**', 'src/app/**', 'src/proxy.ts', 'src/config/**', 'src/**/repository/**', 'src/lib/db/index.ts', 'src/lib/db/transaction.ts', 'src/test/**', 'src/**/testing/**'];
+const NOT_COVERED = ['eslint/**', 'scripts/**', 'prisma/**', 'src/generated/**', 'src/app/**', 'src/proxy.ts', 'src/components/motion/**', 'src/config/**', 'src/**/repository/**', 'src/lib/db/index.ts', 'src/lib/db/transaction.ts', 'src/test/**', 'src/**/testing/**'];
 const UNIT_SETUP = ['./src/test/setup/next-headers.setup.ts', './src/test/setup/next-cache.setup.ts', './src/test/setup/no-database.setup.ts'];
 
 export default defineConfig({

@@ -11,6 +11,7 @@ export function FloatingBookingButton(): ReactElement {
       <Link
         href='/reservar'
         data-booking-button
+        data-intro
         className={`group pointer-events-auto flex h-16 items-center gap-3 rounded-full bg-primary pr-2 pl-6 text-[17px] font-semibold text-primary-foreground transition-shadow duration-300 md:h-[72px] md:pl-7 md:text-lg ${GLOW} ${FOCUS}`}
       >
         <CalendarCheck aria-hidden='true' className='size-5 shrink-0' strokeWidth={2} />

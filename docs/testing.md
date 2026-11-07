@@ -155,3 +155,10 @@ Reintentos: 0 en local y 1 en el CI. Un test que pasa al segundo intento es ines
 
 Fuera de la cobertura: `prisma/`, `src/generated/`, `src/app/`, `src/proxy.ts`, `src/lib/db/index.ts`,
 `src/lib/db/transaction.ts`, los repositorios (se prueban con integración) y los helpers de test.
+
+### Movimiento
+
+- Los componentes de `src/components/motion/` (Lenis y GSAP) sólo corren en un navegador real: quedan fuera de la
+  cobertura unitaria (`vitest.config.mts`) y los cubre `tests/motion.spec.ts`, con `reducedMotion: 'no-preference'`.
+- El resto de los E2E corre con `reducedMotion: 'reduce'` (`playwright.config.ts`): sin animaciones, son
+  deterministas.

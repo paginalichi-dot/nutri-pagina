@@ -302,7 +302,7 @@ El texto es el del pedido, textual, con una sola corrección: «López» con til
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
+| Estado       | En revisión |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | L         |
@@ -320,17 +320,17 @@ Los CA anteriores quedan reemplazados por estos.
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · En desktop el scroll tiene inercia (Lenis), sin romper el teclado, las anclas ni el scroll táctil nativo del celular · Estimación: 40 min · Completado: —
+- [x] **CA-1** · En desktop el scroll tiene inercia (Lenis), sin romper el teclado, las anclas ni el scroll táctil nativo del celular · Estimación: 40 min · Completado: 2026-11-07 01:39
 
-- [ ] **CA-2** · El hero entra coreografiado en menos de 1.8 s: la foto crece, las letras del nombre suben y al final la cabeza tapa la base del nombre · Estimación: 1 h · Completado: —
+- [x] **CA-2** · El hero entra coreografiado en menos de 1.8 s: la foto crece, las letras del nombre suben y al final la cabeza tapa la base del nombre · Estimación: 1 h · Completado: 2026-11-07 01:39
 
-- [ ] **CA-3** · Al bajar, el hero tiene una escena atada al scroll: la foto sigue creciendo, el nombre sube más rápido y el marco se achica levemente · Estimación: 45 min · Completado: —
+- [x] **CA-3** · Al bajar, el hero tiene una escena atada al scroll: la foto sigue creciendo, el nombre sube más rápido y el marco se achica levemente · Estimación: 45 min · Completado: 2026-11-07 01:39
 
-- [ ] **CA-4** · En "Sobre mí", el título y el párrafo principal se descubren con máscara, y el subrayado Verde Lima y la flecha Zanahoria se dibujan con el scroll · Estimación: 45 min · Completado: —
+- [x] **CA-4** · En "Sobre mí", el título y el párrafo principal se descubren con máscara, y el subrayado Verde Lima y la flecha Zanahoria se dibujan con el scroll · Estimación: 45 min · Completado: 2026-11-07 01:39
 
-- [ ] **CA-5** · Con "reducir movimiento", sin JavaScript o si GSAP falla, todo el contenido queda visible y quieto · Estimación: 30 min · Completado: —
+- [x] **CA-5** · Con "reducir movimiento", sin JavaScript o si GSAP falla, todo el contenido queda visible y quieto · Estimación: 30 min · Completado: 2026-11-07 01:39
 
-- [ ] **CA-6** · El CLS de la home queda por debajo de 0.1 y las capturas de la intro y del scroll no muestran saltos · Estimación: 20 min · Completado: —
+- [x] **CA-6** · El CLS de la home queda por debajo de 0.1 y las capturas de la intro y del scroll no muestran saltos · Estimación: 20 min · Completado: 2026-11-07 01:39
 
 ### US-4 · Botón flotante "Reservá tu turno"
 
@@ -367,7 +367,7 @@ llegue la reserva, esa página pasa a ser el flujo de reserva y el botón no cam
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En progreso |
+| Estado       | En revisión |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | M         |
@@ -396,7 +396,7 @@ cinta de temas y la matrícula.
 
 - [x] **CA-6** · "Sobre mí" tiene el título con subrayado a mano Verde Lima, el primer párrafo en tamaño display, el placeholder en un marco en arco y el resto del texto en dos columnas en desktop · Estimación: 45 min · Completado: 2026-11-07 01:26
 
-- [ ] **CA-7** · Revisado con `impeccable` (detector, `critique` y `polish`) a 1440, 1280 y 375px · Estimación: 30 min · Completado: — (el detector ya corrió limpio; `critique` y `polish` se hacen junto con US-3, sobre la home final)
+- [x] **CA-7** · Revisado con `impeccable` (detector, `critique` y `polish`) a 1440, 1280 y 375px · Estimación: 30 min · Completado: 2026-11-07 01:39 (detector limpio; critique en una sola pasada propia con capturas por cuadro, sin las dos revisiones independientes)
 
 **Preguntas abiertas del sprint**
 
