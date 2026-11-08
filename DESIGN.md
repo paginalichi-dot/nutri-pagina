@@ -112,6 +112,7 @@ La referencia usa Peridot PE (licencia comercial). Usamos **Manrope** (Google Fo
 | Marco del hero | 88px desktop · 40px mobile |
 | Testimonios | 8px |
 | Panel admin (tablas, modales) | 16px |
+| Controles del panel (botones, toggles, flechas) | 12px |
 
 ## Componentes — sitio público
 
@@ -125,13 +126,20 @@ Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y r
 - Nombre en Manrope 800, sin tracking negativo: "LISANDRO" blanco macizo y "LÓPEZ" en contorno Verde Lima (relleno
   transparente). Una línea desde 1024px, dos en pantallas más chicas. Sin píldora de credencial arriba (descartada
   por el dev) y sin matrícula por ahora.
-- Foto recortada al centro, apoyada abajo y grande: la cabeza tapa cerca del 45% de abajo de las letras.
+- Foto recortada al centro, apoyada abajo y grande: la cabeza tapa cerca del 45% de abajo de las letras. En mobile
+  la foto sube `8vw` sobre el nombre: asoma la parte de arriba de la «P» y la persona sigue por encima (pedido del
+  dev, 2026-11-07).
 - Frase del cliente en dos bloques a los costados de la foto, abajo, en Hueso con las palabras clave en Verde Lima
   700. El ancho de cada bloque es el espacio libre entre el borde y la foto (`--phrase-w` en `hero.tsx`) y el tamaño
   de letra sale de ese ancho (`--phrase-w / 9.2`): la frase ocupa el costado con aire, grande pero sin competir con el
   nombre (pedido del dev, 2026-11-07). Debajo de 1024px va en columna, debajo de la foto, a
   `clamp(1.25rem, 5.2vw, 1.875rem)`.
 - Sin garabatos, sin píldora del hero ni selector de sucursal: reservar es el botón flotante.
+- En notebooks bajas (p. ej. 1280×600) el marco baja hasta 520px y el nombre se limita también por alto
+  (`min(8.4vw, 8.5rem, 15svh)`); el ancho de la frase se mide sobre el marco (`cqw`), no sobre la ventana, para que
+  la barra de scroll no la empuje afuera. «Sobre mí» limita su arco y su padding al alto de la pantalla y, con la variante `short` (desktop de
+  hasta 760px de alto), achica títulos y texto para entrar entera; si igual no entra, no hace la pausa. El `body`
+  lleva `overflow-x: clip` como red contra cualquier desborde horizontal.
 
 ### Intro de marca (US-7)
 Al entrar o recargar la home (no al volver desde otra página del sitio) aparece una presentación breve, de unos 3.5 s:
@@ -157,11 +165,18 @@ el área segura de iOS. Lleva a `/reservar`. Es la única píldora Verde Lima de
 Hueso más alto que el botón para que nunca tape el final. El foco suma un halo blanco y un anillo Verde Bosque.
 
 ### Sobre mí (US-6)
-Banda Hueso con borde curvo arriba. A la izquierda, la foto en un marco en arco (arriba redondo, abajo radio 30px);
+Banda Hueso con borde curvo arriba. A la izquierda, la foto en un marco en arco (arriba redondo, abajo radio 30px),
+sólo desde 768px: en mobile no se muestra (pedido del dev, 2026-11-07);
 mientras falta, el placeholder `[Completar: foto Sobre mí]` con borde punteado. A la derecha: el `h2` «Sobre **mí**»
 con un subrayado Verde Lima dibujado a mano y una flecha Zanahoria a mano que baja hacia la foto (desde 1024px); el
 primer párrafo en display (28px/38.4px, 500, con «Licenciado en Nutrición» y «Universidad Favaloro» en 700) y el
 resto del texto en dos columnas desde 768px, con menos de 75 caracteres por línea.
+
+### Flecha para bajar (US-19)
+Una flecha dibujada a mano, con el rulo de la de «Sobre mí» pero apuntando derecho hacia abajo (trazo de 3, 20×36px
+en mobile y 36×64px en desktop), en la esquina inferior derecha de cada sección que tiene algo debajo (hoy, el hero
+y «Sobre mí»), con el color de los garabatos de esa sección: blanca sobre Verde Bosque y Zanahoria sobre Hueso. Rebota lento (2.6 s) sólo sin «reducir movimiento», no se puede tocar y es
+decorativa (`aria-hidden`). Nunca pisa el botón flotante. La última sección no la lleva.
 
 ### Píldora Verde Lima con flecha (CTA principal)
 Relleno Verde Lima, 88px de alto (64px en mobile), radio 9999px, padding 0 37px, label Verde Bosque 18px/500 y un círculo blanco con flecha Verde Bosque en el extremo derecho. Sombra `rgba(0,0,0,0.05) 0 6px 34px`. Sin borde. **Una sola por pantalla.**
@@ -181,7 +196,14 @@ Contenedor Papel con radio 100px y sombra `rgba(0,0,0,0.21) 0 6px 34px`, con un 
 ### Tarjeta de servicio (reemplaza a la tarjeta de producto)
 Tarjeta alta Gris Nube con radio 30px, padding 0 40px, sin sombra ni borde. Arriba flota una foto recortada de comida o un objeto representativo (plato, fruta, botella de agua, cinta métrica). Título Verde Bosque 20px/500, descripción corta 17px/500 y, si se muestra, el arancel en Pimentón 15px/500 ("Primera consulta · $XX.XXX") con duración en Gris Piedra ("60 min"). Ejemplos: Primera consulta · Seguimiento · Nutrición deportiva · Plan online.
 
-### Tarjeta de sucursal (nueva)
+### Tarjeta de sucursal (nueva; vigente desde US-19)
+Sección «Dónde atiendo» después de «Sobre mí»: banda Papel con borde curvo que sube sobre «Sobre mí» (profundidad
+US-8), título con «atiendo» en 700 subrayado Verde Lima, una tarjeta por ubicación activa y las obras sociales una
+sola vez debajo, como chips Papel («Particular» primero). La online va sin mapa ni dirección. Sin «Reservar acá» por
+ahora (la única píldora Verde Lima de la home es el botón flotante); «Cómo llegar» es una píldora Papel porque la
+tarjeta es Gris Nube.
+
+Propuesta original:
 Tarjeta Gris Nube con radio 30px. Arriba, un mapa estático o embebido con esquinas de 22px. Debajo: nombre del consultorio (20px/500), dirección, días y horarios en una mini-tabla con separadores Línea Salvia, obras sociales aceptadas como chips Papel, y dos píldoras: Verde Lima "Reservar acá" + Gris Nube "Cómo llegar".
 
 ### Tarjeta flotante de beneficio
@@ -219,24 +241,73 @@ La referencia no tiene flujo de reservas. Se diseña con el mismo lenguaje.
 - **Confirmación:** una tarjeta Hueso con un garabato Zanahoria festivo, el resumen del turno y los botones "Agregar al calendario" (Gris Nube) y "Volver al inicio" (Papel).
 - **Áreas táctiles:** mínimo 44×44px. Todo el flujo se puede usar con teclado.
 
-## Componentes — panel admin (nuevo)
+## Componentes — panel admin
 
-El panel es una herramienta de trabajo diario, así que usa una **versión silenciosa del sistema**: misma tipografía, mismos colores y mismos radios, pero sin garabatos, sin cinta y sin fotos. El Verde Lima se reserva para la acción principal de cada vista.
+El panel es una herramienta de trabajo diario, así que usa una **versión silenciosa del sistema**: misma tipografía,
+mismos colores, sin garabatos, sin cinta y sin fotos. El Verde Lima se reserva para la acción principal de cada vista.
+La referencia es el wireframe del dev `docs/wireframes/panel-administrador.png` (US-26, 2026-11-08), con Lisandro
+como **nutricionista**.
 
-- **Layout:** sidebar Verde Bosque a la izquierda (íconos y links en Niebla, el activo en blanco con un indicador Verde Lima) y un área de contenido sobre Hueso.
-- **Agenda:** vista día/semana con columnas por sucursal, sobre tarjetas Papel con radio 16px. Cada turno es un bloque con el color de su estado.
-- **Tabla de turnos:** filas Papel con separadores Línea Salvia, chips de estado como píldoras y acciones (confirmar, reprogramar, cancelar) en un menú de tres puntos.
-- **Bloquear disponibilidad:** modal Papel con radio 30px, selector de fechas y la píldora Verde Lima "Bloquear".
-- **Mobile:** la sidebar pasa a una barra inferior con 4 íconos y la agenda muestra un día por vez.
-- **Tarjeta de login (T-3):** fondo Hueso, tarjeta Papel con radio 30px, título 38.4px/28px "Ingresá al **panel**",
-  inputs del formulario de reserva (radio 25px, Gris Nube, label 15px/600, foco Verde Bosque de 2px con halo Verde
-  Lima de 4px) y la píldora Verde Lima "Entrar" a todo el ancho. El error va arriba del botón, en Pimentón con ícono.
+- **Controles del panel (US-26, decisión del dev):** botones, flechas, «Hoy», el toggle Día/Semana, los horarios y los
+  inputs son rectángulos con radio 12px (`rounded-control`), no píldoras: así lo pide el wireframe. `PRIMARY_BUTTON` (Verde
+  Lima) y `SECONDARY_BUTTON` (Gris Nube) miden 44px de alto, 15px/600, con ícono Lucide a la izquierda. Los chips de
+  estado sí siguen en píldora (no son botones). En el sitio público todo sigue en píldora.
+- **Hover del panel (US-26 CA-11, pedido del dev):** todo lo que se toca lleva la clase `hover-shade`
+  (`src/app/hover-shade.css`). Con el mouse encima, el control se funde en degradé, de izquierda a derecha, hacia un
+  tono más oscuro de su propio color (Verde Bosque al 16% por encima de su fondo), con un fundido de opacidad de 200 ms.
+  Sobre Verde Bosque (menú lateral) se suma `hover-shade-on-dark` y el degradé va hacia un tono más claro (blanco al 14%).
+  No aparece en touch ni en botones deshabilitados. Los links de texto subrayados no lo llevan.
+- **Títulos del panel:** el `h1` de cada vista va en 700, 32px (28px en mobile), como en el wireframe; los títulos de
+  tarjeta, 18–20px/600.
+- **Sidebar (T-4, US-26):** desde 768px, Verde Bosque fija a la izquierda (240px). Arriba, el logo LLN en un disco
+  Papel, «Lisandro López» (17px/600, blanco) y «NUTRICIONISTA» (11px/600, Niebla, +1px). Links Agenda, Pacientes,
+  Ubicaciones, Ajustes y Mi cuenta (ícono Lucide + texto 15px/600 en Niebla); el activo en blanco, con fondo blanco al
+  10% a todo el ancho y una barra Verde Lima pegada al borde izquierdo. Al pie, una línea `line-on-dark` y «Cerrar
+  sesión». El foco sobre Verde Bosque es un anillo Verde Lima (7.9:1). El contenido va sobre Hueso.
+- **Mobile:** la sidebar pasa a una barra inferior fija con 5 íconos y su texto (11px; la barrita del activo, arriba).
+  «Cerrar sesión» va dentro de Mi cuenta.
+- **Agenda (US-26):** vista `max-w-7xl`.
+  - Cabecera: «Agenda», el saludo según la hora argentina («Buen día / Buenas tardes / Buenas noches, Lisandro») y
+    «Acá tenés un resumen de tus turnos y de tu semana.»; a la derecha «+ Nuevo turno» (Verde Lima) y «Bloquear
+    horario» (Gris Nube con marco Gris Piedra de 1px, candado: sin el marco se perdía sobre Hueso).
+  - Cuatro tarjetas Papel radio 16px: disco Verde Lima al 25% con el ícono, label 14px/500, número 28px/700 y bajada
+    13px Gris Piedra («+2 que ayer», «+12% vs. semana anterior», «Esta semana», «De 10 disponibles» u «Hoy no atendés»).
+    2×2 hasta 1280px; en mobile, sin el disco del ícono.
+  - A la izquierda, la tarjeta de la agenda: título «Hoy, 8 de noviembre de 2026» y, a la derecha, el toggle
+    Día/Semana, flechas cuadradas con borde Línea Salvia y «Hoy» en Gris Nube. La vista día es una
+    línea de horas (de 08:00 a 18:00, estirada si algo cae afuera; 56px por hora) con cada turno en su lugar: bloque
+    radio 6px con barra izquierda de 4px, «**Nombre** · Obra social» y «09:00 – 09:45 · Ubicación»; confirmado en
+    `bg-confirmed` con barra Verde Lima, pendiente en Hueso con borde Línea Salvia, barra Verde Bosque y su chip. Los cancelados no van en la
+    línea (se ven en la semana y en el detalle). Los bloqueos son un bloque rayado Gris Nube / Línea Salvia con
+    «Bloqueado · motivo».
+  - Vista semana (US-26, pedido del dev): ocupa exactamente el mismo lugar y la misma forma que la vista día; cambiar
+    Día/Semana sólo cambia la grilla. Es una tabla con los días en la columna izquierda («Lun 9», link a ese día; hoy
+    en 700) y cada día partido en franjas de 4 horas (08–12, 12–16 y 16–20, estiradas de a 4 h si algo cae afuera),
+    separadas con líneas Línea Salvia. Cada turno no cancelado es un cuadradito de 44px con su hora de inicio y el
+    color de su estado (confirmado `bg-confirmed` con borde Verde Lima, pendiente Hueso con borde Verde Bosque); el
+    nombre va en `title` y en el `aria-label`. La franja que toca un bloqueo se ve rayada.
+  - A la derecha (340px), en las dos vistas. En mobile el orden es próximo turno, agenda y calendario: «Próximo turno» (avatar en disco Verde Lima al 25%,
+    nombre, obra social, reloj con «10:30 – 11:15» y, debajo, «Hoy», «Mañana» o la fecha, pin con ubicación y dirección o «Por videollamada»;
+    «Confirmar» Verde Lima si está pendiente o «Ver turno», y «WhatsApp» Gris Nube; «⋯» lleva al detalle) y el
+    calendario del mes (L a D, el día elegido en disco Verde Bosque, punto en los días con turnos (Verde
+    Bosque; Verde Lima sobre el elegido), hoy en 700 con un aro Línea Salvia, días de otros meses en Gris Piedra; cada día
+    de 44px es un link).
+- **Pacientes (US-26):** por ahora, una tarjeta «Próximamente».
+- **Bloquear disponibilidad (US-14):** página `/admin/bloqueos` (no modal: se usa igual con teclado y en el
+  celular) con desde/hasta, motivo opcional y el botón Verde Lima «Bloquear», más la lista de bloqueos por venir.
+- **Horarios en el panel:** botones Gris Nube de 48px en grilla; el elegido pasa a Verde Lima (los mismos de la
+  reserva, con radio 12px). Tras guardar, confirmar, cancelar o reprogramar, una franja `bg-confirmed` con el
+  resultado y el botón Gris Nube «Avisar por WhatsApp» (ícono `MessageCircle`, abre `wa.me` en otra pestaña).
+- **Tarjeta de login (T-3, US-27):** en `/login`, el mismo para todos. Fondo Hueso, tarjeta Papel con radio 30px,
+  título 38.4px/28px "Ingresá a tu **cuenta**", inputs Gris Nube con radio 12px (label
+  15px/600, foco Verde Bosque de 2px con halo Verde Lima de 4px) y el botón Verde Lima "Entrar" a todo el ancho. El
+  error va arriba del botón, en Pimentón con ícono.
 - **Acceso denegado (T-3):** la ve cualquiera que entre a `/admin/**` sin sesión, así que usa el lenguaje del sitio
   público: banda Hueso, tarjeta Papel, título "Acceso **denegado**" con subrayado Verde Lima, la línea "Esta sección
   es privada." y la píldora Verde Lima "Volver al inicio" con disco de flecha. Ningún link al login.
 - **Mi cuenta (US-5):** sobre Hueso, dos tarjetas Papel con radio 16px ("Cambiar el email" y "Cambiar la contraseña"),
-  cada una con su título 20px/500, los inputs de la tarjeta de login y su píldora Verde Lima "Guardar …". Es la única
-  vista con dos píldoras Verde Lima: cada una cierra su propio formulario. El éxito va en una franja `bg-confirmed`.
+  cada una con su título 20px/500, los inputs de la tarjeta de login y su botón Verde Lima "Guardar …". Es una de las
+  vistas con dos botones Verde Lima: cada uno cierra su propio formulario. El éxito va en una franja `bg-confirmed`.
 
 ## Movimiento (US-3, US-7 y US-8)
 
@@ -254,7 +325,12 @@ acompaña el scroll.
 - **Profundidad entre secciones** (US-8, `depth.ts`): al bajar, la sección actual queda fija (`pin` de ScrollTrigger,
   desde que se ve entera hasta abajo) y se aleja hacia el fondo: su tarjeta se achica a 0.9 y se apaga a 0.5. La
   siguiente sube con el scroll, por encima (`relative z-10`), y la tapa; su borde curvo deja ver la capa de atrás.
-  Todo atado al scroll (`scrub`), sin animaciones sueltas. Se usa `pin` y no `position: sticky` porque el hero en
+  Todo atado al scroll (`scrub`), sin animaciones sueltas. Cada sección ocupa al menos una pantalla (`min-h-svh`,
+  contenido centrado): así la anterior ya quedó tapada antes de que la actual empiece a alejarse, y nunca se ven tres
+  capas a la vez. Cuando la siguiente la tapó del todo, la sección de atrás se oculta (vuelve al subir): si no, se
+  vería a través de la que se aleja y se apaga. «Sobre mí» además hace una pausa: ya vista entera, queda quieta
+  durante 1,25 pantallas de scroll antes de que suba «Dónde atiendo» (`hold` de `depthScene`, pedido del dev,
+  2026-11-07). Se usa `pin` y no `position: sticky` porque el hero en
   mobile y "Sobre mí" son más altos que la pantalla: con `sticky; top: 0` su parte de abajo nunca se vería.
 - **Escena del hero al scrollear** (dentro de la misma profundidad): la foto sigue creciendo (hasta 1.08, desde
   abajo) y el nombre sube más rápido y se apaga a 0.25. La frase no se mueve: el texto no lleva parallax.
@@ -351,7 +427,7 @@ Solo tema claro. No se implementa modo oscuro en esta etapa.
   `stroke-scribble`, `text-footer-text`, `bg-confirmed`, `border-border`, `border-benefit-border`.
 - Radios: `rounded-card` (30px), `rounded-benefit` (29px), `rounded-input` (25px), `rounded-hero` (88px) y
   `rounded-hero-mobile` (40px), `rounded-header-button` (50px), `rounded-toggle` (100px), `rounded-testimonial`
-  (8px), `rounded-panel` (16px). Las píldoras usan `rounded-full`.
+  (8px), `rounded-panel` (16px), `rounded-control` (12px, controles del panel). Las píldoras usan `rounded-full`.
 - Sombras: `shadow-halo`, `shadow-glow`, `shadow-toggle`, `shadow-benefit`, `shadow-modal`.
 - Fuente: Manrope con `next/font/google` (`--font-manrope`), aplicada como `font-sans`.
 - `npm run lint` rechaza cualquier color hex escrito en `src/**/*.{ts,tsx}`, y `src/app/tokens.test.ts` verifica
@@ -375,7 +451,7 @@ Solo tema claro. No se implementa modo oscuro en esta etapa.
 - No usar negro ni grises neutros en títulos.
 - No usar Verde Lima como texto sobre Papel o Hueso, ni como fondo de áreas grandes.
 - No usar el Verde Lima como anillo de foco sobre fondos claros: el foco va en Verde Bosque.
-- No hacer controles con esquinas rectas: botones, tabs y toggles son siempre píldoras.
+- No hacer controles con esquinas rectas: en el sitio público, botones, tabs y toggles son siempre píldoras; en el panel, rectángulos con radio 12px.
 - No poner títulos enteros en bold.
 - No usar tracking negativo.
 - No usar el Pimentón en botones ni títulos. Va solo en precios y errores.

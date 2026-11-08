@@ -1,6 +1,6 @@
 # Prompt inicial: contexto completo de pagina-lichi
 
-> Foto del proyecto al **2026-11-07**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
+> Foto del proyecto al **2026-11-08**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
 
 ## 1. Quién sos y con quién trabajás
 
@@ -29,7 +29,8 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - `src/lib/`: catálogo de errores, `ActionResult`, `db-errors`, `format-date-time`, `database-config`, cliente
   Prisma y `withTransaction`.
 - Login del panel (T-3): JWT propio en la cookie `session`, sesión permanente, cuenta de prueba con `npm run db:seed`.
-  `/admin/**` sin sesión muestra "Acceso denegado" (`noindex`); el login vive en `/admin/login`. Primera tabla: `admin_user`.
+  `/admin/**` sin sesión muestra "Acceso denegado" (`noindex`); el login vive en `/login`, el mismo para todos
+  (US-27). Primera tabla: `admin_user`.
 - "Mi cuenta" (US-5): en `/admin/cuenta` el admin cambia su email y su contraseña; cada cambio cierra las demás sesiones.
 - Tokens de `DESIGN.md` en `src/app/tokens.css` (T-2): colores, radios, sombras y Manrope; shadcn/ui inicializado
   sin componentes todavía. ESLint rechaza colores hex en el código.
@@ -43,6 +44,15 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   - Movimiento con Lenis + GSAP (US-3), intro de marca (US-7: una caja con «Lic. Lisandro López» que se expande
     hasta ser el hero) y scroll con profundidad (US-8: cada sección se aleja al fondo y la siguiente la tapa). Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
 - Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
+- Sprint 2 («Lisandro maneja su agenda») integrado en `develop`, en revisión del dev: menú del panel, ubicaciones con
+  horarios semanales, duración y obras sociales, agenda día y semana, bloqueos, disponibilidad, turnos cargados a
+  mano (cancelar, asistencia, reprogramar) con email por Resend y WhatsApp (`wa.me`), y «Dónde atiendo» en la home.
+  Features nuevos: `location`, `settings` y `agenda`
+  ([ADR 0005](adr/0005-agenda-choque-global-y-horarios-en-hora-argentina.md)).
+- Iteración del Sprint 2 (2026-11-08, rama `feat/sprint-2-iteracion-panel`): el panel según el wireframe del dev
+  (`docs/wireframes/panel-administrador.png`: sidebar con «Pacientes» en «Próximamente», métricas, línea de horas,
+  próximo turno y calendario; botones del panel con radio 12px), «Confirmar» un pendiente (US-23, adelantada del
+  Sprint 4) y un solo login en `/login` (US-27). Los bloqueos se quedan.
 
 ## 4. Stack
 
@@ -63,14 +73,16 @@ mostradas en Argentina, cero datos personales en logs, sólo tokens de `DESIGN.m
 
 ## 7. Dominio: turnos
 
-- Un horario de una sucursal no puede tener dos turnos activos: lo garantiza la base.
-- La disponibilidad sale de los horarios de cada sucursal, la duración del servicio, los turnos activos y los
-  bloqueos.
-- Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario.
-- El paciente cancela con un link de un solo uso que llega por email.
-
-Sin definir todavía (ver "Preguntas abiertas" en `BACKLOG.md`): si los turnos se confirman solos, la duración de
-cada consulta, la anticipación mínima y el proveedor de email.
+- Lisandro es uno solo: dos turnos activos nunca se pisan, en ninguna ubicación (lo garantiza la base), y las
+  franjas semanales de distintas ubicaciones tampoco.
+- Ubicaciones: consultorios y una «Online» (link fijo de videollamada). Franjas semanales en hora argentina, una
+  duración única para todos los turnos y una lista de obras sociales (más «Particular»). Sin tipos de consulta.
+- La disponibilidad sale de las franjas, la duración, los turnos activos y los bloqueos (globales). El paciente
+  reserva con 12 h de anticipación como mínimo y hasta 60 días; el panel, desde ahora.
+- Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario. La reserva online (Sprint 4)
+  nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado.
+- El paciente cancela o reprograma con el link del email hasta 24 h antes (Sprint 4). Emails con Resend; el
+  recordatorio y el dominio propio llegan con el despliegue (Sprint 5); la cuenta de pacientes, en el Sprint 3.
 
 ## 8. Cómo se trabaja
 

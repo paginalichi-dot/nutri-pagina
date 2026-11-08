@@ -18,6 +18,11 @@ describe('catálogo de errores', () => {
     { code: 'SLOT_TOO_SOON', message: 'Ese horario ya pasó o está demasiado cerca. Elegí otro.' },
     { code: 'INVALID_TOKEN', message: 'El link no es válido o ya venció.' },
     { code: 'RATE_LIMITED', message: 'Hiciste demasiados intentos. Esperá unos minutos y probá de nuevo.' },
+    { code: 'HOURS_OVERLAP', message: 'Ese horario se pisa con otra franja de alguna ubicación. Elegí otro.' },
+    { code: 'HAS_ACTIVE_APPOINTMENTS', message: 'Tiene turnos por venir: cancelalos o reprogramalos primero.' },
+    { code: 'BLOCK_HAS_APPOINTMENTS', message: 'En ese rango hay turnos. Cancelalos o reprogramalos antes de bloquear.' },
+    { code: 'INVALID_TRANSITION', message: 'Ese cambio no se puede hacer en el estado actual del turno.' },
+    { code: 'NO_SLOT_DURATION', message: 'Todavía no definiste la duración de los turnos. Hacelo en Ajustes.' },
     { code: 'UNEXPECTED', message: 'No se pudo procesar el turno. Intentá de nuevo en unos minutos.' },
   ] as const)('$code tiene su mensaje en español', ({ code, message }) => {
     expect(errorMessage(code, 'el turno')).toBe(message);

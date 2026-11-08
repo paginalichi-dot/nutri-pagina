@@ -11,8 +11,8 @@ Una sola aplicación **Next.js 16 (App Router)** con dos caras:
 
 | Cara | Rutas | Quién la usa | Cómo renderiza |
 |---|---|---|---|
-| Sitio público | `/` (home), `/servicios`, `/sucursales`, `/reservar`, `/turno/cancelar/[token]` | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
-| Panel | `/admin/**` | Lisandro (único admin), con login propio (JWT) | Client Components + Server Actions |
+| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/login` (el mismo para todos), `/turno/[token]` (Sprint 4) | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
+| Panel | `/admin/**` (agenda, turnos, bloqueos, pacientes, ubicaciones, ajustes, cuenta) | Lisandro (único admin), con login propio (JWT) | Server Components que leen con `guardAdminPage`; formularios Client Components + Server Actions |
 
 **Estilo arquitectónico.** En ejecución es cliente-servidor; en despliegue, un monolito modular. El código se
 agrupa por *feature* (`src/features/<feature>`), no por tipo técnico.
@@ -53,7 +53,7 @@ flowchart LR
 | Validación | Zod 4: el formulario y la action validan con el **mismo** schema |
 | Datos | PostgreSQL 15 (Docker en local, Supabase en producción) + Prisma 7 con `@prisma/adapter-pg` |
 | Autenticación | Login propio con JWT (`jose`), sólo para el panel (T-3, ADR 0004) |
-| Email | Proveedor a definir (confirmación, recordatorio y link de cancelación) |
+| Email | Resend por su API REST, sin SDK (`src/lib/email/`). Sprint 2: desde local, sin dominio propio |
 | Calidad | ESLint 9 (`eslint-config-next` + reglas duras en `eslint/`), Prettier, lefthook, commitlint y GitHub Actions |
 | Tests | Vitest 5, Testing Library, fast-check, Stryker y Playwright. Ver [`testing.md`](testing.md) |
 
@@ -96,21 +96,26 @@ src/features/<feature>/
   testing/      fake, builders y suite de comportamiento   sólo para tests
 ```
 
-Features previstos: `servicio`, `sucursal`, `disponibilidad`, `turno`, `paciente`, `auth`.
+Features: `auth` (login y cuenta), `location` (ubicaciones y horarios), `settings` (duración y obras sociales) y
+`agenda` (turnos, disponibilidad, bloqueos y emails). No hay `servicio`: todos los turnos duran lo mismo y no hay
+tipos de consulta. Las lecturas que usa una página viven en `actions/*-queries.ts` (no son Server Actions): las del
+panel llaman a `guardAdminPage()`; las públicas usan `'use cache'` con un tag que refrescan las actions (`updateTag`).
 
 ## Piezas transversales
 
 | Ruta | Contenido |
 |---|---|
 | `src/app/tokens.css` | Tokens de `DESIGN.md` (colores, radios, sombras, fuente) para Tailwind y shadcn. Único lugar con hex; lo controla ESLint y su contraste lo prueba `tokens.test.ts`. |
-| `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. En `/admin/**` verifica la firma del JWT de la cookie (sin base): si es válido y es una navegación real del navegador (GET con `sec-fetch-dest: document`), renueva la cookie (en actions y precargas no, para no revivir una sesión recién cerrada); si es inválido la borra; sin sesión, todo `/admin/**` salvo `/admin/login` se reescribe a `/acceso-denegado` (la URL no cambia; `noindex`). Responde 200: con Cache Components ni `forbidden()` ni una reescritura pueden fijar un 403. Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
+| `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. En `/admin/**` verifica la firma del JWT de la cookie (sin base): si es válido y es una navegación real del navegador (GET con `sec-fetch-dest: document`), renueva la cookie (en actions y precargas no, para no revivir una sesión recién cerrada); si es inválido la borra; sin sesión, todo `/admin/**` se reescribe a `/acceso-denegado` (la URL no cambia; `noindex`). Responde 200: con Cache Components ni `forbidden()` ni una reescritura pueden fijar un 403. Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
 | `prisma/schema.prisma`, `prisma/migrations/` | Modelo de datos y migraciones versionadas. Las restricciones que Prisma no expresa (`CHECK`, `EXCLUDE`) van en el SQL de la migración. |
 | `prisma.config.ts` | URL de las migraciones: `LOCAL_DATABASE_URL` en local y en tests; `DIRECT_URL` con `APP_ENV=production`. |
 | `src/lib/db/index.ts` | Cliente Prisma único (`db`) con el adaptador de `pg`. La URL sale de `database-config.ts`: `LOCAL_DATABASE_URL`, o `DATABASE_URL` (pooler) con `APP_ENV=production`. |
-| `src/lib/db/transaction.ts` | `withTransaction(work)` y `DbTransaction`: el único acceso a la transacción que usan los services. |
+| `src/lib/db/transaction.ts` | `withTransaction(work)`, `withSerializableTransaction(work)` y `DbTransaction`. La agenda la usa por `agendaRepository.inTransaction`, así el service no conoce Prisma y el fake corre igual. |
+| `src/lib/email/` | `emailSenderFromEnv` (Resend por `fetch`), `renderEmail` (plantilla con los colores de `tokens.css`, verificados por test). Nunca se loguea el destinatario ni el contenido. |
+| `src/lib/argentina-time.ts`, `src/lib/ics.ts`, `src/lib/whatsapp.ts` | Hora argentina ↔ UTC (`argentinaInstant`, `whenText`), archivo `.ics` y link `wa.me`. |
 | `src/lib/errors/` | Catálogo de códigos (`codes.ts`) con su mensaje en español y `AppError(code)`. |
 | `src/lib/action-result.ts` | `ActionResult<T>` y `fail(code)`: resultado tipado de toda action. |
-| `src/lib/db-errors.ts` | `databaseErrorCode` y `toActionFailure`: traducen errores de Prisma y Postgres (`P2002`/`23505`/`23P01` → `DUPLICATE`, `P2003`/`23503` → `RELATION_NOT_FOUND`, `P2025` → `NOT_FOUND`, datos inválidos → `VALIDATION`). Un error desconocido da `UNEXPECTED` y se loguea **sin datos personales** (sólo nombre y códigos). Un borrado con dependencias lo traduce el repositorio a `HAS_RELATIONS`. |
+| `src/lib/db-errors.ts` | `databaseErrorCode` y `toActionFailure`: traducen errores de Prisma y Postgres (`P2002`/`23505`/`23P01` → `DUPLICATE`, `P2003`/`23503` → `RELATION_NOT_FOUND`, `P2025` → `NOT_FOUND`, `P2034`/`40001` (conflicto de una transacción `Serializable`) → `STALE_VERSION`, datos inválidos → `VALIDATION`). `isExclusionViolation` deja que un repositorio traduzca un `EXCLUDE` a su código (`SLOT_TAKEN`, `HOURS_OVERLAP`). Un error desconocido da `UNEXPECTED` y se loguea **sin datos personales** (sólo nombre y códigos). Un borrado con dependencias lo traduce el repositorio a `HAS_RELATIONS`. |
 | `src/lib/format-date-time.ts` | `formatDateTime`, `argentinaDay`, `argentinaTime`: todo se muestra en `America/Argentina/Buenos_Aires`. |
 
 ## Flujo de una mutación (ejemplo: reservar un turno)

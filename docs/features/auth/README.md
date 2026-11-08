@@ -4,14 +4,15 @@ Decisión de base: [ADR 0004](../../adr/0004-login-propio-con-jwt.md). Plan: [T-
 
 ## Qué hace
 
-- El admin entra por `/admin/login` con email y contraseña. No hay registro público ni "olvidé mi contraseña".
+- Todos entran por `/login` (US-27): hoy la única cuenta es la del admin, que va a `/admin`; cualquier otro email o
+  contraseña da `INVALID_CREDENTIALS`. Las cuentas de pacientes (Sprint 3) entrarán por la misma página. Se entra con email y contraseña. No hay registro público ni "olvidé mi contraseña".
 - La sesión es un JWT HS256 (`jose`, `JWT_SECRET`) sin vencimiento, en la cookie `session` (`httpOnly`, `Secure`,
   `SameSite=Lax`, 400 días). El proxy la renueva en cada navegación real del navegador (`sec-fetch-dest: document`) a `/admin/**` y la borra si el token es inválido.
 - El token lleva `sub` (id del admin) y `sv` (`session_version`). `requireAdmin()` verifica la firma y compara
   `sv` con la base: si no coincide, la sesión está cerrada (`SESSION_EXPIRED`). Cambiar email o contraseña (US-5)
   incrementa la `session_version` y cierra las demás sesiones.
 - Cualquiera que entre a `/admin` o `/admin/**` sin una sesión válida ve "Acceso denegado" (`noindex`; responde 200, ver "Riesgos" en el plan). Ningún
-  link lleva al login. Una sesión cerrada desde otro dispositivo vuelve a `/admin/login`.
+  link lleva al login. Una sesión cerrada desde otro dispositivo vuelve a `/login`.
 - Las contraseñas se guardan con `scrypt` (`node:crypto`, sal de 16 bytes) y se comparan con `timingSafeEqual`. Un
   email inexistente se compara contra un hash de relleno, para que tarde lo mismo.
 - 5 intentos fallidos seguidos bloquean el login 15 minutos. El contador vive en la fila del admin
@@ -32,15 +33,16 @@ Decisión de base: [ADR 0004](../../adr/0004-login-propio-con-jwt.md). Plan: [T-
 | Action | Entrada | Salida | Pública |
 |---|---|---|---|
 | `login` (`actions/login.ts`) | `FormData`: `email`, `password`, `website` (honeypot vacío) | `ActionResult`; si sale bien, cookie + `redirect('/admin')` | Sí (honeypot + bloqueo por intentos) |
-| `logout` (`actions/logout.ts`) | — | borra la cookie + `redirect('/admin/login')` | — |
+| `logout` (`actions/logout.ts`) | — | borra la cookie + `redirect('/login')` | — |
 
 `requireAdmin()`, `hasAdminSession()` y `guardAdminPage()` viven en `actions/require-admin.ts` (no son Server
 Actions). Toda action del panel de cualquier feature empieza con `await requireAdmin()`.
 
 ## Pantallas
 
-- `/admin/login`: tarjeta de login (`DESIGN.md`, panel admin). Con sesión válida lleva a `/admin`.
-- `/admin`: título "Panel" y "Cerrar sesión". El layout `(panel)` llama a `guardAdminPage()`.
+- `/login`: tarjeta de login (`DESIGN.md`, panel admin), `noindex`. Con sesión válida lleva a `/admin`. `/admin/login`
+  ya no existe: sin sesión muestra «Acceso denegado», como todo `/admin/**`.
+- `/admin`: la agenda (feature `agenda`). El layout `(panel)` llama a `guardAdminPage()` y muestra el menú del panel (T-4): sidebar Verde Bosque desde 768px y barra inferior debajo; "Cerrar sesión" va al pie de la sidebar y, en mobile, dentro de "Mi cuenta".
 - `src/app/forbidden.tsx`: "Acceso denegado" con la píldora Verde Lima "Volver al inicio".
 
 ## Errores

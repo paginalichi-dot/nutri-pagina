@@ -1,15 +1,9 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { TEST_ADMIN } from '../src/features/auth/testing/test-admin';
-
-async function signIn(page: Page, password: string): Promise<void> {
-  await page.goto('/admin/login');
-  await page.getByLabel('Email').fill(TEST_ADMIN.email);
-  await page.getByLabel('Contraseña').fill(password);
-  await page.getByRole('button', { name: 'Entrar' }).click();
-}
+import { signIn, signOut } from './pages/panel';
 
 test.describe('panel del admin', () => {
-  for (const path of ['/admin', '/admin/cuenta']) {
+  for (const path of ['/admin', '/admin/cuenta', '/admin/ubicaciones', '/admin/ajustes', '/admin/bloqueos', '/admin/turnos/nuevo', '/admin/login', '/admin/pacientes']) {
     test(`${path} sin sesión muestra "Acceso denegado" sin cambiar la URL ni dejarse indexar`, async ({ page }) => {
       await page.goto(path);
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Acceso denegado');
@@ -19,27 +13,44 @@ test.describe('panel del admin', () => {
     });
   }
 
-  test('con una contraseña incorrecta muestra el error y no entra', async ({ page }) => {
-    await signIn(page, 'no-es-la-clave');
-    await expect(page.getByRole('main').getByRole('alert')).toHaveText('El email o la contraseña no son correctos.');
-    await expect(page).toHaveURL(/\/admin\/login$/);
+  test('/login no se deja indexar', async ({ page }) => {
+    await page.goto('/login');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ingresá a tu cuenta');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
   });
 
-  test('con la cuenta de prueba entra al panel, y "Cerrar sesión" vuelve al login', async ({ page }) => {
-    await signIn(page, TEST_ADMIN.password);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Panel');
+  test('con una contraseña incorrecta muestra el error y no entra', async ({ page }) => {
+    await page.goto('/login');
+    await page.getByLabel('Email').fill(TEST_ADMIN.email);
+    await page.getByLabel('Contraseña').fill('no-es-la-clave');
+    await page.getByRole('button', { name: 'Entrar' }).click();
+    await expect(page.getByRole('main').getByRole('alert')).toHaveText('El email o la contraseña no son correctos.');
+    await expect(page).toHaveURL(/\/login$/);
+  });
+
+  test('con la cuenta de prueba entra a la agenda, y "Cerrar sesión" vuelve al login', async ({ page }) => {
+    await signIn(page);
     await expect(page).toHaveURL(/\/admin$/);
-    await page.getByRole('button', { name: 'Cerrar sesión' }).click();
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ingresá al panel');
-    await expect(page).toHaveURL(/\/admin\/login$/);
+    await signOut(page);
+    await expect(page).toHaveURL(/\/login$/);
     await page.goto('/admin');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Acceso denegado');
   });
 
-  test('con sesión, /admin/login lleva directo al panel', async ({ page }) => {
-    await signIn(page, TEST_ADMIN.password);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Panel');
-    await page.goto('/admin/login');
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Panel');
+  test('con sesión, /login lleva directo a la agenda', async ({ page }) => {
+    await signIn(page);
+    await page.goto('/login');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Agenda');
+  });
+
+  test('T-4: el menú marca la sección actual y lleva a cada una', async ({ page }) => {
+    await signIn(page);
+    const menu = page.getByRole('navigation', { name: 'Panel' });
+    await expect(menu.getByRole('link', { name: 'Agenda' })).toHaveAttribute('aria-current', 'page');
+    for (const [label, heading] of [['Pacientes', 'Pacientes'], ['Ubicaciones', 'Tus ubicaciones'], ['Ajustes', 'Ajustes de la agenda'], ['Mi cuenta', 'Mi cuenta']]) {
+      await menu.getByRole('link', { name: label }).click();
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
+      await expect(menu.getByRole('link', { name: label })).toHaveAttribute('aria-current', 'page');
+    }
   });
 });

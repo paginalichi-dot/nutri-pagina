@@ -36,7 +36,7 @@ describe('sesión del panel (contrato)', () => {
   it('con una sesión cerrada desde otro lado: SESSION_EXPIRED y vuelve al login', async () => {
     cookieJar.set('session', await adminToken(2));
     await expect(requireAdmin()).rejects.toMatchObject({ code: 'SESSION_EXPIRED' });
-    await expect(guardAdminPage()).rejects.toThrow('NEXT_REDIRECT:/admin/login');
+    await expect(guardAdminPage()).rejects.toThrow('NEXT_REDIRECT:/login');
   });
 
   it('con una sesión vigente entra', async () => {
@@ -55,7 +55,7 @@ describe('sesión del panel (contrato)', () => {
 
   it('cerrar sesión borra la cookie y lleva al login', async () => {
     cookieJar.set('session', await adminToken());
-    await expect(logout()).rejects.toThrow('NEXT_REDIRECT:/admin/login');
+    await expect(logout()).rejects.toThrow('NEXT_REDIRECT:/login');
     expect(revalidatePath).toHaveBeenCalledWith('/admin', 'layout');
     expect(cookieJar.get('session')).toBeUndefined();
   });

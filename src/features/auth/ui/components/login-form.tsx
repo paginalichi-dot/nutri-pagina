@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import type { ReactElement } from 'react';
 import { login } from '../../actions/login';
-import { Field, FormFeedback, SubmitButton } from './form-parts';
+import { Field, FormFeedback, SubmitButton } from '@/components/form/form-parts';
 
 export function LoginForm(): ReactElement {
   const [state, action, pending] = useActionState(login, null);

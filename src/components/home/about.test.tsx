@@ -22,7 +22,9 @@ describe('Sobre mí', () => {
 
   it('mientras no llegue la foto, muestra el placeholder visible en el marco en arco', () => {
     render(<About />);
-    expect(screen.getByText('[Completar: foto Sobre mí]').className).toMatch(/rounded-t-full/);
+    const frame = screen.getByText('[Completar: foto Sobre mí]');
+    expect(frame.className).toMatch(/rounded-t-full/);
+    expect(frame.parentElement?.className).toMatch(/^hidden .*md:block/);
   });
 
   it('los trazos a mano son decorativos', () => {

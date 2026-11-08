@@ -4,7 +4,7 @@ import { useActionState } from 'react';
 import type { ReactElement } from 'react';
 import { changeEmail } from '../../actions/change-email';
 import { changePassword } from '../../actions/change-password';
-import { Field, FormFeedback, SubmitButton } from './form-parts';
+import { Field, FormFeedback, SubmitButton } from '@/components/form/form-parts';
 
 const CARD = 'flex flex-col gap-5 rounded-panel bg-background p-6 md:p-10';
 const TITLE = 'text-[19px] font-medium md:text-[20px]';
