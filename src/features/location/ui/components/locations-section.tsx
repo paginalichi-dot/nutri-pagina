@@ -19,7 +19,7 @@ export function LocationsSection({ locations, insurances }: LocationsSectionProp
           </h2>
           <p className='max-w-md text-lg text-muted-foreground'>Elegí el consultorio que te quede cómodo, o atendete online desde tu casa.</p>
         </div>
-        <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
+        <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))]'>
           {locations.map((location) => (
             <LocationCard key={location.id} location={location} />
           ))}

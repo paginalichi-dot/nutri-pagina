@@ -19,7 +19,7 @@ function KindPicker({ kind, onChange }: { kind: Kind; onChange: (kind: Kind) => 
       <legend className='mb-2 text-[15px] font-semibold'>Tipo de atención</legend>
       <div className='flex gap-2'>
         {KIND_LABELS.map(([value, label]) => (
-          <label key={value} className='flex h-12 cursor-pointer items-center rounded-toggle bg-secondary px-6 font-medium has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-foreground'>
+          <label key={value} className='hover-shade flex h-12 cursor-pointer items-center rounded-control bg-secondary px-6 font-medium has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-foreground'>
             <input type='radio' name='kind' value={value} checked={kind === value} onChange={() => onChange(value)} className='sr-only' />
             {label}
           </label>

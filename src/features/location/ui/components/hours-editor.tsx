@@ -45,8 +45,8 @@ function DayRow({ weekday, hours }: { weekday: number; hours: WeeklyHoursRow[] }
   const ranges = hours.filter((range) => range.weekday === weekday);
   return (
     <li className='flex flex-col gap-3 border-b border-border py-4 last:border-b-0 sm:flex-row sm:items-start'>
-      <span className='w-28 shrink-0 font-semibold capitalize'>{WEEKDAY_NAMES[weekday - 1]}</span>
-      {ranges.length === 0 ? <span className='text-muted-foreground'>No atendés</span> : null}
+      <span className='w-28 shrink-0 font-semibold capitalize sm:leading-11'>{WEEKDAY_NAMES[weekday - 1]}</span>
+      {ranges.length === 0 ? <span className='text-muted-foreground sm:leading-11'>No atendés</span> : null}
       <ul className='flex flex-col gap-3'>
         {ranges.map((range) => (
           <li key={range.id} className='flex flex-wrap items-center gap-4'>
