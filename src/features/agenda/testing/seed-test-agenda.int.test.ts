@@ -12,6 +12,7 @@ describe('seedTestAgenda (integración)', () => {
     await expect(db.weeklyHours.count()).resolves.toBe(10);
     await expect(db.healthInsurance.count()).resolves.toBe(2);
     await expect(db.agendaSettings.findUnique({ where: { id: 1 } })).resolves.toMatchObject({ slotMinutes: 45 });
+    await expect(db.appointment.count({ where: { status: 'PENDING', source: 'ONLINE' } })).resolves.toBe(2);
   });
 
   it('en tests arranca de una agenda limpia', async () => {

@@ -62,6 +62,10 @@ export function longDay(day: string): string {
   return new Intl.DateTimeFormat('es-AR', { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long' }).format(utcMidnight(day));
 }
 
+export function longDate(day: string): string {
+  return new Intl.DateTimeFormat('es-AR', { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' }).format(utcMidnight(day));
+}
+
 export function whenText(value: Date): string {
   return `${longDay(argentinaDay(value))} a las ${argentinaTime(value)}`;
 }

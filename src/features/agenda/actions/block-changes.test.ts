@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { formData, signedInAdmin } from '@/features/auth/testing/account-actions.fixture';
 import { errorMessage } from '@/lib/errors';
 import { fakeAgenda, seedAgenda } from '../testing/agenda-contract';
-import { cancelAppointment, createManualAppointment, markAttendance, rescheduleAppointment } from './appointment-changes';
+import { cancelAppointment, confirmAppointment, createManualAppointment, markAttendance, rescheduleAppointment } from './appointment-changes';
 import { createBlock, deleteBlock } from './block-changes';
 
 vi.mock('next/navigation', async () => (await import('@/features/auth/testing/module-mocks')).navigationMock);
@@ -56,7 +56,7 @@ describe('acciones de bloqueos (contrato)', () => {
     const fields = fc.record({ id: fc.string(), version: fc.string(), locationId: fc.constantFrom(centro, 'x'), startsAt: fc.string(), name: fc.string(), phone: fc.string(), start: fc.string(), end: fc.string() });
     await fc.assert(
       fc.asyncProperty(fields, async (input) => {
-        for (const action of [createBlock, deleteBlock, markAttendance, cancelAppointment, rescheduleAppointment, createManualAppointment]) {
+        for (const action of [createBlock, deleteBlock, markAttendance, cancelAppointment, confirmAppointment, rescheduleAppointment, createManualAppointment]) {
           const result = await action(null, formData(input));
           if (!result.success) expect(() => errorMessage(result.code ?? 'UNEXPECTED')).not.toThrow();
         }

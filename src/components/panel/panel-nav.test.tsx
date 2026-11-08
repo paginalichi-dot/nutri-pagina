@@ -6,16 +6,18 @@ const pathname = vi.hoisted(() => ({ value: '/admin' }));
 vi.mock('next/navigation', () => ({ usePathname: () => pathname.value }));
 
 describe('PanelNav', () => {
-  it('T-4 CA-1: muestra Agenda, Ubicaciones, Ajustes y Mi cuenta, con el pie que recibe', () => {
+  it('T-4 y US-26 CA-1: muestra la marca, Agenda, Pacientes, Ubicaciones, Ajustes y Mi cuenta, con el pie que recibe', () => {
     render(<PanelNav footer={<button type='button'>Cerrar sesión</button>} />);
     const links = screen.getAllByRole('link');
     expect(links.map((link) => [link.textContent, link.getAttribute('href')])).toEqual([
       ['Agenda', '/admin'],
+      ['Pacientes', '/admin/pacientes'],
       ['Ubicaciones', '/admin/ubicaciones'],
       ['Ajustes', '/admin/ajustes'],
       ['Mi cuenta', '/admin/cuenta'],
     ]);
     expect(screen.getByRole('button', { name: 'Cerrar sesión' })).toBeDefined();
+    expect(screen.getByText('NUTRICIONISTA')).toBeDefined();
   });
 
   it('T-4 CA-2: marca sólo la sección actual con aria-current', () => {

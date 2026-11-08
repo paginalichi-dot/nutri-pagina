@@ -6,6 +6,7 @@ import {
   argentinaInstant,
   argentinaWeekday,
   isArgentinaDay,
+  longDate,
   longDay,
   minuteOfDay,
   minutesToTime,
@@ -68,6 +69,7 @@ describe('días', () => {
 
   it('longDay y whenText escriben el día y la hora de Argentina en español', () => {
     expect(longDay('2026-11-09')).toBe('lunes, 9 de noviembre');
+    expect(longDate('2026-11-09')).toBe('9 de noviembre de 2026');
     expect(whenText(new Date('2026-11-10T01:30:00Z'))).toBe('lunes, 9 de noviembre a las 22:30');
   });
 });

@@ -6,6 +6,7 @@ describe('activeSection', () => {
     ['/admin', 'Agenda'],
     ['/admin/turnos/nuevo', 'Agenda'],
     ['/admin/bloqueos', 'Agenda'],
+    ['/admin/pacientes', 'Pacientes'],
     ['/admin/ubicaciones', 'Ubicaciones'],
     ['/admin/ubicaciones/123', 'Ubicaciones'],
     ['/admin/ajustes', 'Ajustes'],
@@ -18,7 +19,7 @@ describe('activeSection', () => {
     expect(activeSection(pathname)).toBeNull();
   });
 
-  it('el menú tiene Agenda, Ubicaciones, Ajustes y Mi cuenta, en ese orden', () => {
-    expect(PANEL_SECTIONS.map(({ label }) => label)).toEqual(['Agenda', 'Ubicaciones', 'Ajustes', 'Mi cuenta']);
+  it('el menú tiene Agenda, Pacientes, Ubicaciones, Ajustes y Mi cuenta, en ese orden', () => {
+    expect(PANEL_SECTIONS.map(({ label }) => label)).toEqual(['Agenda', 'Pacientes', 'Ubicaciones', 'Ajustes', 'Mi cuenta']);
   });
 });

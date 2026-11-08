@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/features/agenda/ui/components/appointment-card.tsx"
+        ],
+        "createdAt": "2026-11-08T16:13:42.822Z",
+        "reason": "Wireframe del dev (docs/wireframes/panel-administrador.png), pedido como diseño exacto: cada turno lleva la barra de color a la izquierda"
+      }
+    ]
+  }
+}

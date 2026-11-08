@@ -2,12 +2,13 @@ import { db } from '@/lib/db';
 import { isSerializationFailure } from '@/lib/db-errors';
 import { type DbTransaction, withSerializableTransaction } from '@/lib/db/transaction';
 import type { RecordRef } from '@/lib/record-ref';
-import type { AppointmentDetail, AppointmentRow, AppointmentStatus, TimeRange } from '../domain/appointment.schema';
+import type { AppointmentDetail, AppointmentRow, AppointmentStatus, PatientContact, TimeRange } from '../domain/appointment.schema';
 import type { BlockInput, BlockRow } from '../domain/block.schema';
 import { agendaReads } from './agenda-reads';
 import { agendaWrites } from './agenda-writes';
 
-export type LocationSchedule = { active: boolean; hours: { weekday: number; startMinute: number; endMinute: number }[] };
+export type WeeklySlot = { weekday: number; startMinute: number; endMinute: number };
+export type LocationSchedule = { active: boolean; hours: WeeklySlot[] };
 
 export type NewAppointment = {
   locationId: string;
@@ -28,6 +29,9 @@ export type AgendaRepository = {
   findAppointment(id: string): Promise<AppointmentDetail | null>;
   listBusy(range: TimeRange, ignoreId: string | null): Promise<TimeRange[]>;
   findSchedule(locationId: string): Promise<LocationSchedule | null>;
+  listActiveHours(): Promise<WeeklySlot[]>;
+  findNextActive(now: Date): Promise<AppointmentDetail | null>;
+  listContactsBefore(before: Date): Promise<PatientContact[]>;
   getSlotMinutes(): Promise<number | null>;
   findActiveByEmail(email: string, now: Date): Promise<TimeRange | null>;
   countActiveAppointments(range: TimeRange): Promise<number>;

@@ -21,7 +21,7 @@ export function LocationList({ locations }: { locations: LocationWithHours[] }):
           <li key={location.id}>
             <Link
               href={`/admin/ubicaciones/${location.id}`}
-              className='flex items-start gap-4 rounded-panel bg-background p-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground md:p-6'
+              className='hover-shade flex items-start gap-4 rounded-panel bg-background p-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground md:p-6'
             >
               <Icon aria-hidden='true' className='mt-1 size-5 shrink-0' strokeWidth={2} />
               <span className='flex flex-col gap-1'>

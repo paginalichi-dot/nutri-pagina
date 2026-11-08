@@ -7,5 +7,5 @@ import { clearSessionCookie } from '@/lib/auth/session-cookie';
 export async function logout(): Promise<void> {
   await clearSessionCookie();
   revalidatePath('/admin', 'layout');
-  redirect('/admin/login');
+  redirect('/login');
 }

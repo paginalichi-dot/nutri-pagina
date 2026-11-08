@@ -1,23 +1,29 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import { FOCUS, SECONDARY_BUTTON } from '@/components/form/form-parts';
-import { addDays } from '@/lib/argentina-time';
+import { FOCUS } from '@/components/form/form-parts';
+import { addDays, argentinaWeekday, longDate, startOfWeek, WEEKDAY_NAMES } from '@/lib/argentina-time';
 
 export type AgendaMode = 'dia' | 'semana';
 
-const href = (day: string, mode: AgendaMode): string => `/admin?dia=${day}&vista=${mode}`;
-const ROUND = `flex size-11 items-center justify-center rounded-full bg-background ${FOCUS}`;
+export const agendaHref = (day: string, mode: AgendaMode): string => `/admin?dia=${day}&vista=${mode}`;
+export const SQUARE = `hover-shade flex size-11 shrink-0 items-center justify-center rounded-control border border-border bg-background ${FOCUS}`;
+const MODES: ReadonlyArray<readonly [AgendaMode, string]> = [
+  ['dia', 'Día'],
+  ['semana', 'Semana'],
+];
+
+export function boardTitle({ day, mode, today }: { day: string; mode: AgendaMode; today: string }): string {
+  if (mode === 'semana') return `Semana del ${longDate(startOfWeek(day))}`;
+  const weekday = WEEKDAY_NAMES[argentinaWeekday(day) - 1] ?? '';
+  return day === today ? `Hoy, ${longDate(day)}` : `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${longDate(day)}`;
+}
 
 function ModeToggle({ day, mode }: { day: string; mode: AgendaMode }): ReactElement {
-  const options: ReadonlyArray<readonly [AgendaMode, string]> = [
-    ['dia', 'Día'],
-    ['semana', 'Semana'],
-  ];
   return (
-    <div className='hidden gap-1 rounded-toggle bg-background p-1 md:flex'>
-      {options.map(([value, label]) => (
-        <Link key={value} href={href(day, value)} aria-current={mode === value ? 'page' : undefined} className={`flex h-10 items-center rounded-toggle px-5 font-medium ${mode === value ? 'bg-primary' : ''} ${FOCUS}`}>
+    <div className='flex rounded-control bg-secondary'>
+      {MODES.map(([value, label]) => (
+        <Link key={value} href={agendaHref(day, value)} aria-current={mode === value ? 'page' : undefined} className={`hover-shade flex h-11 items-center rounded-control px-3 text-[15px] font-semibold md:px-4 ${mode === value ? 'bg-primary' : ''} ${FOCUS}`}>
           {label}
         </Link>
       ))}
@@ -25,24 +31,22 @@ function ModeToggle({ day, mode }: { day: string; mode: AgendaMode }): ReactElem
   );
 }
 
-export function AgendaToolbar({ day, mode, title, today }: { day: string; mode: AgendaMode; title: string; today: string }): ReactElement {
+export function AgendaToolbar({ day, mode, today }: { day: string; mode: AgendaMode; today: string }): ReactElement {
   const step = mode === 'semana' ? 7 : 1;
   return (
-    <div className='flex flex-wrap items-center gap-3'>
-      <Link href={href(addDays(day, -step), mode)} aria-label={mode === 'semana' ? 'Semana anterior' : 'Día anterior'} className={ROUND}>
-        <ChevronLeft aria-hidden='true' className='size-5' />
-      </Link>
-      <Link href={href(addDays(day, step), mode)} aria-label={mode === 'semana' ? 'Semana siguiente' : 'Día siguiente'} className={ROUND}>
-        <ChevronRight aria-hidden='true' className='size-5' />
-      </Link>
-      <p className='text-[19px] font-medium capitalize'>{title}</p>
-      {day === today ? null : (
-        <Link href={href(today, mode)} className={SECONDARY_BUTTON}>
+    <div className='flex flex-wrap items-center justify-between gap-3'>
+      <h2 className='text-[18px] font-semibold md:text-[20px]'>{boardTitle({ day, mode, today })}</h2>
+      <div className='flex items-center gap-1.5 md:gap-2'>
+        <ModeToggle day={day} mode={mode} />
+        <Link href={agendaHref(addDays(day, -step), mode)} aria-label={mode === 'semana' ? 'Semana anterior' : 'Día anterior'} className={SQUARE}>
+          <ChevronLeft aria-hidden='true' className='size-5' />
+        </Link>
+        <Link href={agendaHref(today, mode)} className={`hover-shade flex h-11 items-center rounded-control bg-secondary px-3 text-[15px] font-semibold md:px-4 ${FOCUS}`}>
           Hoy
         </Link>
-      )}
-      <div className='ml-auto'>
-        <ModeToggle day={day} mode={mode} />
+        <Link href={agendaHref(addDays(day, step), mode)} aria-label={mode === 'semana' ? 'Semana siguiente' : 'Día siguiente'} className={SQUARE}>
+          <ChevronRight aria-hidden='true' className='size-5' />
+        </Link>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ export function PanelPage({ title, lead, back, actions, children }: PanelPagePro
       ) : null}
       <header className='flex flex-wrap items-end justify-between gap-4'>
         <div className='flex flex-col gap-2'>
-          <h1 className='text-[28px] leading-tight font-medium md:text-[38.4px]'>{title}</h1>
+          <h1 className='text-[28px] leading-tight font-bold md:text-[32px]'>{title}</h1>
           {lead ? <p className='text-muted-foreground'>{lead}</p> : null}
         </div>
         {actions ? <div className='flex flex-wrap gap-3'>{actions}</div> : null}

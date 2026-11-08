@@ -35,6 +35,13 @@ function fakeReads(state: FakeState): Omit<AgendaRepository, keyof ReturnType<ty
       const place = state.places.get(locationId);
       return place ? { active: place.active, hours: place.hours } : null;
     },
+    listActiveHours: async () => [...state.places.values()].filter((place) => place.active).flatMap((place) => place.hours),
+    async findNextActive(now) {
+      const row = active().filter((candidate) => candidate.startsAt >= now).sort((a, b) => +a.startsAt - +b.startsAt)[0];
+      return row ? detail(state, row) : null;
+    },
+    listContactsBefore: async (before) =>
+      [...state.appointments.values()].filter((row) => row.status !== 'CANCELLED' && row.startsAt < before).map((row) => ({ phone: row.patientPhone, email: row.patientEmail })),
     getSlotMinutes: async () => state.settings.slotMinutes,
     async findActiveByEmail(email, now) {
       const row = active().find((candidate) => candidate.patientEmail === email && candidate.startsAt > now);

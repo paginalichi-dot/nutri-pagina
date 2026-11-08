@@ -3,14 +3,13 @@ import type { NextRequest } from 'next/server';
 import { SESSION_COOKIE, SESSION_COOKIE_OPTIONS, verifySession } from '@/lib/auth/session-token';
 
 const ADMIN = '/admin';
-const ADMIN_LOGIN = '/admin/login';
 const ACCESS_DENIED = '/acceso-denegado';
 
 const isAdminPath = (pathname: string): boolean => pathname === ADMIN || pathname.startsWith(`${ADMIN}/`);
 
 // Por qué: con Cache Components la página empieza a enviarse antes que el layout del panel; el proxy decide primero.
 function adminResponse(request: NextRequest, signedIn: boolean): NextResponse {
-  if (signedIn || request.nextUrl.pathname === ADMIN_LOGIN) return NextResponse.next();
+  if (signedIn) return NextResponse.next();
   return NextResponse.rewrite(new URL(ACCESS_DENIED, request.url));
 }
 

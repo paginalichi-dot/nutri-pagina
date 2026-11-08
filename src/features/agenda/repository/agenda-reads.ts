@@ -1,12 +1,9 @@
 import type { DbTransaction } from '@/lib/db/transaction';
-import { type AppointmentDetail, AppointmentDetailSchema, type AppointmentRow, AppointmentRowSchema, type TimeRange } from '../domain/appointment.schema';
+import { type AppointmentDetail, AppointmentDetailSchema, type AppointmentRow, AppointmentRowSchema, type PatientContact, type TimeRange } from '../domain/appointment.schema';
 import { type BlockRow, BlockRowSchema } from '../domain/block.schema';
-import type { AgendaRepository, LocationSchedule } from './agenda.repository';
+import type { AgendaRepository, LocationSchedule, WeeklySlot } from './agenda.repository';
 
-type AgendaReads = Pick<
-  AgendaRepository,
-  'listAppointments' | 'findAppointment' | 'listBusy' | 'findSchedule' | 'getSlotMinutes' | 'findActiveByEmail' | 'countActiveAppointments' | 'listBlocks'
->;
+type AgendaReads = Omit<AgendaRepository, 'createAppointment' | 'updateStatus' | 'moveAppointment' | 'createBlock' | 'deleteBlock' | 'inTransaction'>;
 
 const ACTIVE = { in: ['PENDING' as const, 'CONFIRMED' as const] };
 const RANGE = { startsAt: true, endsAt: true } as const;
@@ -38,6 +35,12 @@ function toDetail<T extends Row>(row: T): AppointmentDetail {
   return AppointmentDetailSchema.parse({ ...toRow(row), place: { kind, address, directions, videoUrl } });
 }
 
+async function contactsBefore(client: DbTransaction, before: Date): Promise<PatientContact[]> {
+  const where = { startsAt: { lt: before }, status: { not: 'CANCELLED' as const } };
+  const rows = await client.appointment.findMany({ where, select: { patientPhone: true, patientEmail: true }, distinct: ['patientPhone', 'patientEmail'] });
+  return rows.map(({ patientPhone, patientEmail }) => ({ phone: patientPhone, email: patientEmail }));
+}
+
 export function agendaReads(client: DbTransaction): AgendaReads {
   return {
     async listAppointments(range: TimeRange): Promise<AppointmentRow[]> {
@@ -57,6 +60,12 @@ export function agendaReads(client: DbTransaction): AgendaReads {
       const hours = { select: { weekday: true, startMinute: true, endMinute: true } };
       return client.location.findUnique({ where: { id: locationId }, select: { active: true, hours } });
     },
+    listActiveHours: (): Promise<WeeklySlot[]> => client.weeklyHours.findMany({ where: { location: { active: true } }, select: { weekday: true, startMinute: true, endMinute: true } }),
+    async findNextActive(now: Date): Promise<AppointmentDetail | null> {
+      const row = await client.appointment.findFirst({ where: { status: ACTIVE, startsAt: { gte: now } }, select: ROW, orderBy: { startsAt: 'asc' } });
+      return row ? toDetail(row) : null;
+    },
+    listContactsBefore: (before: Date): Promise<PatientContact[]> => contactsBefore(client, before),
     async getSlotMinutes(): Promise<number | null> {
       return (await client.agendaSettings.findUnique({ where: { id: 1 }, select: { slotMinutes: true } }))?.slotMinutes ?? null;
     },

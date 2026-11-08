@@ -42,7 +42,7 @@ export function AppointmentInfo({ appointment, now }: { appointment: Appointment
       <div className='flex flex-wrap items-start gap-3'>
         <WhatsappLink href={whatsappLink(appointment.patientPhone, '')} label='Escribir por WhatsApp' />
       </div>
-      <AppointmentActions id={appointment.id} version={appointment.version} upcoming={upcoming} started={started} />
+      <AppointmentActions id={appointment.id} version={appointment.version} upcoming={upcoming} started={started} pending={appointment.status === 'PENDING'} />
     </div>
   );
 }

@@ -2,7 +2,7 @@ import 'server-only';
 import { z } from 'zod';
 import { guardAdminPage } from '@/features/auth/actions/require-admin';
 import { isAppError } from '@/lib/errors';
-import type { AgendaView, AppointmentDetail } from '../domain/appointment.schema';
+import type { AgendaSummary, AgendaView, AppointmentDetail } from '../domain/appointment.schema';
 import { SlotQuerySchema } from '../domain/booking.schema';
 import { agendaService } from '../services/agenda.service';
 
@@ -11,6 +11,11 @@ export type SlotsResult = { slots: Date[]; error: string | null };
 export async function getAgenda(day: string, days: number): Promise<AgendaView> {
   await guardAdminPage();
   return agendaService.agenda(day, days);
+}
+
+export async function getAgendaSummary(): Promise<AgendaSummary> {
+  await guardAdminPage();
+  return agendaService.summary();
 }
 
 export async function getAppointment(id: string): Promise<AppointmentDetail | null> {

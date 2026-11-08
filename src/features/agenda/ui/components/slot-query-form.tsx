@@ -19,7 +19,7 @@ export function SlotQueryForm({ action, locations, locationId, day, today }: Slo
       </label>
       <button
         type='submit'
-        className='flex h-12 items-center justify-center rounded-full bg-secondary px-6 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
+        className='hover-shade flex h-12 items-center justify-center rounded-control bg-secondary px-6 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
       >
         Ver horarios
       </button>

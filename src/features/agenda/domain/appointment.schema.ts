@@ -57,3 +57,12 @@ export type AppointmentRow = z.infer<typeof AppointmentRowSchema>;
 export type AppointmentDetail = z.infer<typeof AppointmentDetailSchema>;
 export type TimeRange = { startsAt: Date; endsAt: Date };
 export type AgendaView = { appointments: AppointmentRow[]; blocks: BlockRow[] };
+export type PatientContact = { phone: string; email: string | null };
+
+export type AgendaSummary = {
+  today: { count: number; yesterday: number };
+  week: { count: number; previous: number };
+  newPatients: number;
+  time: { freeMinutes: number; availableMinutes: number } | null;
+  next: AppointmentDetail | null;
+};

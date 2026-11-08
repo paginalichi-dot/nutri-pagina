@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { formData, signedInAdmin } from '@/features/auth/testing/account-actions.fixture';
 import { fakeAgenda, outbox, seedAgenda } from '../testing/agenda-contract';
-import { cancelAppointment, createManualAppointment, markAttendance, rescheduleAppointment } from './appointment-changes';
+import { aNewAppointment } from '../testing/agenda-builders';
+import { cancelAppointment, confirmAppointment, createManualAppointment, markAttendance, rescheduleAppointment } from './appointment-changes';
 
 vi.mock('next/navigation', async () => (await import('@/features/auth/testing/module-mocks')).navigationMock);
 vi.mock('@/features/auth/repository/admin.repository', async () => (await import('@/features/auth/testing/module-mocks')).fakeRepositoryModule());
@@ -27,7 +28,7 @@ describe('acciones de turnos (contrato)', () => {
 
   it('sin sesión ninguna acción cambia nada', async () => {
     const data = formData({ id: '00000000-0000-4000-8000-000000000000', version: '1', locationId: centro, startsAt: MONDAY_9, ...patient });
-    for (const action of [createManualAppointment, cancelAppointment, rescheduleAppointment, markAttendance]) await expect(action(null, data)).resolves.toMatchObject({ code: 'UNAUTHENTICATED' });
+    for (const action of [createManualAppointment, cancelAppointment, confirmAppointment, rescheduleAppointment, markAttendance]) await expect(action(null, data)).resolves.toMatchObject({ code: 'UNAUTHENTICATED' });
   });
 
   it('US-16: guarda el turno, avisa el email y devuelve el WhatsApp', async () => {
@@ -81,5 +82,13 @@ describe('acciones de turnos (contrato)', () => {
     await expect(markAttendance(null, formData({ id, version: '1', attended: 'true' }))).resolves.toEqual({ success: true, message: 'Marcado: asistió.' });
     await expect(markAttendance(null, formData({ id: 'x', version: '1' }))).resolves.toMatchObject({ code: 'VALIDATION' });
     await expect(cancelAppointment(null, formData({ id: 'x', version: '1' }))).resolves.toMatchObject({ code: 'VALIDATION' });
+  });
+
+  it('US-23: confirma un pendiente, avisa el email y no lo confirma dos veces', async () => {
+    await signedInAdmin();
+    const id = await fakeAgenda.createAppointment(aNewAppointment(centro, { status: 'PENDING', source: 'ONLINE' }));
+    await expect(confirmAppointment(null, formData({ id, version: '1' }))).resolves.toMatchObject({ success: true, message: 'Turno confirmado. Le mandamos un email al paciente.' });
+    await expect(confirmAppointment(null, formData({ id, version: '2' }))).resolves.toMatchObject({ code: 'INVALID_TRANSITION' });
+    await expect(confirmAppointment(null, formData({ id: 'x', version: '1' }))).resolves.toMatchObject({ code: 'VALIDATION' });
   });
 });

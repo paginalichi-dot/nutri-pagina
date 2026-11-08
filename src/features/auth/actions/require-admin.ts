@@ -24,7 +24,7 @@ export async function guardAdminPage(): Promise<void> {
     await requireAdmin();
   } catch (error) {
     if (!isAppError(error)) throw error;
-    if (error.code === 'SESSION_EXPIRED') redirect('/admin/login');
+    if (error.code === 'SESSION_EXPIRED') redirect('/login');
     forbidden();
   }
 }

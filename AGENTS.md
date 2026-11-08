@@ -50,7 +50,7 @@ Las aplican ESLint (`eslint.config.mjs` + `eslint/`), lefthook y el CI, desde el
 | Errores | Toda acción inválida ⇒ `AppError(code)` del catálogo (`src/lib/errors`), con mensaje claro en español. Nunca `throw 'texto'` ni un error crudo al cliente: las Server Actions devuelven `ActionResult`. |
 | Seguridad | Toda Server Action verifica en el servidor la sesión del admin (`requireAdmin()`, JWT propio; ADR 0004), salvo las acciones públicas, que se listan explícitamente (ver más abajo). Toda página nueva se registra en `src/proxy.ts`. Toda entrada se valida con Zod `strictObject`. Toda respuesta se valida contra su `RowSchema`. |
 | Fechas | Se guardan y viajan en UTC (ISO 8601, `timestamptz`). Se muestran en `America/Argentina/Buenos_Aires` con `formatDateTime`. Nunca se usa la zona horaria del servidor ni del navegador. Única excepción: las franjas semanales (día + minutos en hora argentina), que no son instantes; se pasan a UTC con `argentinaInstant` (ADR 0005). |
-| Diseño | Solo tokens de `DESIGN.md` (variables CSS o clases de Tailwind), definidos en `src/app/tokens.css`. **Cero hex hardcodeados** en `src/**/*.{ts,tsx}` (ESLint lo rechaza). Botones, tabs y toggles siempre en forma de píldora. |
+| Diseño | Solo tokens de `DESIGN.md` (variables CSS o clases de Tailwind), definidos en `src/app/tokens.css`. **Cero hex hardcodeados** en `src/**/*.{ts,tsx}` (ESLint lo rechaza). Botones, tabs y toggles en forma de píldora en el sitio público; en el panel, rectángulos con radio 12px (`rounded-control`, wireframe del dev). |
 | Secretos | Jamás se commitea un `.env` real (hook + CI lo bloquean). Cada variable nueva va a `.env.example`. Los secretos (`JWT_SECRET`, claves de email) solo existen en el servidor. |
 
 ## Reglas del dominio: turnos

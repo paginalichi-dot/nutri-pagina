@@ -5,10 +5,11 @@ import { requireAdmin } from '@/features/auth/actions/require-admin';
 import { type ActionResult, failValidation } from '@/lib/action-result';
 import { toActionFailure } from '@/lib/db-errors';
 import { formFields } from '@/lib/form-data';
-import { RecordRefSchema } from '@/lib/record-ref';
+import { type RecordRef, RecordRefSchema } from '@/lib/record-ref';
 import { ManualAppointmentInputSchema, SlotChoiceSchema } from '../domain/booking.schema';
 import { whenText } from '@/lib/argentina-time';
 import { agendaService } from '../services/agenda.service';
+import type { Notice } from '../services/appointment-commands';
 import { noticeMessage } from './notice-message';
 
 export type NoticeData = { whatsappUrl: string; appointmentId: string };
@@ -37,13 +38,21 @@ export async function createManualAppointment(_previous: NoticeResult | null, fo
   });
 }
 
-export async function cancelAppointment(_previous: NoticeResult | null, formData: FormData): Promise<NoticeResult> {
+function changeStatus(formData: FormData, { done, change }: { done: string; change: (ref: RecordRef) => Promise<Notice> }): Promise<NoticeResult> {
   return run(async () => {
     const ref = RecordRefSchema.safeParse(formFields(formData, ['id', 'version']));
     if (!ref.success) return failValidation(ref.error.issues[0]?.message);
-    const { whatsappUrl, emailSent } = await agendaService.cancel(ref.data);
-    return { success: true, message: noticeMessage({ done: 'Turno cancelado.', emailSent }), data: { whatsappUrl, appointmentId: ref.data.id } };
+    const { whatsappUrl, emailSent } = await change(ref.data);
+    return { success: true, message: noticeMessage({ done, emailSent }), data: { whatsappUrl, appointmentId: ref.data.id } };
   });
+}
+
+export async function cancelAppointment(_previous: NoticeResult | null, formData: FormData): Promise<NoticeResult> {
+  return changeStatus(formData, { done: 'Turno cancelado.', change: (ref) => agendaService.cancel(ref) });
+}
+
+export async function confirmAppointment(_previous: NoticeResult | null, formData: FormData): Promise<NoticeResult> {
+  return changeStatus(formData, { done: 'Turno confirmado.', change: (ref) => agendaService.confirm(ref) });
 }
 
 export async function rescheduleAppointment(_previous: NoticeResult | null, formData: FormData): Promise<NoticeResult> {

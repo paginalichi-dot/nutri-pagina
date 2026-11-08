@@ -112,6 +112,7 @@ La referencia usa Peridot PE (licencia comercial). Usamos **Manrope** (Google Fo
 | Marco del hero | 88px desktop · 40px mobile |
 | Testimonios | 8px |
 | Panel admin (tablas, modales) | 16px |
+| Controles del panel (botones, toggles, flechas) | 12px |
 
 ## Componentes — sitio público
 
@@ -240,36 +241,73 @@ La referencia no tiene flujo de reservas. Se diseña con el mismo lenguaje.
 - **Confirmación:** una tarjeta Hueso con un garabato Zanahoria festivo, el resumen del turno y los botones "Agregar al calendario" (Gris Nube) y "Volver al inicio" (Papel).
 - **Áreas táctiles:** mínimo 44×44px. Todo el flujo se puede usar con teclado.
 
-## Componentes — panel admin (nuevo)
+## Componentes — panel admin
 
-El panel es una herramienta de trabajo diario, así que usa una **versión silenciosa del sistema**: misma tipografía, mismos colores y mismos radios, pero sin garabatos, sin cinta y sin fotos. El Verde Lima se reserva para la acción principal de cada vista.
+El panel es una herramienta de trabajo diario, así que usa una **versión silenciosa del sistema**: misma tipografía,
+mismos colores, sin garabatos, sin cinta y sin fotos. El Verde Lima se reserva para la acción principal de cada vista.
+La referencia es el wireframe del dev `docs/wireframes/panel-administrador.png` (US-26, 2026-11-08), con Lisandro
+como **nutricionista**.
 
-- **Layout (T-4):** desde 768px, sidebar Verde Bosque fija a la izquierda (240px) con el nombre arriba, los links
-  Agenda, Ubicaciones, Ajustes y Mi cuenta (ícono Lucide + texto en Niebla; el activo en blanco con una barrita Verde
-  Lima a la izquierda) y «Cerrar sesión» al pie. El foco sobre Verde Bosque es un anillo Verde Lima (7.9:1). El
-  contenido va sobre Hueso, en tarjetas Papel con radio 16px (`PanelPage` y `PanelCard`).
-- **Agenda:** vista día/semana con columnas por sucursal, sobre tarjetas Papel con radio 16px. Cada turno es un bloque con el color de su estado.
-- **Tabla de turnos:** filas Papel con separadores Línea Salvia, chips de estado como píldoras y acciones (confirmar, reprogramar, cancelar) en un menú de tres puntos.
+- **Controles del panel (US-26, decisión del dev):** botones, flechas, «Hoy», el toggle Día/Semana, los horarios y los
+  inputs son rectángulos con radio 12px (`rounded-control`), no píldoras: así lo pide el wireframe. `PRIMARY_BUTTON` (Verde
+  Lima) y `SECONDARY_BUTTON` (Gris Nube) miden 44px de alto, 15px/600, con ícono Lucide a la izquierda. Los chips de
+  estado sí siguen en píldora (no son botones). En el sitio público todo sigue en píldora.
+- **Hover del panel (US-26 CA-11, pedido del dev):** todo lo que se toca lleva la clase `hover-shade`
+  (`src/app/hover-shade.css`). Con el mouse encima, el control se funde en degradé, de izquierda a derecha, hacia un
+  tono más oscuro de su propio color (Verde Bosque al 16% por encima de su fondo), con un fundido de opacidad de 200 ms.
+  Sobre Verde Bosque (menú lateral) se suma `hover-shade-on-dark` y el degradé va hacia un tono más claro (blanco al 14%).
+  No aparece en touch ni en botones deshabilitados. Los links de texto subrayados no lo llevan.
+- **Títulos del panel:** el `h1` de cada vista va en 700, 32px (28px en mobile), como en el wireframe; los títulos de
+  tarjeta, 18–20px/600.
+- **Sidebar (T-4, US-26):** desde 768px, Verde Bosque fija a la izquierda (240px). Arriba, el logo LLN en un disco
+  Papel, «Lisandro López» (17px/600, blanco) y «NUTRICIONISTA» (11px/600, Niebla, +1px). Links Agenda, Pacientes,
+  Ubicaciones, Ajustes y Mi cuenta (ícono Lucide + texto 15px/600 en Niebla); el activo en blanco, con fondo blanco al
+  10% a todo el ancho y una barra Verde Lima pegada al borde izquierdo. Al pie, una línea `line-on-dark` y «Cerrar
+  sesión». El foco sobre Verde Bosque es un anillo Verde Lima (7.9:1). El contenido va sobre Hueso.
+- **Mobile:** la sidebar pasa a una barra inferior fija con 5 íconos y su texto (11px; la barrita del activo, arriba).
+  «Cerrar sesión» va dentro de Mi cuenta.
+- **Agenda (US-26):** vista `max-w-7xl`.
+  - Cabecera: «Agenda», el saludo según la hora argentina («Buen día / Buenas tardes / Buenas noches, Lisandro») y
+    «Acá tenés un resumen de tus turnos y de tu semana.»; a la derecha «+ Nuevo turno» (Verde Lima) y «Bloquear
+    horario» (Gris Nube con marco Gris Piedra de 1px, candado: sin el marco se perdía sobre Hueso).
+  - Cuatro tarjetas Papel radio 16px: disco Verde Lima al 25% con el ícono, label 14px/500, número 28px/700 y bajada
+    13px Gris Piedra («+2 que ayer», «+12% vs. semana anterior», «Esta semana», «De 10 disponibles» u «Hoy no atendés»).
+    2×2 hasta 1280px; en mobile, sin el disco del ícono.
+  - A la izquierda, la tarjeta de la agenda: título «Hoy, 8 de noviembre de 2026» y, a la derecha, el toggle
+    Día/Semana, flechas cuadradas con borde Línea Salvia y «Hoy» en Gris Nube. La vista día es una
+    línea de horas (de 08:00 a 18:00, estirada si algo cae afuera; 56px por hora) con cada turno en su lugar: bloque
+    radio 6px con barra izquierda de 4px, «**Nombre** · Obra social» y «09:00 – 09:45 · Ubicación»; confirmado en
+    `bg-confirmed` con barra Verde Lima, pendiente en Hueso con borde Línea Salvia, barra Verde Bosque y su chip. Los cancelados no van en la
+    línea (se ven en la semana y en el detalle). Los bloqueos son un bloque rayado Gris Nube / Línea Salvia con
+    «Bloqueado · motivo».
+  - Vista semana (US-26, pedido del dev): ocupa exactamente el mismo lugar y la misma forma que la vista día; cambiar
+    Día/Semana sólo cambia la grilla. Es una tabla con los días en la columna izquierda («Lun 9», link a ese día; hoy
+    en 700) y cada día partido en franjas de 4 horas (08–12, 12–16 y 16–20, estiradas de a 4 h si algo cae afuera),
+    separadas con líneas Línea Salvia. Cada turno no cancelado es un cuadradito de 44px con su hora de inicio y el
+    color de su estado (confirmado `bg-confirmed` con borde Verde Lima, pendiente Hueso con borde Verde Bosque); el
+    nombre va en `title` y en el `aria-label`. La franja que toca un bloqueo se ve rayada.
+  - A la derecha (340px), en las dos vistas. En mobile el orden es próximo turno, agenda y calendario: «Próximo turno» (avatar en disco Verde Lima al 25%,
+    nombre, obra social, reloj con «10:30 – 11:15» y, debajo, «Hoy», «Mañana» o la fecha, pin con ubicación y dirección o «Por videollamada»;
+    «Confirmar» Verde Lima si está pendiente o «Ver turno», y «WhatsApp» Gris Nube; «⋯» lleva al detalle) y el
+    calendario del mes (L a D, el día elegido en disco Verde Bosque, punto en los días con turnos (Verde
+    Bosque; Verde Lima sobre el elegido), hoy en 700 con un aro Línea Salvia, días de otros meses en Gris Piedra; cada día
+    de 44px es un link).
+- **Pacientes (US-26):** por ahora, una tarjeta «Próximamente».
 - **Bloquear disponibilidad (US-14):** página `/admin/bloqueos` (no modal: se usa igual con teclado y en el
-  celular) con desde/hasta, motivo opcional y la píldora Verde Lima «Bloquear», más la lista de bloqueos por venir.
-- **Mobile:** la sidebar pasa a una barra inferior fija con 4 íconos y su texto (la barrita del activo, arriba) y
-  la agenda muestra un día por vez. «Cerrar sesión» va dentro de Mi cuenta.
-- **Agenda (US-13):** flechas redondas Papel, «Hoy» en Gris Nube y el toggle Día/Semana en píldoras (activo Verde
-  Lima). Vista día: una tarjeta Papel por ubicación con sus turnos; vista semana: 7 columnas. Cada turno es un bloque
-  con el color de su estado y su chip; los bloqueos, un bloque Gris Nube con borde punteado. «Nuevo turno» es la
-  píldora Verde Lima de la vista.
-- **Horarios en el panel:** píldoras Gris Nube de 48px en grilla; la elegida pasa a Verde Lima (las mismas de la
-  reserva). Tras guardar, cancelar o reprogramar, una franja `bg-confirmed` con el resultado y la píldora Gris Nube
-  «Avisar por WhatsApp» (ícono `MessageCircle`, abre `wa.me` en otra pestaña).
-- **Tarjeta de login (T-3):** fondo Hueso, tarjeta Papel con radio 30px, título 38.4px/28px "Ingresá al **panel**",
-  inputs del formulario de reserva (radio 25px, Gris Nube, label 15px/600, foco Verde Bosque de 2px con halo Verde
-  Lima de 4px) y la píldora Verde Lima "Entrar" a todo el ancho. El error va arriba del botón, en Pimentón con ícono.
+  celular) con desde/hasta, motivo opcional y el botón Verde Lima «Bloquear», más la lista de bloqueos por venir.
+- **Horarios en el panel:** botones Gris Nube de 48px en grilla; el elegido pasa a Verde Lima (los mismos de la
+  reserva, con radio 12px). Tras guardar, confirmar, cancelar o reprogramar, una franja `bg-confirmed` con el
+  resultado y el botón Gris Nube «Avisar por WhatsApp» (ícono `MessageCircle`, abre `wa.me` en otra pestaña).
+- **Tarjeta de login (T-3, US-27):** en `/login`, el mismo para todos. Fondo Hueso, tarjeta Papel con radio 30px,
+  título 38.4px/28px "Ingresá a tu **cuenta**", inputs Gris Nube con radio 12px (label
+  15px/600, foco Verde Bosque de 2px con halo Verde Lima de 4px) y el botón Verde Lima "Entrar" a todo el ancho. El
+  error va arriba del botón, en Pimentón con ícono.
 - **Acceso denegado (T-3):** la ve cualquiera que entre a `/admin/**` sin sesión, así que usa el lenguaje del sitio
   público: banda Hueso, tarjeta Papel, título "Acceso **denegado**" con subrayado Verde Lima, la línea "Esta sección
   es privada." y la píldora Verde Lima "Volver al inicio" con disco de flecha. Ningún link al login.
 - **Mi cuenta (US-5):** sobre Hueso, dos tarjetas Papel con radio 16px ("Cambiar el email" y "Cambiar la contraseña"),
-  cada una con su título 20px/500, los inputs de la tarjeta de login y su píldora Verde Lima "Guardar …". Es la única
-  vista con dos píldoras Verde Lima: cada una cierra su propio formulario. El éxito va en una franja `bg-confirmed`.
+  cada una con su título 20px/500, los inputs de la tarjeta de login y su botón Verde Lima "Guardar …". Es una de las
+  vistas con dos botones Verde Lima: cada uno cierra su propio formulario. El éxito va en una franja `bg-confirmed`.
 
 ## Movimiento (US-3, US-7 y US-8)
 
@@ -389,7 +427,7 @@ Solo tema claro. No se implementa modo oscuro en esta etapa.
   `stroke-scribble`, `text-footer-text`, `bg-confirmed`, `border-border`, `border-benefit-border`.
 - Radios: `rounded-card` (30px), `rounded-benefit` (29px), `rounded-input` (25px), `rounded-hero` (88px) y
   `rounded-hero-mobile` (40px), `rounded-header-button` (50px), `rounded-toggle` (100px), `rounded-testimonial`
-  (8px), `rounded-panel` (16px). Las píldoras usan `rounded-full`.
+  (8px), `rounded-panel` (16px), `rounded-control` (12px, controles del panel). Las píldoras usan `rounded-full`.
 - Sombras: `shadow-halo`, `shadow-glow`, `shadow-toggle`, `shadow-benefit`, `shadow-modal`.
 - Fuente: Manrope con `next/font/google` (`--font-manrope`), aplicada como `font-sans`.
 - `npm run lint` rechaza cualquier color hex escrito en `src/**/*.{ts,tsx}`, y `src/app/tokens.test.ts` verifica
@@ -413,7 +451,7 @@ Solo tema claro. No se implementa modo oscuro en esta etapa.
 - No usar negro ni grises neutros en títulos.
 - No usar Verde Lima como texto sobre Papel o Hueso, ni como fondo de áreas grandes.
 - No usar el Verde Lima como anillo de foco sobre fondos claros: el foco va en Verde Bosque.
-- No hacer controles con esquinas rectas: botones, tabs y toggles son siempre píldoras.
+- No hacer controles con esquinas rectas: en el sitio público, botones, tabs y toggles son siempre píldoras; en el panel, rectángulos con radio 12px.
 - No poner títulos enteros en bold.
 - No usar tracking negativo.
 - No usar el Pimentón en botones ni títulos. Va solo en precios y errores.

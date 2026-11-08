@@ -4,7 +4,7 @@ import type { AppointmentDetail } from '../../domain/appointment.schema';
 import { AppointmentInfo } from './appointment-detail';
 import { NoticePanel } from './notice-panel';
 
-vi.mock('../../actions/appointment-changes', () => ({ cancelAppointment: vi.fn(), markAttendance: vi.fn() }));
+vi.mock('../../actions/appointment-changes', () => ({ cancelAppointment: vi.fn(), confirmAppointment: vi.fn(), markAttendance: vi.fn() }));
 
 const DETAIL: AppointmentDetail = {
   id: '7b0f1a52-4a5c-4c1e-9a43-1f3b5a7c9d10',
@@ -34,6 +34,13 @@ describe('AppointmentInfo', () => {
     expect(screen.getByRole('link', { name: 'Reprogramar' }).getAttribute('href')).toBe(`/admin/turnos/${DETAIL.id}/reprogramar`);
     expect(screen.getByRole('button', { name: 'Cancelar turno' })).toBeDefined();
     expect(screen.queryByRole('button', { name: 'Asistió' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Confirmar' })).toBeNull();
+  });
+
+  it('US-23 CA-1: un pendiente por venir se puede confirmar', () => {
+    render(<AppointmentInfo appointment={{ ...DETAIL, status: 'PENDING' }} now={new Date('2026-11-07T12:00:00Z')} />);
+    expect(screen.getByRole('button', { name: 'Confirmar' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Cancelar turno' })).toBeDefined();
   });
 
   it('US-17 CA-3: un turno confirmado que ya empezó se marca asistió o ausente', () => {

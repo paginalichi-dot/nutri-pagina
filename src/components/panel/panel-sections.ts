@@ -1,7 +1,8 @@
-export type PanelSection = { href: string; label: string; icon: 'agenda' | 'locations' | 'settings' | 'account'; matches: readonly string[] };
+export type PanelSection = { href: string; label: string; icon: 'agenda' | 'patients' | 'locations' | 'settings' | 'account'; matches: readonly string[] };
 
 export const PANEL_SECTIONS: readonly PanelSection[] = [
   { href: '/admin', label: 'Agenda', icon: 'agenda', matches: ['/admin', '/admin/turnos', '/admin/bloqueos'] },
+  { href: '/admin/pacientes', label: 'Pacientes', icon: 'patients', matches: ['/admin/pacientes'] },
   { href: '/admin/ubicaciones', label: 'Ubicaciones', icon: 'locations', matches: ['/admin/ubicaciones'] },
   { href: '/admin/ajustes', label: 'Ajustes', icon: 'settings', matches: ['/admin/ajustes'] },
   { href: '/admin/cuenta', label: 'Mi cuenta', icon: 'account', matches: ['/admin/cuenta'] },

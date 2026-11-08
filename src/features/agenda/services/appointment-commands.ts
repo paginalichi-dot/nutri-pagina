@@ -3,7 +3,7 @@ import type { EmailSender } from '@/lib/email/send-email';
 import { AppError } from '@/lib/errors';
 import type { RecordRef } from '@/lib/record-ref';
 import { whatsappLink } from '@/lib/whatsapp';
-import { type AppointmentDetail, isActiveStatus, type TimeRange } from '../domain/appointment.schema';
+import { type AppointmentDetail, canTransition, isActiveStatus, type TimeRange } from '../domain/appointment.schema';
 import type { ManualAppointmentInput, SlotChoice } from '../domain/booking.schema';
 import type { AgendaRepository } from '../repository/agenda.repository';
 import { appointmentEmail, type NoticeKind, whatsappMessage } from './appointment-notices';
@@ -16,6 +16,7 @@ export type AgendaDependencies = { repository: AgendaRepository; clock: () => Da
 export type AppointmentCommands = {
   createManual(input: ManualAppointmentInput): Promise<ManualResult>;
   cancel(ref: RecordRef): Promise<Notice>;
+  confirm(ref: RecordRef): Promise<Notice>;
   markAttendance(ref: RecordRef, attended: boolean): Promise<void>;
   reschedule(ref: RecordRef, choice: SlotChoice): Promise<Notice>;
 };
@@ -67,6 +68,12 @@ export function appointmentCommands(dependencies: AgendaDependencies): Appointme
       assertChangeable(detail, clock());
       await repository.updateStatus(ref, 'CANCELLED');
       return notice('cancelled', detail);
+    },
+    async confirm(ref) {
+      const detail = await mustFind(repository, ref.id);
+      if (!canTransition(detail.status, 'CONFIRMED') || detail.startsAt <= clock()) throw new AppError('INVALID_TRANSITION');
+      await repository.updateStatus(ref, 'CONFIRMED');
+      return notice('confirmed', detail);
     },
     async markAttendance(ref, attended) {
       const detail = await mustFind(repository, ref.id);

@@ -166,7 +166,8 @@ Decisiones del dev (2026-11-06): se entra con email y contraseña, sin registro 
 JWT en lugar de Supabase Auth, para probar todo con Docker ([ADR 0004](docs/adr/0004-login-propio-con-jwt.md)).
 La sesión queda iniciada para siempre, hasta "Cerrar sesión". Por ahora hay una sola cuenta admin, de prueba; el
 alta del admin de producción queda para el ítem de despliegue. Quien escriba `/admin` sin la sesión del admin ve
-"Acceso denegado": el login vive sólo en `/admin/login` y ningún link lleva ahí.
+"Acceso denegado": el login vive sólo en `/admin/login` y ningún link lleva ahí. **Cambio (2026-11-08, US-27)**: el
+login se mudó a `/login`, el mismo para todos.
 
 **Criterios de aceptación**
 
@@ -497,8 +498,8 @@ Antes de arrancar: cerrar el Sprint 1 (revisión del dev, merge a `main` y tag `
 Implementación: el dev pidió programar el sprint entero y revisarlo al final (2026-11-07), así que los ítems no
 tienen plan propio en `docs/plans/`: el plan es este encabezado más el
 [ADR 0005](docs/adr/0005-agenda-choque-global-y-horarios-en-hora-argentina.md). Integrado en `develop` con el OK del dev
-(2026-11-07), en un solo commit para todo el sprint. Pendiente en los ítems con UI: la revisión con
-`impeccable` (`critique` y `polish`).
+(2026-11-07), en un solo commit para todo el sprint. Pendiente en US-9 y US-19: la revisión con `impeccable`
+(`critique` y `polish`); la del panel (T-4, US-13) se hizo con US-26.
 
 ### T-4 · Layout del panel
 
@@ -527,7 +528,7 @@ tienen plan propio en `docs/plans/`: el plan es este encabezado más el
 
 - [x] **CA-5** · El menú se recorre con teclado y el foco se ve sobre el fondo Verde Bosque (anillo Verde Lima, 7.9:1) · Estimación: 15 min · Completado: 2026-11-07 18:30
 
-- [ ] **CA-6** · Los links salen de una sola lista (`panel-sections.ts`); Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 20 min · Completado: —
+- [x] **CA-6** · Los links salen de una sola lista (`panel-sections.ts`); Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 20 min · Completado: 2026-11-08 13:30 (con el rediseño de US-26)
 
 ### T-5 · Envío de emails con Resend
 
@@ -736,7 +737,7 @@ Supuesto a confirmar con Lisandro: el rango de 15 a 120 minutos.
 
 - [x] **CA-6** · Un día sin turnos lo dice; los bloqueos se ven en la agenda · Estimación: 15 min · Completado: 2026-11-07 18:30
 
-- [ ] **CA-7** · Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 20 min · Completado: —
+- [x] **CA-7** · Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 20 min · Completado: 2026-11-08 13:30 (con el rediseño de US-26)
 
 ### US-14 · Lisandro bloquea franjas
 
@@ -918,12 +919,115 @@ Fuera por ahora: «Reservar acá» (la reserva llega en el Sprint 3 y el botón 
 
 - [x] **CA-10** · Una flecha a mano abajo a la derecha de cada sección con algo debajo (blanca sobre Verde Bosque, Zanahoria sobre Hueso) avisa que se puede bajar sin tapar el botón de reserva (pedido del dev, 2026-11-07) · Estimación: 20 min · Completado: 2026-11-07 21:40
 
+### Iteración del Sprint 2 (revisión del dev, 2026-11-08)
+
+El dev revisó el sprint y pidió tres cambios: el panel exactamente como `docs/wireframes/panel-administrador.png`
+(Lisandro es nutricionista, no fisioterapeuta), quitar los bloqueos (descartado por el mismo dev: con horarios
+semanales, el bloqueo es la única forma de cerrar una fecha puntual) y un solo login en `/login`. Plan:
+[`docs/plans/sprint-2-iteracion-panel.md`](docs/plans/sprint-2-iteracion-panel.md).
+
+### US-23 · Lisandro confirma un turno pendiente
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | S |
+| Depende de   | T-6, T-5 |
+| Plan         | [`docs/plans/sprint-2-iteracion-panel.md`](docs/plans/sprint-2-iteracion-panel.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero confirmar un turno pendiente, de forma que el paciente sepa que lo espero.
+
+Se adelanta del Sprint 3 porque el wireframe del panel tiene «Confirmar» en el próximo turno (decisión del dev,
+2026-11-08). Hasta que llegue la reserva online, los únicos pendientes son los del seed de tests.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Desde el detalle del turno y desde «Próximo turno», «Confirmar» pasa un pendiente que no empezó a confirmado · Estimación: 40 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-2** · Con email, el paciente recibe «Tu turno está confirmado» con el `.ics`; si el email falla, el turno queda confirmado y se avisa · Estimación: 20 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-3** · Un turno que no está pendiente o que ya empezó → `INVALID_TRANSITION`; versión vieja → `STALE_VERSION`; sin sesión → `UNAUTHENTICATED` · Estimación: 20 min · Completado: 2026-11-08 13:11
+
+### US-26 · Panel según el wireframe del dev
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | L |
+| Depende de   | T-4, US-13, US-23 |
+| Plan         | [`docs/plans/sprint-2-iteracion-panel.md`](docs/plans/sprint-2-iteracion-panel.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero abrir el panel y ver de un vistazo mi día, mi semana y mi próximo turno, de forma
+que organice mi trabajo sin buscar nada.
+
+Origen: `docs/wireframes/panel-administrador.png` (wireframe del dev, 2026-11-08). Decisiones del dev: «Pacientes»
+lleva a «Próximamente»; los botones del panel son rectángulos redondeados como en el wireframe (la píldora queda para
+el sitio público); se mantiene la vista semana.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · La sidebar muestra el logo, «Lisandro López», «NUTRICIONISTA» y Agenda, Pacientes, Ubicaciones, Ajustes y Mi cuenta, con «Cerrar sesión» al pie; «Pacientes» lleva a una página «Próximamente» · Estimación: 40 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-2** · La cabecera tiene «Agenda», el saludo según la hora argentina, la bajada, «Nuevo turno» y «Bloquear horario» · Estimación: 20 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-3** · Cuatro tarjetas: turnos hoy (contra ayer), turnos de la semana (contra la anterior, en %), pacientes nuevos de la semana (por teléfono o email) y horas libres hoy de las disponibles · Estimación: 1 h 30 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-4** · La vista día es una línea de horas con cada turno en su lugar («Nombre · Obra social» y «horario · ubicación»), los bloqueos rayados y sin los cancelados; se mantiene el toggle Día/Semana · Estimación: 1 h 30 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-5** · «Próximo turno» muestra paciente, obra social, horario y lugar, con «Confirmar» (pendiente) o «Ver turno» (confirmado) y «WhatsApp» · Estimación: 45 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-6** · Un calendario del mes marca con un punto los días con turnos y lleva a cada día · Estimación: 45 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-7** · Los botones, las flechas y el toggle del panel son rectángulos de 12px; el sitio público no cambia · Estimación: 20 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-8** · En 375px se apila (métricas 2×2, agenda, próximo turno, calendario) sin scroll horizontal; revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 40 min · Completado: 2026-11-08 13:30 (critique con dos evaluaciones aisladas sobre capturas de Playwright, sin overlay en vivo porque no se levanta servidor de desarrollo; en mobile el orden quedó próximo turno, agenda y calendario)
+
+- [x] **CA-9** · Cambiar Día/Semana sólo cambia la grilla: la tarjeta de la agenda, el próximo turno y el calendario quedan en su lugar; la semana muestra los días en filas partidas en franjas de 4 h, con un cuadradito por turno y la franja bloqueada rayada (pedido del dev en la revisión, 2026-11-08) · Estimación: 1 h · Completado: 2026-11-08 17:35
+
+- [x] **CA-10** · «Bloquear horario» lleva un marco gris oscuro para no perderse sobre el fondo (pedido del dev en la revisión, 2026-11-08) · Estimación: 10 min · Completado: 2026-11-08 17:35
+- [x] **CA-11** · Con el mouse encima, todo lo que se toca en el panel (botones, flechas, «Hoy», Día/Semana, horarios, menú lateral, días del calendario, ubicaciones y turnos) se funde en degradé hacia un tono más oscuro de su propio color, en 200 ms (más claro sobre Verde Bosque), para avisar que se está por elegir (pedido del dev, 2026-11-08) · Estimación: 30 min · Completado: 2026-11-08 22:45
+
+### US-27 · Un solo login en `/login`
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | S |
+| Depende de   | T-3 |
+| Plan         | [`docs/plans/sprint-2-iteracion-panel.md`](docs/plans/sprint-2-iteracion-panel.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero entrar por `/login`, de forma que no tenga que recordar una dirección escondida.
+
+Decisión del dev (2026-11-08): todos entran por el mismo `/login` y la cuenta decide a dónde van. Hoy sólo existe la
+del admin; cualquier otro email o contraseña da `INVALID_CREDENTIALS`. Las cuentas de pacientes (Sprint 5) entrarán
+por la misma página e irán a la home. Todavía no hay links al login: se entra escribiendo la dirección.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · `/login` con los datos del admin entra a `/admin`; con sesión, `/login` lleva a `/admin`; «Cerrar sesión» y una sesión cerrada desde otro lado vuelven a `/login` · Estimación: 30 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-2** · `/admin/login` ya no existe: sin sesión muestra «Acceso denegado», como cualquier `/admin/**` · Estimación: 15 min · Completado: 2026-11-08 13:11
+
+- [x] **CA-3** · `/login` no se indexa (`noindex`) y «Acceso denegado» sigue sin link al login · Estimación: 10 min · Completado: 2026-11-08 13:11
+
 ## Sprint 3 · El paciente reserva online
 
 A definir ítem por ítem cuando el dev confirme el Sprint 2. Previstos: T-7 protección de acciones públicas (rate
 limiting + honeypot), US-20 política de privacidad, US-21 reserva online (nace pendiente), US-22 emails de la
-reserva («Recibimos tu solicitud» y aviso a Lisandro), US-23 Lisandro confirma un pendiente, US-24 el paciente
-cancela con el link, US-25 el paciente reprograma con el link (vuelve a pendiente).
+reserva («Recibimos tu solicitud» y aviso a Lisandro), US-24 el paciente cancela con el link, US-25 el paciente
+reprograma con el link (vuelve a pendiente). US-23 (Lisandro confirma un pendiente) se adelantó al Sprint 2.
 
 ## Sprint 4 · Despliegue
 

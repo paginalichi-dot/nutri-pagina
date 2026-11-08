@@ -1,0 +1,29 @@
+@layer components {
+  .hover-shade {
+    --shade: color-mix(in oklab, var(--foreground) 16%, transparent);
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hover-shade-on-dark {
+    --shade: color-mix(in oklab, var(--background) 14%, transparent);
+  }
+
+  .hover-shade::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-image: linear-gradient(to right, transparent, var(--shade));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @media (hover: hover) {
+    .hover-shade:not(:disabled):hover::before {
+      opacity: 1;
+    }
+  }
+}

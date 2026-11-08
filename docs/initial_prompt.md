@@ -1,6 +1,6 @@
 # Prompt inicial: contexto completo de pagina-lichi
 
-> Foto del proyecto al **2026-11-07**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
+> Foto del proyecto al **2026-11-08**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
 
 ## 1. Quién sos y con quién trabajás
 
@@ -29,7 +29,8 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - `src/lib/`: catálogo de errores, `ActionResult`, `db-errors`, `format-date-time`, `database-config`, cliente
   Prisma y `withTransaction`.
 - Login del panel (T-3): JWT propio en la cookie `session`, sesión permanente, cuenta de prueba con `npm run db:seed`.
-  `/admin/**` sin sesión muestra "Acceso denegado" (`noindex`); el login vive en `/admin/login`. Primera tabla: `admin_user`.
+  `/admin/**` sin sesión muestra "Acceso denegado" (`noindex`); el login vive en `/login`, el mismo para todos
+  (US-27). Primera tabla: `admin_user`.
 - "Mi cuenta" (US-5): en `/admin/cuenta` el admin cambia su email y su contraseña; cada cambio cierra las demás sesiones.
 - Tokens de `DESIGN.md` en `src/app/tokens.css` (T-2): colores, radios, sombras y Manrope; shadcn/ui inicializado
   sin componentes todavía. ESLint rechaza colores hex en el código.
@@ -43,11 +44,15 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   - Movimiento con Lenis + GSAP (US-3), intro de marca (US-7: una caja con «Lic. Lisandro López» que se expande
     hasta ser el hero) y scroll con profundidad (US-8: cada sección se aleja al fondo y la siguiente la tapa). Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
 - Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
-- Sprint 2 («Lisandro maneja su agenda») programado en la rama `feat/sprint-2-agenda`, sin commitear, a la espera
-  de la revisión del dev: menú del panel, ubicaciones con horarios semanales, duración y obras sociales, agenda día
-  y semana, bloqueos, disponibilidad, turnos cargados a mano (cancelar, asistencia, reprogramar) con email por Resend
-  y WhatsApp (`wa.me`), y «Dónde atiendo» en la home. Features nuevos: `location`, `settings` y `agenda`
+- Sprint 2 («Lisandro maneja su agenda») integrado en `develop`, en revisión del dev: menú del panel, ubicaciones con
+  horarios semanales, duración y obras sociales, agenda día y semana, bloqueos, disponibilidad, turnos cargados a
+  mano (cancelar, asistencia, reprogramar) con email por Resend y WhatsApp (`wa.me`), y «Dónde atiendo» en la home.
+  Features nuevos: `location`, `settings` y `agenda`
   ([ADR 0005](adr/0005-agenda-choque-global-y-horarios-en-hora-argentina.md)).
+- Iteración del Sprint 2 (2026-11-08, rama `feat/sprint-2-iteracion-panel`): el panel según el wireframe del dev
+  (`docs/wireframes/panel-administrador.png`: sidebar con «Pacientes» en «Próximamente», métricas, línea de horas,
+  próximo turno y calendario; botones del panel con radio 12px), «Confirmar» un pendiente (US-23, adelantada del
+  Sprint 3) y un solo login en `/login` (US-27). Los bloqueos se quedan.
 
 ## 4. Stack
 

@@ -11,8 +11,8 @@ Una sola aplicación **Next.js 16 (App Router)** con dos caras:
 
 | Cara | Rutas | Quién la usa | Cómo renderiza |
 |---|---|---|---|
-| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/turno/[token]` (Sprint 3) | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
-| Panel | `/admin/**` (agenda, turnos, bloqueos, ubicaciones, ajustes, cuenta) | Lisandro (único admin), con login propio (JWT) | Server Components que leen con `guardAdminPage`; formularios Client Components + Server Actions |
+| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/login` (el mismo para todos), `/turno/[token]` (Sprint 3) | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
+| Panel | `/admin/**` (agenda, turnos, bloqueos, pacientes, ubicaciones, ajustes, cuenta) | Lisandro (único admin), con login propio (JWT) | Server Components que leen con `guardAdminPage`; formularios Client Components + Server Actions |
 
 **Estilo arquitectónico.** En ejecución es cliente-servidor; en despliegue, un monolito modular. El código se
 agrupa por *feature* (`src/features/<feature>`), no por tipo técnico.
@@ -106,7 +106,7 @@ panel llaman a `guardAdminPage()`; las públicas usan `'use cache'` con un tag q
 | Ruta | Contenido |
 |---|---|
 | `src/app/tokens.css` | Tokens de `DESIGN.md` (colores, radios, sombras, fuente) para Tailwind y shadcn. Único lugar con hex; lo controla ESLint y su contraste lo prueba `tokens.test.ts`. |
-| `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. En `/admin/**` verifica la firma del JWT de la cookie (sin base): si es válido y es una navegación real del navegador (GET con `sec-fetch-dest: document`), renueva la cookie (en actions y precargas no, para no revivir una sesión recién cerrada); si es inválido la borra; sin sesión, todo `/admin/**` salvo `/admin/login` se reescribe a `/acceso-denegado` (la URL no cambia; `noindex`). Responde 200: con Cache Components ni `forbidden()` ni una reescritura pueden fijar un 403. Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
+| `src/proxy.ts` | Next 16 renombró `middleware.ts` a `proxy.ts`. En `/admin/**` verifica la firma del JWT de la cookie (sin base): si es válido y es una navegación real del navegador (GET con `sec-fetch-dest: document`), renueva la cookie (en actions y precargas no, para no revivir una sesión recién cerrada); si es inválido la borra; sin sesión, todo `/admin/**` se reescribe a `/acceso-denegado` (la URL no cambia; `noindex`). Responde 200: con Cache Components ni `forbidden()` ni una reescritura pueden fijar un 403. Es barrera de navegación, **no** de seguridad: cada action del panel vuelve a verificar la sesión. |
 | `prisma/schema.prisma`, `prisma/migrations/` | Modelo de datos y migraciones versionadas. Las restricciones que Prisma no expresa (`CHECK`, `EXCLUDE`) van en el SQL de la migración. |
 | `prisma.config.ts` | URL de las migraciones: `LOCAL_DATABASE_URL` en local y en tests; `DIRECT_URL` con `APP_ENV=production`. |
 | `src/lib/db/index.ts` | Cliente Prisma único (`db`) con el adaptador de `pg`. La URL sale de `database-config.ts`: `LOCAL_DATABASE_URL`, o `DATABASE_URL` (pooler) con `APP_ENV=production`. |

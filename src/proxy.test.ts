@@ -38,13 +38,7 @@ describe('proxy', () => {
     expect(response.cookies.get('session')).toBeUndefined();
   });
 
-  it('sin sesión, /admin/login pasa y no toca la cookie', async () => {
-    const response = await proxy(request('/admin/login'));
-    expect(passes(response)).toBe(true);
-    expect(response.cookies.get('session')).toBeUndefined();
-  });
-
-  it.each(['/admin', '/admin/cuenta'])('sin sesión, %s muestra "Acceso denegado"', async (path) => {
+  it.each(['/admin', '/admin/cuenta', '/admin/login'])('sin sesión, %s muestra "Acceso denegado"', async (path) => {
     const response = await proxy(request(path));
     expect(rewrittenTo(response)).toBe('http://localhost/acceso-denegado');
   });
@@ -60,6 +54,7 @@ describe('proxy', () => {
     ['el sitio público, aunque haya token', request('/', 'cualquiera')],
     ['una ruta que sólo empieza parecido', request('/administracion', 'cualquiera')],
     ['/reservar, que es pública', request('/reservar', 'cualquiera')],
+    ['/login, el login de todos', request('/login', 'cualquiera')],
   ])('no toca %s', async (_caso, incoming) => {
     const response = await proxy(incoming);
     expect(passes(response)).toBe(true);

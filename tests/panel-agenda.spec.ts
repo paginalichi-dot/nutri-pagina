@@ -25,7 +25,7 @@ test.describe('panel: agenda y turnos', () => {
     await page.goto(`/admin?dia=${day}`);
     await page.getByRole('link', { name: new RegExp(patient) }).click();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(`Turno de ${patient}`);
-    await expect(page.getByText('Prepaga Ficticia')).toBeVisible();
+    await expect(page.getByText('Prepaga Ficticia', { exact: true })).toBeVisible();
 
     await page.getByRole('link', { name: 'Reprogramar' }).click();
     const reschedule = page.getByRole('form', { name: 'Nuevo horario' });
