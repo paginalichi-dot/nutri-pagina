@@ -18,6 +18,11 @@ const CATALOG = {
   SLOT_TOO_SOON: () => 'Ese horario ya pasó o está demasiado cerca. Elegí otro.',
   INVALID_TOKEN: () => 'El link no es válido o ya venció.',
   RATE_LIMITED: () => 'Hiciste demasiados intentos. Esperá unos minutos y probá de nuevo.',
+  HOURS_OVERLAP: () => 'Ese horario se pisa con otra franja de alguna ubicación. Elegí otro.',
+  HAS_ACTIVE_APPOINTMENTS: () => 'Tiene turnos por venir: cancelalos o reprogramalos primero.',
+  BLOCK_HAS_APPOINTMENTS: () => 'En ese rango hay turnos. Cancelalos o reprogramalos antes de bloquear.',
+  INVALID_TRANSITION: () => 'Ese cambio no se puede hacer en el estado actual del turno.',
+  NO_SLOT_DURATION: () => 'Todavía no definiste la duración de los turnos. Hacelo en Ajustes.',
   UNEXPECTED: (entity: string) => `No se pudo procesar ${entity}. Intentá de nuevo en unos minutos.`,
 } satisfies Record<string, (entity: string) => string>;
 

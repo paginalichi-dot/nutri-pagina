@@ -143,7 +143,7 @@ Reintentos: 0 en local y 1 en el CI. Un test que pasa al segundo intento es ines
 |---|---|
 | `db-test` | postgres:15 en `127.0.0.1:5436`, base `nutricion_test`, con `tmpfs` y perfil `test` (`docker compose up -d` no lo levanta). Se configura en `.env.test`, que está versionado. Se levanta con `docker compose up -d --wait db-test`. |
 | Integración | `src/test/integration.global-setup.ts` aborta si `NODE_ENV=production`, si `APP_ENV=production` o si `LOCAL_DATABASE_URL` no es la de `db-test`, y aplica las migraciones con `prisma migrate deploy`. |
-| E2E | `npm run test:e2e` carga `.env.test`, y `playwright.config.ts` aborta si la URL no es la de `db-test`. El `webServer` (`npm run e2e:server`) aplica las migraciones y levanta la app con `next build` + `next start` en el puerto 3100, con la carpeta `.next-e2e`. |
+| E2E | `npm run test:e2e` carga `.env.test`, y `playwright.config.ts` aborta si la URL no es la de `db-test`. El `webServer` (`npm run e2e:server`) aplica las migraciones, corre el seed (con `APP_ENV=test` vacía las tablas de la agenda y carga una agenda de ejemplo: dos ubicaciones, horarios de lunes a viernes, 45 minutos y dos obras sociales) y levanta la app con `next build` + `next start` en el puerto 3100, con la carpeta `.next-e2e`. Los E2E que cambian horarios corren sólo en `chromium`; los que cargan turnos usan días distintos por proyecto y terminan cancelándolos. |
 
 ## Reportes
 

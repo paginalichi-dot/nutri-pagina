@@ -1,7 +1,10 @@
 'use client';
 
 import { type ReactElement, type ReactNode, useRef } from 'react';
+import { depthScene } from './depth';
 import { EASE_OUT, gsap, MOTION_OK, SplitText, useGSAP } from './gsap';
+
+const HOLD_SCREENS = 1.25;
 
 const once = (trigger: Element, start = 'top 85%'): ScrollTrigger.Vars => ({ trigger, start, once: true });
 
@@ -27,6 +30,8 @@ function reveal(root: HTMLElement): void {
   gsap.from(body, { autoAlpha: 0, y: 32, duration: 1, ease: EASE_OUT, scrollTrigger: once(body, 'top 88%') });
   gsap.from(frame, { clipPath: 'inset(100% 0% 0% 0%)', duration: 1.4, ease: EASE_OUT, scrollTrigger: once(frame, 'top 80%') });
   gsap.from(q('[data-draw]'), { drawSVG: '0%', ease: 'none', stagger: 0.15, scrollTrigger: { trigger: title, start: 'top 85%', end: 'top 35%', scrub: 1 } });
+  const [section, next] = [root.firstElementChild, root.nextElementSibling];
+  if (section && next?.matches('section')) depthScene({ layer: root, next, content: section, hold: HOLD_SCREENS });
 }
 
 export function AboutMotion({ children }: { children: ReactNode }): ReactElement {

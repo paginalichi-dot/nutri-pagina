@@ -18,7 +18,7 @@ test.describe('botón flotante "Reservá tu turno"', () => {
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await expect(button(page)).toBeVisible();
     expect(await isBottomCenter(page, button(page))).toBe(true);
-    const last = page.locator('#sobre-mi p').last();
+    const last = page.locator('main section').last().locator('p, li').last();
     const [lastBox, buttonBox] = await Promise.all([last.boundingBox(), button(page).boundingBox()]);
     expect((lastBox?.y ?? 0) + (lastBox?.height ?? 0)).toBeLessThanOrEqual(buttonBox?.y ?? 0);
   });

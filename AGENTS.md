@@ -49,26 +49,27 @@ Las aplican ESLint (`eslint.config.mjs` + `eslint/`), lefthook y el CI, desde el
 | Concurrencia | Toda tabla mutable usa `version` (concurrencia optimista). Update/delete filtran por `id` **y** `version`; si afectan 0 filas ⇒ `STALE_VERSION`. |
 | Errores | Toda acción inválida ⇒ `AppError(code)` del catálogo (`src/lib/errors`), con mensaje claro en español. Nunca `throw 'texto'` ni un error crudo al cliente: las Server Actions devuelven `ActionResult`. |
 | Seguridad | Toda Server Action verifica en el servidor la sesión del admin (`requireAdmin()`, JWT propio; ADR 0004), salvo las acciones públicas, que se listan explícitamente (ver más abajo). Toda página nueva se registra en `src/proxy.ts`. Toda entrada se valida con Zod `strictObject`. Toda respuesta se valida contra su `RowSchema`. |
-| Fechas | Se guardan y viajan en UTC (ISO 8601, `timestamptz`). Se muestran en `America/Argentina/Buenos_Aires` con `formatDateTime`. Nunca se usa la zona horaria del servidor ni del navegador. |
+| Fechas | Se guardan y viajan en UTC (ISO 8601, `timestamptz`). Se muestran en `America/Argentina/Buenos_Aires` con `formatDateTime`. Nunca se usa la zona horaria del servidor ni del navegador. Única excepción: las franjas semanales (día + minutos en hora argentina), que no son instantes; se pasan a UTC con `argentinaInstant` (ADR 0005). |
 | Diseño | Solo tokens de `DESIGN.md` (variables CSS o clases de Tailwind), definidos en `src/app/tokens.css`. **Cero hex hardcodeados** en `src/**/*.{ts,tsx}` (ESLint lo rechaza). Botones, tabs y toggles siempre en forma de píldora. |
 | Secretos | Jamás se commitea un `.env` real (hook + CI lo bloquean). Cada variable nueva va a `.env.example`. Los secretos (`JWT_SECRET`, claves de email) solo existen en el servidor. |
 
 ## Reglas del dominio: turnos
 
-Detalle completo en `docs/features/turno/README.md`.
+Detalle completo en `docs/features/agenda/README.md`, `docs/features/location/README.md` y
+`docs/features/settings/README.md` ([ADR 0005](docs/adr/0005-agenda-choque-global-y-horarios-en-hora-argentina.md)).
 
-- **Sin doble reserva.** Un horario de una sucursal no puede tener dos turnos activos. Se garantiza en la base (restricción `EXCLUDE` o `UNIQUE` parcial en la migración), y además se crea el turno dentro de una transacción. Si hay choque ⇒ `SLOT_TAKEN`.
-- **Disponibilidad.** Se calcula a partir de los horarios de cada sucursal, la duración del servicio, los turnos activos y los bloqueos que cargue Lisandro. Es lógica de `service`, con tests de nivel 3.
-- **Límites de reserva.** No se puede reservar en el pasado ni con menos de [X] horas de anticipación ⇒ `SLOT_TOO_SOON`.
-- **Estados.** `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`, y `CANCELADO` desde `PENDIENTE` o `CONFIRMADO`. Un turno cancelado libera el horario.
-- **Cancelación por el paciente.** Se hace con un link de un solo uso y con vencimiento, que llega en el email de confirmación. No requiere cuenta.
-- **Acciones públicas (sin sesión).** Solo estas: leer servicios, sucursales y disponibilidad; crear una reserva; cancelar con token; iniciar sesión en el panel (`login`). Llevan rate limiting (el login, bloqueo por intentos) y honeypot.
+- **Sin doble reserva.** Lisandro es uno solo: dos turnos activos nunca se pisan en el tiempo, en ninguna ubicación. Se garantiza en la base (`EXCLUDE` en `appointment`), y el turno se crea o se mueve en una transacción `Serializable` (que también lo cuida contra un bloqueo simultáneo). Si hay choque ⇒ `SLOT_TAKEN`. Las franjas semanales tampoco se pisan entre ubicaciones ⇒ `HOURS_OVERLAP`.
+- **Disponibilidad.** Se calcula a partir de las franjas semanales de cada ubicación (hora argentina), una duración única para todos los turnos, los turnos activos y los bloqueos. Es lógica de `service` (`availableSlots`), con tests de nivel 3.
+- **Límites de reserva.** El paciente no puede reservar en el pasado ni con menos de 12 horas ⇒ `SLOT_TOO_SOON`, ni a más de 60 días. Lisandro, desde el panel, puede cargar turnos desde ahora.
+- **Estados.** `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`, y `CANCELADO` desde `PENDIENTE` o `CONFIRMADO` (en el código: `PENDING`, `CONFIRMED`, `ATTENDED`, `NO_SHOW`, `CANCELLED`). La reserva online nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado. Un turno cancelado libera el horario.
+- **Gestión por el paciente (Sprint 3).** Con el link del email de solicitud cancela o reprograma hasta 24 h antes (el turno reprogramado vuelve a pendiente). El link no cambia nada con un GET. No requiere cuenta.
+- **Acciones públicas (sin sesión).** Solo estas: leer ubicaciones, horarios, obras sociales y disponibilidad; crear una reserva; gestionar un turno con token (cancelar o reprogramar); iniciar sesión en el panel (`login`). Llevan rate limiting (el login, bloqueo por intentos) y honeypot.
 
 ## Datos personales
 
 Esta web maneja datos de pacientes en un contexto de salud (Ley 25.326).
 
-- Se piden solo los datos necesarios para el turno: nombre, email, teléfono y obra social opcional. Nada de historia clínica.
+- Se piden solo los datos necesarios para el turno: nombre, email, teléfono y obra social opcional (en un turno que carga Lisandro, el email también es opcional). Nada de historia clínica.
 - **Cero datos personales en logs**, errores, reportes de tests o analytics. Los errores inesperados se loguean sólo con nombre y código (`src/lib/db-errors.ts`).
 - El formulario de reserva lleva consentimiento explícito y un link a la política de privacidad.
 - Los seeds y tests usan solo datos ficticios.

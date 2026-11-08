@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { databaseErrorCode, toActionFailure } from './db-errors';
+import { databaseErrorCode, isExclusionViolation, isSerializationFailure, toActionFailure } from './db-errors';
 import { AppError } from './errors';
 
 const prismaError = (code: string): Error => Object.assign(new Error('falló'), { name: 'PrismaClientKnownRequestError', code });
@@ -27,6 +27,18 @@ describe('databaseErrorCode', () => {
   it('lee el código que deja el adaptador en meta.driverAdapterError', () => {
     const error = Object.assign(new Error('falló'), { meta: { driverAdapterError: { code: '23505' } } });
     expect(databaseErrorCode(error)).toBe('DUPLICATE');
+  });
+
+  it('un conflicto de una transacción serializable es STALE_VERSION', () => {
+    expect(databaseErrorCode(prismaError('P2034'))).toBe('STALE_VERSION');
+    expect(databaseErrorCode({ meta: { driverAdapterError: { cause: { originalCode: '40001' } } } })).toBe('STALE_VERSION');
+  });
+
+  it('distingue un EXCLUDE y un conflicto serializable, pero no los confunde con un AppError', () => {
+    expect(isExclusionViolation({ cause: { code: '23P01' } })).toBe(true);
+    expect(isExclusionViolation(prismaError('P2002'))).toBe(false);
+    expect(isSerializationFailure(prismaError('P2034'))).toBe(true);
+    expect(isSerializationFailure(new AppError('STALE_VERSION'))).toBe(false);
   });
 
   it('respeta el código de un AppError', () => {

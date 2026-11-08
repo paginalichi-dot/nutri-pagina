@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { HandArrow, HandUnderline } from './about-strokes';
+import { ScrollHint } from './scroll-hint';
 
 export const ABOUT_PARAGRAPHS = [
   'Entiendo la nutrición como una herramienta fundamental para cuidar la salud y mejorar la calidad de vida. Mi objetivo es acompañar a cada persona en su proceso, brindando una atención profesional, cercana y personalizada.',
@@ -21,9 +22,9 @@ function ArchFrame(): ReactElement {
 
 export function About(): ReactElement {
   return (
-    <section id='sobre-mi' aria-labelledby='sobre-mi-titulo' className='relative z-10 rounded-t-hero-mobile bg-muted px-4 py-16 md:rounded-t-hero md:px-20 md:py-[108px]'>
-      <div className='mx-auto grid max-w-[1280px] items-start gap-12 md:grid-cols-12 md:gap-x-10'>
-        <div className='md:col-span-5'>
+    <section id='sobre-mi' aria-labelledby='sobre-mi-titulo' className='relative z-10 flex min-h-svh flex-col justify-center rounded-t-hero-mobile bg-muted px-4 py-16 md:rounded-t-hero md:px-20 md:py-[108px]'>
+      <div className='mx-auto grid w-full max-w-[1280px] items-start gap-12 md:grid-cols-12 md:gap-x-10'>
+        <div className='hidden md:col-span-5 md:block'>
           <ArchFrame />
         </div>
         <div className='relative flex flex-col gap-8 md:col-span-7 md:pt-6'>
@@ -44,6 +45,7 @@ export function About(): ReactElement {
           </div>
         </div>
       </div>
+      <ScrollHint tone='onLight' />
     </section>
   );
 }

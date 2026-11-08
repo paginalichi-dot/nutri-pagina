@@ -125,7 +125,9 @@ Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y r
 - Nombre en Manrope 800, sin tracking negativo: "LISANDRO" blanco macizo y "LÓPEZ" en contorno Verde Lima (relleno
   transparente). Una línea desde 1024px, dos en pantallas más chicas. Sin píldora de credencial arriba (descartada
   por el dev) y sin matrícula por ahora.
-- Foto recortada al centro, apoyada abajo y grande: la cabeza tapa cerca del 45% de abajo de las letras.
+- Foto recortada al centro, apoyada abajo y grande: la cabeza tapa cerca del 45% de abajo de las letras. En mobile
+  la foto sube `8vw` sobre el nombre: asoma la parte de arriba de la «P» y la persona sigue por encima (pedido del
+  dev, 2026-11-07).
 - Frase del cliente en dos bloques a los costados de la foto, abajo, en Hueso con las palabras clave en Verde Lima
   700. El ancho de cada bloque es el espacio libre entre el borde y la foto (`--phrase-w` en `hero.tsx`) y el tamaño
   de letra sale de ese ancho (`--phrase-w / 9.2`): la frase ocupa el costado con aire, grande pero sin competir con el
@@ -157,11 +159,18 @@ el área segura de iOS. Lleva a `/reservar`. Es la única píldora Verde Lima de
 Hueso más alto que el botón para que nunca tape el final. El foco suma un halo blanco y un anillo Verde Bosque.
 
 ### Sobre mí (US-6)
-Banda Hueso con borde curvo arriba. A la izquierda, la foto en un marco en arco (arriba redondo, abajo radio 30px);
+Banda Hueso con borde curvo arriba. A la izquierda, la foto en un marco en arco (arriba redondo, abajo radio 30px),
+sólo desde 768px: en mobile no se muestra (pedido del dev, 2026-11-07);
 mientras falta, el placeholder `[Completar: foto Sobre mí]` con borde punteado. A la derecha: el `h2` «Sobre **mí**»
 con un subrayado Verde Lima dibujado a mano y una flecha Zanahoria a mano que baja hacia la foto (desde 1024px); el
 primer párrafo en display (28px/38.4px, 500, con «Licenciado en Nutrición» y «Universidad Favaloro» en 700) y el
 resto del texto en dos columnas desde 768px, con menos de 75 caracteres por línea.
+
+### Flecha para bajar (US-19)
+Una flecha dibujada a mano, con el rulo de la de «Sobre mí» pero apuntando derecho hacia abajo (trazo de 3, 20×36px
+en mobile y 36×64px en desktop), en la esquina inferior derecha de cada sección que tiene algo debajo (hoy, el hero
+y «Sobre mí»), con el color de los garabatos de esa sección: blanca sobre Verde Bosque y Zanahoria sobre Hueso. Rebota lento (2.6 s) sólo sin «reducir movimiento», no se puede tocar y es
+decorativa (`aria-hidden`). Nunca pisa el botón flotante. La última sección no la lleva.
 
 ### Píldora Verde Lima con flecha (CTA principal)
 Relleno Verde Lima, 88px de alto (64px en mobile), radio 9999px, padding 0 37px, label Verde Bosque 18px/500 y un círculo blanco con flecha Verde Bosque en el extremo derecho. Sombra `rgba(0,0,0,0.05) 0 6px 34px`. Sin borde. **Una sola por pantalla.**
@@ -181,7 +190,14 @@ Contenedor Papel con radio 100px y sombra `rgba(0,0,0,0.21) 0 6px 34px`, con un 
 ### Tarjeta de servicio (reemplaza a la tarjeta de producto)
 Tarjeta alta Gris Nube con radio 30px, padding 0 40px, sin sombra ni borde. Arriba flota una foto recortada de comida o un objeto representativo (plato, fruta, botella de agua, cinta métrica). Título Verde Bosque 20px/500, descripción corta 17px/500 y, si se muestra, el arancel en Pimentón 15px/500 ("Primera consulta · $XX.XXX") con duración en Gris Piedra ("60 min"). Ejemplos: Primera consulta · Seguimiento · Nutrición deportiva · Plan online.
 
-### Tarjeta de sucursal (nueva)
+### Tarjeta de sucursal (nueva; vigente desde US-19)
+Sección «Dónde atiendo» después de «Sobre mí»: banda Papel con borde curvo que sube sobre «Sobre mí» (profundidad
+US-8), título con «atiendo» en 700 subrayado Verde Lima, una tarjeta por ubicación activa y las obras sociales una
+sola vez debajo, como chips Papel («Particular» primero). La online va sin mapa ni dirección. Sin «Reservar acá» por
+ahora (la única píldora Verde Lima de la home es el botón flotante); «Cómo llegar» es una píldora Papel porque la
+tarjeta es Gris Nube.
+
+Propuesta original:
 Tarjeta Gris Nube con radio 30px. Arriba, un mapa estático o embebido con esquinas de 22px. Debajo: nombre del consultorio (20px/500), dirección, días y horarios en una mini-tabla con separadores Línea Salvia, obras sociales aceptadas como chips Papel, y dos píldoras: Verde Lima "Reservar acá" + Gris Nube "Cómo llegar".
 
 ### Tarjeta flotante de beneficio
@@ -223,11 +239,23 @@ La referencia no tiene flujo de reservas. Se diseña con el mismo lenguaje.
 
 El panel es una herramienta de trabajo diario, así que usa una **versión silenciosa del sistema**: misma tipografía, mismos colores y mismos radios, pero sin garabatos, sin cinta y sin fotos. El Verde Lima se reserva para la acción principal de cada vista.
 
-- **Layout:** sidebar Verde Bosque a la izquierda (íconos y links en Niebla, el activo en blanco con un indicador Verde Lima) y un área de contenido sobre Hueso.
+- **Layout (T-4):** desde 768px, sidebar Verde Bosque fija a la izquierda (240px) con el nombre arriba, los links
+  Agenda, Ubicaciones, Ajustes y Mi cuenta (ícono Lucide + texto en Niebla; el activo en blanco con una barrita Verde
+  Lima a la izquierda) y «Cerrar sesión» al pie. El foco sobre Verde Bosque es un anillo Verde Lima (7.9:1). El
+  contenido va sobre Hueso, en tarjetas Papel con radio 16px (`PanelPage` y `PanelCard`).
 - **Agenda:** vista día/semana con columnas por sucursal, sobre tarjetas Papel con radio 16px. Cada turno es un bloque con el color de su estado.
 - **Tabla de turnos:** filas Papel con separadores Línea Salvia, chips de estado como píldoras y acciones (confirmar, reprogramar, cancelar) en un menú de tres puntos.
-- **Bloquear disponibilidad:** modal Papel con radio 30px, selector de fechas y la píldora Verde Lima "Bloquear".
-- **Mobile:** la sidebar pasa a una barra inferior con 4 íconos y la agenda muestra un día por vez.
+- **Bloquear disponibilidad (US-14):** página `/admin/bloqueos` (no modal: se usa igual con teclado y en el
+  celular) con desde/hasta, motivo opcional y la píldora Verde Lima «Bloquear», más la lista de bloqueos por venir.
+- **Mobile:** la sidebar pasa a una barra inferior fija con 4 íconos y su texto (la barrita del activo, arriba) y
+  la agenda muestra un día por vez. «Cerrar sesión» va dentro de Mi cuenta.
+- **Agenda (US-13):** flechas redondas Papel, «Hoy» en Gris Nube y el toggle Día/Semana en píldoras (activo Verde
+  Lima). Vista día: una tarjeta Papel por ubicación con sus turnos; vista semana: 7 columnas. Cada turno es un bloque
+  con el color de su estado y su chip; los bloqueos, un bloque Gris Nube con borde punteado. «Nuevo turno» es la
+  píldora Verde Lima de la vista.
+- **Horarios en el panel:** píldoras Gris Nube de 48px en grilla; la elegida pasa a Verde Lima (las mismas de la
+  reserva). Tras guardar, cancelar o reprogramar, una franja `bg-confirmed` con el resultado y la píldora Gris Nube
+  «Avisar por WhatsApp» (ícono `MessageCircle`, abre `wa.me` en otra pestaña).
 - **Tarjeta de login (T-3):** fondo Hueso, tarjeta Papel con radio 30px, título 38.4px/28px "Ingresá al **panel**",
   inputs del formulario de reserva (radio 25px, Gris Nube, label 15px/600, foco Verde Bosque de 2px con halo Verde
   Lima de 4px) y la píldora Verde Lima "Entrar" a todo el ancho. El error va arriba del botón, en Pimentón con ícono.
@@ -254,7 +282,12 @@ acompaña el scroll.
 - **Profundidad entre secciones** (US-8, `depth.ts`): al bajar, la sección actual queda fija (`pin` de ScrollTrigger,
   desde que se ve entera hasta abajo) y se aleja hacia el fondo: su tarjeta se achica a 0.9 y se apaga a 0.5. La
   siguiente sube con el scroll, por encima (`relative z-10`), y la tapa; su borde curvo deja ver la capa de atrás.
-  Todo atado al scroll (`scrub`), sin animaciones sueltas. Se usa `pin` y no `position: sticky` porque el hero en
+  Todo atado al scroll (`scrub`), sin animaciones sueltas. Cada sección ocupa al menos una pantalla (`min-h-svh`,
+  contenido centrado): así la anterior ya quedó tapada antes de que la actual empiece a alejarse, y nunca se ven tres
+  capas a la vez. Cuando la siguiente la tapó del todo, la sección de atrás se oculta (vuelve al subir): si no, se
+  vería a través de la que se aleja y se apaga. «Sobre mí» además hace una pausa: ya vista entera, queda quieta
+  durante 1,25 pantallas de scroll antes de que suba «Dónde atiendo» (`hold` de `depthScene`, pedido del dev,
+  2026-11-07). Se usa `pin` y no `position: sticky` porque el hero en
   mobile y "Sobre mí" son más altos que la pantalla: con `sticky; top: 0` su parte de abajo nunca se vería.
 - **Escena del hero al scrollear** (dentro de la misma profundidad): la foto sigue creciendo (hasta 1.08, desde
   abajo) y el nombre sube más rápido y se apaga a 0.25. La frase no se mueve: el texto no lleva parallax.

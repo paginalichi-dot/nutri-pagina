@@ -10,3 +10,4 @@ nuevo que lo reemplaza y se actualiza el estado del anterior.
 | [0002](0002-la-base-se-elige-con-app-env.md) | La base se elige con `APP_ENV`, no con `NODE_ENV` | Aceptado | 2026-11-06 |
 | [0003](0003-prisma-y-supabase-auth.md) | Prisma como ORM y Supabase Auth para el panel | Aceptado; la parte de auth la reemplaza 0004 | 2026-11-06 |
 | [0004](0004-login-propio-con-jwt.md) | Login propio con JWT para el panel | Aceptado | 2026-11-06 |
+| [0005](0005-agenda-choque-global-y-horarios-en-hora-argentina.md) | Agenda: choque global de turnos y horarios semanales en hora argentina | Aceptado | 2026-11-07 |

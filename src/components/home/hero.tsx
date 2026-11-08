@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import { HeroName } from './hero-name';
 import { HeroPhoto } from './hero-photo';
 import { HeroPhraseClosing, HeroPhraseOpening } from './hero-phrase';
+import { ScrollHint } from './scroll-hint';
 
 export function Hero(): ReactElement {
   return (
@@ -14,6 +15,7 @@ export function Hero(): ReactElement {
         <HeroPhoto />
         <HeroPhraseOpening />
         <HeroPhraseClosing />
+        <ScrollHint tone='onDark' />
       </div>
     </section>
   );

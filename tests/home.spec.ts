@@ -58,4 +58,28 @@ test.describe('home', () => {
     expect(fitsSeventyFive).toBe(false);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
+
+  test('US-19: "Dónde atiendo" muestra las ubicaciones activas con sus horarios y las obras sociales', async ({ page }) => {
+    await page.goto('/');
+    const section = page.locator('#sucursales');
+    await section.scrollIntoViewIfNeeded();
+    await expect(section.getByRole('heading', { level: 2 })).toHaveText('Dónde atiendo');
+    await expect(section.getByRole('heading', { name: 'Consultorio de ejemplo' })).toBeVisible();
+    await expect(section.getByRole('heading', { name: 'Online de ejemplo' })).toBeVisible();
+    await expect(section.getByRole('table', { name: 'Días y horarios de Consultorio de ejemplo' })).toContainText('09:00 a 13:00');
+    await expect(section.getByText('Particular', { exact: true })).toBeVisible();
+    await expect(section.getByText('meet.example.test')).toHaveCount(0);
+  });
+
+  test('una flecha sutil abajo a la derecha avisa que se puede bajar, sin tapar el botón de reserva', async ({ page }) => {
+    await page.goto('/');
+    const hints = page.locator('[data-scroll-hint]');
+    await expect(hints).toHaveCount(2);
+    await expect(page.locator('[data-hero-frame] [data-scroll-hint]')).toBeVisible();
+    await expect(page.locator('#sobre-mi [data-scroll-hint]')).toHaveCount(1);
+    await expect(page.locator('#sucursales [data-scroll-hint]')).toHaveCount(0);
+    const [hint, button] = await Promise.all([hints.first().boundingBox(), page.getByRole('link', { name: 'Reservá tu turno' }).boundingBox()]);
+    const apart = !hint || !button || hint.x >= button.x + button.width || hint.x + hint.width <= button.x || hint.y >= button.y + button.height || hint.y + hint.height <= button.y;
+    expect(apart).toBe(true);
+  });
 });

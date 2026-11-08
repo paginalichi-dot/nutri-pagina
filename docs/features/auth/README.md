@@ -40,7 +40,7 @@ Actions). Toda action del panel de cualquier feature empieza con `await requireA
 ## Pantallas
 
 - `/admin/login`: tarjeta de login (`DESIGN.md`, panel admin). Con sesión válida lleva a `/admin`.
-- `/admin`: título "Panel" y "Cerrar sesión". El layout `(panel)` llama a `guardAdminPage()`.
+- `/admin`: la agenda (feature `agenda`). El layout `(panel)` llama a `guardAdminPage()` y muestra el menú del panel (T-4): sidebar Verde Bosque desde 768px y barra inferior debajo; "Cerrar sesión" va al pie de la sidebar y, en mobile, dentro de "Mi cuenta".
 - `src/app/forbidden.tsx`: "Acceso denegado" con la píldora Verde Lima "Volver al inicio".
 
 ## Errores

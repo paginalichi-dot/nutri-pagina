@@ -19,7 +19,7 @@ test.describe('movimiento de la home', () => {
     await page.evaluate(() => window.scrollTo({ top: window.innerHeight * 0.6, behavior: 'instant' }));
     await expect.poll(async () => (await transformOf(page, hero)).scale).toBeLessThan(0.99);
     await expect.poll(() => page.locator(hero).evaluate((element) => Number(getComputedStyle(element).opacity))).toBeLessThan(1);
-    await page.evaluate(() => window.scrollTo({ top: document.getElementById('sobre-mi')?.offsetTop ?? 0, behavior: 'instant' }));
+    await page.evaluate(() => window.scrollTo({ top: (document.getElementById('sobre-mi')?.getBoundingClientRect().top ?? 0) + window.scrollY, behavior: 'instant' }));
     const onTop = (): Promise<boolean> =>
       page.evaluate(() => Boolean(document.elementFromPoint(innerWidth / 2, innerHeight / 2)?.closest('#sobre-mi')));
     await expect.poll(onTop).toBe(true);
