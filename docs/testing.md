@@ -22,10 +22,11 @@ Herramientas: Vitest para unit, tipos, contrato, fuzz, integración y componente
 
 ### Cómo se arma un test de contrato
 
-Una Server Action depende de `next/headers` (cookies), de la sesión de Supabase y de los repositorios. En el test
+Una Server Action depende de `next/headers` (cookies), de la sesión (cookie con JWT) y de los repositorios. En el test
 de contrato:
 
-- La sesión del admin se simula con un helper de `src/test/` (se crea en T-3, junto con el login). `next/headers`
+- La sesión del admin se arma con `signSession` y `cookieJar.set('session', token)`; el repositorio se reemplaza por el
+  fake con `vi.mock(…, fakeRepositoryModule)` y `next/navigation` con `navigationMock` (`features/auth/testing/module-mocks.ts`). `next/headers`
   está simulado para todos los tests por `src/test/setup/next-headers.setup.ts`, que además limpia cookies, spies y
   variables después de cada test.
 - En el proyecto unit, `src/test/setup/no-database.setup.ts` reemplaza `@/lib/db` por un objeto que falla al
@@ -154,3 +155,10 @@ Reintentos: 0 en local y 1 en el CI. Un test que pasa al segundo intento es ines
 
 Fuera de la cobertura: `prisma/`, `src/generated/`, `src/app/`, `src/proxy.ts`, `src/lib/db/index.ts`,
 `src/lib/db/transaction.ts`, los repositorios (se prueban con integración) y los helpers de test.
+
+### Movimiento
+
+- Los componentes de `src/components/motion/` (Lenis y GSAP) sólo corren en un navegador real: quedan fuera de la
+  cobertura unitaria (`vitest.config.mts`) y los cubre `tests/motion.spec.ts`, con `reducedMotion: 'no-preference'`.
+- El resto de los E2E corre con `reducedMotion: 'reduce'` (`playwright.config.ts`): sin animaciones, son
+  deterministas.

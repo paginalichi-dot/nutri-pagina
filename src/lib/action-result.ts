@@ -7,3 +7,7 @@ export type ActionResult<T = void> = (T extends void ? { success: true; data?: T
 export function fail(code: ErrorCode, entity?: string): ActionFailure {
   return { success: false, code, error: errorMessage(code, entity) };
 }
+
+export function failValidation(message: string | undefined): ActionFailure {
+  return { success: false, code: 'VALIDATION', error: message ?? errorMessage('VALIDATION') };
+}

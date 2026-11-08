@@ -1,0 +1,39 @@
+:root {
+  --intro-box-w: min(80vw, 440px);
+  --intro-box-h: 120px;
+}
+
+.motion-pending [data-intro] {
+  opacity: 0;
+}
+
+:root:is(.motion-pending, [data-intro-state='playing']) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+:root:is(.motion-pending, [data-intro-state='playing']) [data-reveal-mask] {
+  clip-path: inset(
+    calc(50svh - var(--intro-box-h) / 2) calc(50% - var(--intro-box-w) / 2)
+      calc(100% - 50svh - var(--intro-box-h) / 2) round 25px
+  );
+}
+
+[data-preloader] {
+  display: none;
+}
+
+:root:is(.motion-pending, [data-intro-state='playing']) [data-preloader] {
+  display: grid;
+}
+
+@keyframes intro-name-in {
+  from {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+}
+
+[data-preloader-name] {
+  animation: intro-name-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards;
+}

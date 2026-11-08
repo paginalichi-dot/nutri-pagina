@@ -29,7 +29,7 @@ Antes de planificar, el agente le hace al dev (y el dev se hace) estas preguntas
 la US, en `docs/features/` o en `docs/requerimientos/specs.md` **se pregunta, no se inventa**.
 
 **Actores y permisos**
-- ¿Quién ejecuta la acción: un paciente sin cuenta o [Nombre] desde el panel? ¿Qué pasa si la intenta alguien sin sesión?
+- ¿Quién ejecuta la acción: un paciente sin cuenta o Lisandro desde el panel? ¿Qué pasa si la intenta alguien sin sesión?
 - ¿Hay restricción de pertenencia?
 
 **Datos**

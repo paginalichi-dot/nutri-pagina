@@ -1,41 +1,53 @@
 # Prompt inicial: contexto completo de pagina-lichi
 
-> Foto del proyecto al **2026-11-06**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
+> Foto del proyecto al **2026-11-07**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
 
 ## 1. Quién sos y con quién trabajás
 
 Sos el agente de desarrollo de este repo. Trabajás con **Tomás (el dev)**, que interpreta, decide y aprueba. El
-cliente es **[Nombre]**, Licenciado en Nutrición recién recibido, amigo del dev. Sólo el dev habla con él.
+cliente es **Lisandro López**, Licenciado en Nutrición (Universidad Favaloro) recién recibido, amigo del dev. Sólo el dev habla con él.
 
 Idioma: docs, commits y UI en español de Argentina, con voseo; código en inglés.
 
 ## 2. El producto
 
-Web profesional de [Nombre] con tres objetivos:
+Web profesional de Lisandro con tres objetivos:
 
 1. **Presentarlo** y generar confianza en pacientes nuevos (home, sobre mí, servicios, preguntas frecuentes).
 2. **Mostrar sus sucursales**: dirección, mapa, días y horarios de cada consultorio.
-3. **Gestionar turnos**: los pacientes reservan online **sin crear cuenta**; [Nombre] administra la agenda desde
+3. **Gestionar turnos**: los pacientes reservan online **sin crear cuenta**; Lisandro administra la agenda desde
    un panel privado (`/admin`).
 
 Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios profesionales.
 
 ## 3. Estado actual del repo
 
-- Next.js 16 creado con `create-next-app`, movido a `src/`. La home es un placeholder.
+- Next.js 16 creado con `create-next-app`, movido a `src/`.
 - Base técnica copiada y adaptada de *gestor-empanaderia* (T-1, ADR 0001): `AGENTS.md`, `docs/`, ESLint con
   reglas duras, lefthook, commitlint, CI, Vitest, Stryker, Playwright y las skills propias.
-- Prisma 7 configurado (`prisma/schema.prisma`, `prisma.config.ts`) **sin modelos todavía**.
+- Prisma 7 configurado (`prisma/schema.prisma`, `prisma.config.ts`) con un solo modelo, `AdminUser` (T-3).
 - `src/lib/`: catálogo de errores, `ActionResult`, `db-errors`, `format-date-time`, `database-config`, cliente
   Prisma y `withTransaction`.
-- `src/proxy.ts` cierra `/admin` hasta que exista el login (T-3).
-- `DESIGN.md` define la identidad visual, pero los tokens todavía no están en `globals.css` (T-2).
-- Sin commits. Sin `develop`. Sin despliegue.
+- Login del panel (T-3): JWT propio en la cookie `session`, sesión permanente, cuenta de prueba con `npm run db:seed`.
+  `/admin/**` sin sesión muestra "Acceso denegado" (`noindex`); el login vive en `/admin/login`. Primera tabla: `admin_user`.
+- "Mi cuenta" (US-5): en `/admin/cuenta` el admin cambia su email y su contraseña; cada cambio cierra las demás sesiones.
+- Tokens de `DESIGN.md` en `src/app/tokens.css` (T-2): colores, radios, sombras y Manrope; shadcn/ui inicializado
+  sin componentes todavía. ESLint rechaza colores hex en el código.
+- `main` sólo tiene el primer commit; todo lo demás está en `develop`, publicado en GitHub
+  (`paginalichi-dot/nutri-pagina`). `main` no se toca hasta que el dev revise el Sprint 1. Sin despliegue.
+- Sprint 1 hecho en `develop` (en revisión):
+  - Hero según el wireframe del dev (US-1 y US-6): «LISANDRO LÓPEZ» en gigante, la foto tapando la base del nombre y
+    la frase del cliente a los costados.
+  - "Sobre mí" con placeholder de foto (US-2) y botón flotante "Reservá tu turno" hacia `/reservar` ("Próximamente",
+    US-4).
+  - Movimiento con Lenis + GSAP (US-3), intro de marca (US-7: una caja con «Lic. Lisandro López» que se expande
+    hasta ser el hero) y scroll con profundidad (US-8: cada sección se aleja al fondo y la siguiente la tapa). Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
+- Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
 
 ## 4. Stack
 
 Next.js 16 (App Router, Cache Components) · React 19 · TypeScript `strict` · Tailwind CSS v4 + shadcn/ui ·
-Zod 4 · Prisma 7 + PostgreSQL (Docker en local, Supabase en producción) · Supabase Auth (sólo el panel) ·
+Zod 4 · Prisma 7 + PostgreSQL (Docker en local, Supabase en producción) · login propio con JWT (`jose`, sólo el panel) ·
 Vercel · Vitest 5 · Testing Library · fast-check · Stryker · Playwright.
 
 ## 5. Arquitectura en un minuto
@@ -96,8 +108,8 @@ npm run verify
 
 | Término | Significa |
 |---|---|
-| Sucursal | Consultorio donde atiende [Nombre], con su dirección y sus horarios. |
+| Sucursal | Consultorio donde atiende Lisandro, con su dirección y sus horarios. |
 | Servicio | Tipo de consulta (primera consulta, seguimiento, etc.), con su duración. |
 | Disponibilidad | Horarios libres que se ofrecen para reservar. |
-| Bloqueo | Franja que [Nombre] cierra a mano (vacaciones, un trámite). |
+| Bloqueo | Franja que Lisandro cierra a mano (vacaciones, un trámite). |
 | Turno | Reserva de un paciente para un servicio, en una sucursal, a una hora. |

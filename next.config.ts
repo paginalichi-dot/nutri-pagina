@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || '.next',
   experimental: {
     agentFeedback: true,
+    authInterrupts: true,
   },
   cacheComponents: true,
   partialPrefetching: true,

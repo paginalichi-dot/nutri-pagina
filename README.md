@@ -1,6 +1,6 @@
-# [Nombre] · Nutrición
+# Lisandro López · Nutrición
 
-Web profesional y sistema de turnos de [Nombre], Licenciado en Nutrición.
+Web profesional y sistema de turnos de Lisandro López, Licenciado en Nutrición.
 
 - Reglas para agentes y humanos: [`AGENTS.md`](AGENTS.md)
 - Identidad visual: [`DESIGN.md`](DESIGN.md)

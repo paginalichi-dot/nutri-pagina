@@ -37,7 +37,7 @@ feat/us-3-…  ── (merge --squash local)──▶  develop  ── "chore(re
    git branch -D feat/us-3-…     # -D: el squash no marca la rama como mergeada
    ```
 
-2. **Cerrar el sprint.** Antes de mostrarle el avance a [Nombre], con el OK del dev:
+2. **Cerrar el sprint.** Antes de mostrarle el avance a Lisandro, con el OK del dev:
 
    ```bash
    git switch main && git pull
