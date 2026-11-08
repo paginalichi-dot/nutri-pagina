@@ -107,8 +107,8 @@ integra con merge squash local, con el OK del dev (ver [`docs/git.md`](docs/git.
 | Tamaño       | M           |
 | Depende de   | —           |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | c0586db |
+| Horas reales | ≈ 1 h 40 min (estimadas) |
 
 **Historia**: Como dev quiero el flujo, las reglas y los gates de gestor-empanaderia en este repo, de forma que
 los agentes trabajen igual desde el primer commit.
@@ -127,14 +127,14 @@ los agentes trabajen igual desde el primer commit.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | S         |
 | Depende de   | T-1       |
 | Plan         | [`docs/plans/T-2-tokens-design.md`](docs/plans/T-2-tokens-design.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | 8f12c49 |
+| Horas reales | ≈ 1 h 5 min (estimadas) |
 
 **Historia**: Como dev quiero la paleta, la tipografía (Manrope) y los radios de `DESIGN.md` como tokens, de forma
 que ningún componente use colores hardcodeados.
@@ -151,14 +151,14 @@ que ningún componente use colores hardcodeados.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | L         |
 | Depende de   | T-1       |
 | Plan         | [`docs/plans/T-3-login-panel.md`](docs/plans/T-3-login-panel.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | 592746c |
+| Horas reales | ≈ 4 h 50 min (estimadas) |
 
 **Historia**: Como Lisandro quiero entrar a un panel privado, de forma que sólo yo administre los turnos.
 
@@ -190,14 +190,14 @@ login se mudó a `/login`, el mismo para todos.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | M         |
 | Depende de   | T-3       |
 | Plan         | [`docs/plans/US-5-cuenta-admin.md`](docs/plans/US-5-cuenta-admin.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | b92f084 |
+| Horas reales | ≈ 2 h 10 min (estimadas) |
 
 **Historia**: Como admin quiero cambiar mi email y mi contraseña desde el panel, de forma que la cuenta de prueba
 pase a ser mía sin tocar la base a mano.
@@ -231,14 +231,14 @@ contacto por WhatsApp. Se cargan como `US-N` después del descubrimiento (`docs/
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | M         |
 | Depende de   | T-2       |
 | Plan         | [`docs/plans/US-1-hero.md`](docs/plans/US-1-hero.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | a617593 |
+| Horas reales | ≈ 2 h 35 min (estimadas) |
 
 **Historia**: Como paciente que entra a la web quiero ver a Lisandro y leer su frase sobre la alimentación, de
 forma que entienda de entrada cómo trabaja.
@@ -273,14 +273,14 @@ el selector de sucursal, que llega con la US de sucursales.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | S         |
 | Depende de   | T-2       |
 | Plan         | [`docs/plans/US-2-sobre-mi.md`](docs/plans/US-2-sobre-mi.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | 18a348b |
+| Horas reales | ≈ 1 h 15 min (estimadas) |
 
 **Historia**: Como paciente que baja por la home quiero leer quién es Lisandro y cómo trabaja, de forma que
 confíe en él antes de pedir un turno.
@@ -306,14 +306,14 @@ El texto es el del pedido, textual, con una sola corrección: «López» con til
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | L         |
 | Depende de   | US-6      |
 | Plan         | [`docs/plans/US-3-scroll-suave.md`](docs/plans/US-3-scroll-suave.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | abc2d32 |
+| Horas reales | ≈ 4 h (estimadas) |
 
 **Historia**: Como paciente que recorre la home quiero que el desplazamiento sea suave y que las cosas se desplieguen
 con efecto, de forma que la web sea agradable de mirar.
@@ -340,14 +340,14 @@ Los CA anteriores quedan reemplazados por estos.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | S         |
 | Depende de   | T-2       |
 | Plan         | [`docs/plans/US-4-boton-reserva.md`](docs/plans/US-4-boton-reserva.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | 296fe57 |
+| Horas reales | ≈ 1 h 40 min (estimadas) |
 
 **Historia**: Como paciente quiero tener siempre a mano un botón para reservar, de forma que pueda pedir un turno
 en cualquier momento mientras recorro la home.
@@ -371,14 +371,14 @@ llegue la reserva, esa página pasa a ser el flujo de reserva y el botón no cam
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-06 |
 | Tamaño       | M         |
 | Depende de   | US-1, US-2, US-4 |
 | Plan         | [`docs/plans/US-6-hero-wireframe.md`](docs/plans/US-6-hero-wireframe.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | c17456b |
+| Horas reales | ≈ 2 h 55 min (estimadas) |
 
 **Historia**: Como paciente que entra a la web quiero un hero y un "Sobre mí" con presencia, de forma que la web se
 sienta profesional y propia de Lisandro.
@@ -406,14 +406,14 @@ cinta de temas y la matrícula.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-07 |
 | Tamaño       | M         |
 | Depende de   | US-3, US-6 |
 | Plan         | [`docs/plans/US-7-intro-de-marca.md`](docs/plans/US-7-intro-de-marca.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | d45aabc |
+| Horas reales | ≈ 3 h 20 min (estimadas) |
 
 **Historia**: Como paciente que entra a la web quiero una presentación breve de Lisandro antes de ver la home, de forma
 que la web se sienta cuidada y propia desde el primer segundo.
@@ -439,14 +439,14 @@ los bordes y la foto crece desde el centro.
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude    |
 | Inicio       | 2026-11-07 |
 | Tamaño       | M         |
 | Depende de   | US-3      |
 | Plan         | [`docs/plans/US-8-scroll-profundidad.md`](docs/plans/US-8-scroll-profundidad.md) |
-| Merge        | —         |
-| Horas reales | —         |
+| Merge        | a26a1f1 |
+| Horas reales | ≈ 2 h 5 min (estimadas) |
 
 **Historia**: Como paciente que recorre la home quiero que las secciones se sucedan como capas, de forma que el
 recorrido se sienta inmersivo y no un scroll plano.
@@ -492,8 +492,9 @@ Decisiones del dev:
 - **Avisos**: emails con Resend, enviados desde local (sin dominio, sólo llegan a la casilla dueña de la cuenta).
   Cuando Lisandro cancela o reprograma, además, un botón de WhatsApp (`wa.me`) con el mensaje armado.
 
-Antes de arrancar: cerrar el Sprint 1 (revisión del dev, merge a `main` y tag `sprint-1`, que cierra T-1 CA-4).
-**Pendiente**: el dev pidió arrancar igual (2026-11-07).
+Sprints 1 y 2 cerrados el 2026-11-08: merge a `main` con los tags `sprint-1` y `sprint-2`. Las horas reales son
+estimadas (suma de las estimaciones de cada criterio). Quedan abiertos T-1 CA-4 (el CI de GitHub todavía no corrió
+nunca) y T-5 CA-5 (el email de prueba con la clave real de Resend), que dependen del dev.
 
 Implementación: el dev pidió programar el sprint entero y revisarlo al final (2026-11-07), así que los ítems no
 tienen plan propio en `docs/plans/`: el plan es este encabezado más el
@@ -505,14 +506,14 @@ tienen plan propio en `docs/plans/`: el plan es este encabezado más el
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | S |
 | Depende de   | T-3 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 2 h 15 min (estimadas) |
 
 **Historia**: Como Lisandro quiero un menú fijo en el panel, de forma que pase de una sección a otra con un toque, en la compu y en el celular.
 
@@ -540,8 +541,8 @@ tienen plan propio en `docs/plans/`: el plan es este encabezado más el
 | Tamaño       | S |
 | Depende de   | T-1 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 2 h 25 min (estimadas) |
 
 **Historia**: Como dev quiero un único punto para mandar emails, de forma que los avisos de turnos salgan por Resend y los tests nunca manden un email real.
 
@@ -567,14 +568,14 @@ Sin dominio propio hasta el despliegue (Sprint 5): Resend sólo entrega a la cas
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | T-4 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 3 h 30 min (estimadas) |
 
 **Historia**: Como Lisandro quiero cargar los lugares donde atiendo (mis consultorios y la atención online), de forma que los pacientes sepan dónde y cómo es cada consulta.
 
@@ -590,7 +591,7 @@ Sin dominio propio hasta el despliegue (Sprint 5): Resend sólo entrega a la cas
 
 - [x] **CA-5** · Nombre repetido → `DUPLICATE`; dos ediciones a la vez → `STALE_VERSION`; datos inválidos → `VALIDATION` con el mensaje del campo · Estimación: 30 min · Completado: 2026-11-07 18:30
 
-- [ ] **CA-6** · Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 20 min · Completado: —
+- [x] **CA-6** · Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 20 min · Completado: 2026-11-08 23:36
 
 **Preguntas abiertas**
 
@@ -600,14 +601,14 @@ Sin dominio propio hasta el despliegue (Sprint 5): Resend sólo entrega a la cas
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | US-9 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 2 h 35 min (estimadas) |
 
 **Historia**: Como Lisandro quiero cargar qué días y en qué horarios atiendo en cada ubicación, de forma que sólo se ofrezcan turnos cuando realmente estoy.
 
@@ -629,14 +630,14 @@ Sin dominio propio hasta el despliegue (Sprint 5): Resend sólo entrega a la cas
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | S |
 | Depende de   | T-4 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 1 h 15 min (estimadas) |
 
 **Historia**: Como Lisandro quiero definir cuánto dura un turno, de forma que la agenda ofrezca horarios a la medida de mis consultas.
 
@@ -660,14 +661,14 @@ Supuesto a confirmar con Lisandro: el rango de 15 a 120 minutos.
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | S |
 | Depende de   | T-4 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 1 h 25 min (estimadas) |
 
 **Historia**: Como Lisandro quiero cargar las obras sociales con las que trabajo, de forma que sepa con qué viene cada paciente.
 
@@ -687,14 +688,14 @@ Supuesto a confirmar con Lisandro: el rango de 15 a 120 minutos.
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | US-9, US-12 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 3 h 10 min (estimadas) |
 
 **Historia**: Como dev quiero la tabla de turnos con sus reglas garantizadas por la base, de forma que nunca existan dos turnos que se pisen aunque se carguen a la vez.
 
@@ -712,14 +713,14 @@ Supuesto a confirmar con Lisandro: el rango de 15 a 120 minutos.
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | T-4, T-6 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 3 h 35 min (estimadas) |
 
 **Historia**: Como Lisandro quiero ver mis turnos por día y por semana, de forma que sepa a quién atiendo, dónde y cuándo.
 
@@ -743,14 +744,14 @@ Supuesto a confirmar con Lisandro: el rango de 15 a 120 minutos.
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | US-13 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 3 h 5 min (estimadas) |
 
 **Historia**: Como Lisandro quiero cerrar días u horarios puntuales (vacaciones, un trámite), de forma que nadie reserve cuando no voy a estar.
 
@@ -774,14 +775,14 @@ Cambio sobre `DESIGN.md`: el bloqueo es una página y no un modal, para que se u
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | US-10, US-11, US-14 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 3 h 10 min (estimadas) |
 
 **Historia**: Como Lisandro (y como paciente en el Sprint 4) quiero ver sólo horarios realmente libres, de forma que no se elija uno imposible.
 
@@ -801,14 +802,14 @@ Cambio sobre `DESIGN.md`: el bloqueo es una página y no un modal, para que se u
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | US-12, US-15, T-5 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 4 h 10 min (estimadas) |
 
 **Historia**: Como Lisandro quiero cargar un turno para un paciente que me escribió o me llamó, de forma que mi agenda tenga todo en un solo lugar.
 
@@ -834,14 +835,14 @@ Cambio sobre `DESIGN.md`: el bloqueo es una página y no un modal, para que se u
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | US-13, T-5 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 2 h 20 min (estimadas) |
 
 **Historia**: Como Lisandro quiero cancelar un turno y registrar si el paciente vino, de forma que el horario se libere y mi agenda refleje lo que pasó.
 
@@ -859,14 +860,14 @@ Cambio sobre `DESIGN.md`: el bloqueo es una página y no un modal, para que se u
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | US-17, US-15 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 2 h 40 min (estimadas) |
 
 **Historia**: Como Lisandro quiero mover un turno a otro horario, de forma que no tenga que cancelarlo y cargarlo de nuevo.
 
@@ -884,14 +885,14 @@ Cambio sobre `DESIGN.md`: el bloqueo es una página y no un modal, para que se u
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-07  |
 | Tamaño       | M |
 | Depende de   | US-10, US-12 |
 | Plan         | —           |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 9a016a5 |
+| Horas reales | ≈ 5 h (estimadas) |
 
 **Historia**: Como paciente quiero ver dónde atiende Lisandro, qué días y en qué horarios, de forma que elija la ubicación que me queda cómoda.
 
@@ -911,7 +912,7 @@ Fuera por ahora: «Reservar acá» (la reserva llega en el Sprint 4 y el botón 
 
 - [x] **CA-6** · Sin ubicaciones activas, la sección no se muestra · Estimación: 10 min · Completado: 2026-11-07 18:30
 
-- [ ] **CA-7** · Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 20 min · Completado: —
+- [x] **CA-7** · Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop · Estimación: 20 min · Completado: 2026-11-08 23:36
 
 - [x] **CA-8** · Cada sección ocupa al menos una pantalla y nunca se ven tres capas a la vez: la sección tapada del todo se oculta (bug encontrado por el dev en la revisión, 2026-11-07) · Estimación: 30 min · Completado: 2026-11-07 21:10
 
@@ -930,14 +931,14 @@ semanales, el bloqueo es la única forma de cerrar una fecha puntual) y un solo 
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-08  |
 | Tamaño       | S |
 | Depende de   | T-6, T-5 |
 | Plan         | [`docs/plans/sprint-2-iteracion-panel.md`](docs/plans/sprint-2-iteracion-panel.md) |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 4c497bf |
+| Horas reales | ≈ 1 h 20 min (estimadas) |
 
 **Historia**: Como Lisandro quiero confirmar un turno pendiente, de forma que el paciente sepa que lo espero.
 
@@ -956,14 +957,14 @@ Se adelanta del Sprint 4 porque el wireframe del panel tiene «Confirmar» en el
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-08  |
 | Tamaño       | L |
 | Depende de   | T-4, US-13, US-23 |
 | Plan         | [`docs/plans/sprint-2-iteracion-panel.md`](docs/plans/sprint-2-iteracion-panel.md) |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 4c497bf |
+| Horas reales | ≈ 8 h 10 min (estimadas) |
 
 **Historia**: Como Lisandro quiero abrir el panel y ver de un vistazo mi día, mi semana y mi próximo turno, de forma
 que organice mi trabajo sin buscar nada.
@@ -999,14 +1000,14 @@ el sitio público); se mantiene la vista semana.
 
 | Campo        | Valor       |
 | ------------ | ----------- |
-| Estado       | En revisión |
+| Estado       | Hecho |
 | Dueño        | Claude      |
 | Inicio       | 2026-11-08  |
 | Tamaño       | S |
 | Depende de   | T-3 |
 | Plan         | [`docs/plans/sprint-2-iteracion-panel.md`](docs/plans/sprint-2-iteracion-panel.md) |
-| Merge        | —           |
-| Horas reales | —           |
+| Merge        | 4c497bf |
+| Horas reales | ≈ 55 min (estimadas) |
 
 **Historia**: Como Lisandro quiero entrar por `/login`, de forma que no tenga que recordar una dirección escondida.
 
