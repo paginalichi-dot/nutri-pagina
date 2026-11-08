@@ -82,4 +82,17 @@ test.describe('home', () => {
     const apart = !hint || !button || hint.x >= button.x + button.width || hint.x + hint.width <= button.x || hint.y >= button.y + button.height || hint.y + hint.height <= button.y;
     expect(apart).toBe(true);
   });
+
+  test('en una notebook baja (1280×600) no hay scroll horizontal y el hero y «Sobre mí» entran en la pantalla', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Es un tamaño de notebook: sólo desktop');
+    await page.setViewportSize({ width: 1280, height: 600 });
+    await page.goto('/');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    const fits = await page.locator('[data-hero-frame]').evaluate((frame) => {
+      const box = frame.getBoundingClientRect();
+      return box.bottom <= innerHeight && [...frame.querySelectorAll('p')].every((phrase) => phrase.getBoundingClientRect().right <= box.right);
+    });
+    expect(fits).toBe(true);
+    expect(await page.locator('#sobre-mi').evaluate((section) => section.getBoundingClientRect().height <= innerHeight)).toBe(true);
+  });
 });

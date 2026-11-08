@@ -5,8 +5,9 @@ type DepthLayer = { layer: HTMLElement; next: Element; content: Element; hold?: 
 const hidden = (layer: HTMLElement, isHidden: boolean): void => void gsap.set(layer, { autoAlpha: isHidden ? 0 : 1 });
 
 export function depthScene({ layer, next, content, hold = 0 }: DepthLayer): gsap.core.Timeline {
-  // Por qué: la siguiente llega `hold` pantallas más tarde, y mientras tanto ésta queda fija y quieta.
-  if (hold > 0) gsap.set(next, { marginTop: `${hold * 100}svh` });
+  // Por qué: la pausa demora a la siguiente; si ésta no entra en pantalla, quedaría cortada arriba mientras dura.
+  const pause = layer.offsetHeight <= window.innerHeight + 1 ? hold : 0;
+  if (pause > 0) gsap.set(next, { marginTop: `${pause * 100}svh` });
   return gsap
     .timeline({
       defaults: { ease: 'none' },
@@ -23,5 +24,5 @@ export function depthScene({ layer, next, content, hold = 0 }: DepthLayer): gsap
         onEnterBack: () => hidden(layer, false),
       },
     })
-    .to(content, { scale: 0.9, autoAlpha: 0.5, transformOrigin: '50% 50%', duration: 1 }, hold);
+    .to(content, { scale: 0.9, autoAlpha: 0.5, transformOrigin: '50% 50%', duration: 1 }, pause);
 }

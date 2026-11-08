@@ -134,6 +134,11 @@ Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y r
   nombre (pedido del dev, 2026-11-07). Debajo de 1024px va en columna, debajo de la foto, a
   `clamp(1.25rem, 5.2vw, 1.875rem)`.
 - Sin garabatos, sin píldora del hero ni selector de sucursal: reservar es el botón flotante.
+- En notebooks bajas (p. ej. 1280×600) el marco baja hasta 520px y el nombre se limita también por alto
+  (`min(8.4vw, 8.5rem, 15svh)`); el ancho de la frase se mide sobre el marco (`cqw`), no sobre la ventana, para que
+  la barra de scroll no la empuje afuera. «Sobre mí» limita su arco y su padding al alto de la pantalla y, con la variante `short` (desktop de
+  hasta 760px de alto), achica títulos y texto para entrar entera; si igual no entra, no hace la pausa. El `body`
+  lleva `overflow-x: clip` como red contra cualquier desborde horizontal.
 
 ### Intro de marca (US-7)
 Al entrar o recargar la home (no al volver desde otra página del sitio) aparece una presentación breve, de unos 3.5 s:

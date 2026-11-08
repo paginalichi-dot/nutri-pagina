@@ -31,7 +31,8 @@ test.describe('profundidad entre secciones', () => {
     await expect.poll(heroShown).toBe('visible');
   });
 
-  test('"Sobre mí" queda quieto una pantalla y cuarto antes de que suba "Dónde atiendo"', async ({ page }) => {
+  test('"Sobre mí" queda quieto una pantalla y cuarto antes de que suba "Dónde atiendo"', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'En el celular "Sobre mí" no entra en la pantalla: scrollea normal, sin pausa');
     await page.goto('/');
     await introDone(page);
     const bottom = await page.evaluate(() => (document.getElementById('sobre-mi')?.getBoundingClientRect().bottom ?? 0) + window.scrollY);
