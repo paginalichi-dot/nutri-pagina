@@ -52,7 +52,7 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - Iteración del Sprint 2 (2026-11-08, rama `feat/sprint-2-iteracion-panel`): el panel según el wireframe del dev
   (`docs/wireframes/panel-administrador.png`: sidebar con «Pacientes» en «Próximamente», métricas, línea de horas,
   próximo turno y calendario; botones del panel con radio 12px), «Confirmar» un pendiente (US-23, adelantada del
-  Sprint 3) y un solo login en `/login` (US-27). Los bloqueos se quedan.
+  Sprint 4) y un solo login en `/login` (US-27). Los bloqueos se quedan.
 
 ## 4. Stack
 
@@ -79,10 +79,10 @@ mostradas en Argentina, cero datos personales en logs, sólo tokens de `DESIGN.m
   duración única para todos los turnos y una lista de obras sociales (más «Particular»). Sin tipos de consulta.
 - La disponibilidad sale de las franjas, la duración, los turnos activos y los bloqueos (globales). El paciente
   reserva con 12 h de anticipación como mínimo y hasta 60 días; el panel, desde ahora.
-- Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario. La reserva online (Sprint 3)
+- Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario. La reserva online (Sprint 4)
   nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado.
-- El paciente cancela o reprograma con el link del email hasta 24 h antes (Sprint 3). Emails con Resend; el
-  recordatorio y el dominio propio llegan con el despliegue (Sprint 4); la cuenta de pacientes, en el Sprint 5.
+- El paciente cancela o reprograma con el link del email hasta 24 h antes (Sprint 4). Emails con Resend; el
+  recordatorio y el dominio propio llegan con el despliegue (Sprint 5); la cuenta de pacientes, en el Sprint 3.
 
 ## 8. Cómo se trabaja
 

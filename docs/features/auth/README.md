@@ -5,7 +5,7 @@ Decisión de base: [ADR 0004](../../adr/0004-login-propio-con-jwt.md). Plan: [T-
 ## Qué hace
 
 - Todos entran por `/login` (US-27): hoy la única cuenta es la del admin, que va a `/admin`; cualquier otro email o
-  contraseña da `INVALID_CREDENTIALS`. Las cuentas de pacientes (Sprint 5) entrarán por la misma página. Se entra con email y contraseña. No hay registro público ni "olvidé mi contraseña".
+  contraseña da `INVALID_CREDENTIALS`. Las cuentas de pacientes (Sprint 3) entrarán por la misma página. Se entra con email y contraseña. No hay registro público ni "olvidé mi contraseña".
 - La sesión es un JWT HS256 (`jose`, `JWT_SECRET`) sin vencimiento, en la cookie `session` (`httpOnly`, `Secure`,
   `SameSite=Lax`, 400 días). El proxy la renueva en cada navegación real del navegador (`sec-fetch-dest: document`) a `/admin/**` y la borra si el token es inválido.
 - El token lleva `sub` (id del admin) y `sv` (`session_version`). `requireAdmin()` verifica la firma y compara

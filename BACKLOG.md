@@ -10,9 +10,9 @@
 - [Sprint 0 · Base técnica](#sprint-0--base-técnica)
 - [Sprint 1 · Sitio de presentación](#sprint-1--sitio-de-presentación)
 - [Sprint 2 · Lisandro maneja su agenda](#sprint-2--lisandro-maneja-su-agenda)
-- [Sprint 3 · El paciente reserva online](#sprint-3--el-paciente-reserva-online)
-- [Sprint 4 · Despliegue](#sprint-4--despliegue)
-- [Sprint 5 · Cuenta de pacientes](#sprint-5--cuenta-de-pacientes)
+- [Sprint 3 · Cuenta de pacientes](#sprint-3--cuenta-de-pacientes)
+- [Sprint 4 · El paciente reserva online](#sprint-4--el-paciente-reserva-online)
+- [Sprint 5 · Despliegue](#sprint-5--despliegue)
 
 ## Convenciones
 
@@ -222,7 +222,7 @@ descubrimiento:
 - El hero lleva el nombre en gigante detrás de la foto; la frase del cliente va más chica, en las
   esquinas que pidió (arriba a la izquierda y abajo a la derecha).
 - El scroll suave y la aparición de secciones se hacen con CSS y APIs nativas del navegador, sin librerías.
-- Hasta que exista la reserva online (Sprint 2), el botón "Reservá tu turno" lleva a una página "Próximamente".
+- Hasta que exista la reserva online (Sprint 4), el botón "Reservá tu turno" lleva a una página "Próximamente".
 
 Quedan por definir con Lisandro, más adelante: servicios, sucursales con mapa, preguntas frecuentes, footer y
 contacto por WhatsApp. Se cargan como `US-N` después del descubrimiento (`docs/workflow.md` §0).
@@ -352,7 +352,7 @@ Los CA anteriores quedan reemplazados por estos.
 **Historia**: Como paciente quiero tener siempre a mano un botón para reservar, de forma que pueda pedir un turno
 en cualquier momento mientras recorro la home.
 
-Hasta que exista la reserva online (Sprint 2), el botón lleva a `/reservar`, que muestra "Próximamente". Cuando
+Hasta que exista la reserva online (Sprint 4), el botón lleva a `/reservar`, que muestra "Próximamente". Cuando
 llegue la reserva, esa página pasa a ser el flujo de reserva y el botón no cambia.
 
 **Criterios de aceptación**
@@ -474,7 +474,7 @@ Origen: pedido del dev (2026-11-07).
 ## Sprint 2 · Lisandro maneja su agenda
 
 Origen: descubrimiento con el dev (2026-11-07). Los turnos se parten en dos sprints, por actor: en este, Lisandro
-arma y maneja su agenda desde el panel; en el Sprint 3, el paciente reserva online.
+arma y maneja su agenda desde el panel; en el Sprint 4, el paciente reserva online.
 
 Decisiones del dev:
 
@@ -545,7 +545,7 @@ tienen plan propio en `docs/plans/`: el plan es este encabezado más el
 
 **Historia**: Como dev quiero un único punto para mandar emails, de forma que los avisos de turnos salgan por Resend y los tests nunca manden un email real.
 
-Sin dominio propio hasta el despliegue (Sprint 4): Resend sólo entrega a la casilla dueña de la cuenta.
+Sin dominio propio hasta el despliegue (Sprint 5): Resend sólo entrega a la casilla dueña de la cuenta.
 
 **Criterios de aceptación**
 
@@ -783,7 +783,7 @@ Cambio sobre `DESIGN.md`: el bloqueo es una página y no un modal, para que se u
 | Merge        | —           |
 | Horas reales | —           |
 
-**Historia**: Como Lisandro (y como paciente en el Sprint 3) quiero ver sólo horarios realmente libres, de forma que no se elija uno imposible.
+**Historia**: Como Lisandro (y como paciente en el Sprint 4) quiero ver sólo horarios realmente libres, de forma que no se elija uno imposible.
 
 **Criterios de aceptación**
 
@@ -795,7 +795,7 @@ Cambio sobre `DESIGN.md`: el bloqueo es una página y no un modal, para que se u
 
 - [x] **CA-4** · Se calcula en hora argentina y viaja en UTC: tests de cruce de medianoche y de día sin franjas · Estimación: 40 min · Completado: 2026-11-07 18:30
 
-- [x] **CA-5** · Una ubicación desactivada o inexistente no ofrece horarios; la lectura pública llega con la reserva (Sprint 3) · Estimación: 20 min · Completado: 2026-11-07 18:30
+- [x] **CA-5** · Una ubicación desactivada o inexistente no ofrece horarios; la lectura pública llega con la reserva (Sprint 4) · Estimación: 20 min · Completado: 2026-11-07 18:30
 
 ### US-16 · Lisandro carga un turno a mano
 
@@ -895,7 +895,7 @@ Cambio sobre `DESIGN.md`: el bloqueo es una página y no un modal, para que se u
 
 **Historia**: Como paciente quiero ver dónde atiende Lisandro, qué días y en qué horarios, de forma que elija la ubicación que me queda cómoda.
 
-Fuera por ahora: «Reservar acá» (la reserva llega en el Sprint 3 y el botón flotante es la única píldora Verde Lima de la home). El botón flotante pasa a ser lo primero del `<main>` para que siga siendo el primer foco con Tab.
+Fuera por ahora: «Reservar acá» (la reserva llega en el Sprint 4 y el botón flotante es la única píldora Verde Lima de la home). El botón flotante pasa a ser lo primero del `<main>` para que siga siendo el primer foco con Tab.
 
 **Criterios de aceptación**
 
@@ -941,7 +941,7 @@ semanales, el bloqueo es la única forma de cerrar una fecha puntual) y un solo 
 
 **Historia**: Como Lisandro quiero confirmar un turno pendiente, de forma que el paciente sepa que lo espero.
 
-Se adelanta del Sprint 3 porque el wireframe del panel tiene «Confirmar» en el próximo turno (decisión del dev,
+Se adelanta del Sprint 4 porque el wireframe del panel tiene «Confirmar» en el próximo turno (decisión del dev,
 2026-11-08). Hasta que llegue la reserva online, los únicos pendientes son los del seed de tests.
 
 **Criterios de aceptación**
@@ -1011,7 +1011,7 @@ el sitio público); se mantiene la vista semana.
 **Historia**: Como Lisandro quiero entrar por `/login`, de forma que no tenga que recordar una dirección escondida.
 
 Decisión del dev (2026-11-08): todos entran por el mismo `/login` y la cuenta decide a dónde van. Hoy sólo existe la
-del admin; cualquier otro email o contraseña da `INVALID_CREDENTIALS`. Las cuentas de pacientes (Sprint 5) entrarán
+del admin; cualquier otro email o contraseña da `INVALID_CREDENTIALS`. Las cuentas de pacientes (Sprint 3) entrarán
 por la misma página e irán a la home. Todavía no hay links al login: se entra escribiendo la dirección.
 
 **Criterios de aceptación**
@@ -1022,23 +1022,28 @@ por la misma página e irán a la home. Todavía no hay links al login: se entra
 
 - [x] **CA-3** · `/login` no se indexa (`noindex`) y «Acceso denegado» sigue sin link al login · Estimación: 10 min · Completado: 2026-11-08 13:11
 
-## Sprint 3 · El paciente reserva online
+Orden de los sprints 3 a 5 decidido por el dev (2026-11-08): primero el login de pacientes, después la reserva
+online y al final el despliegue.
 
-A definir ítem por ítem cuando el dev confirme el Sprint 2. Previstos: T-7 protección de acciones públicas (rate
-limiting + honeypot), US-20 política de privacidad, US-21 reserva online (nace pendiente), US-22 emails de la
-reserva («Recibimos tu solicitud» y aviso a Lisandro), US-24 el paciente cancela con el link, US-25 el paciente
-reprograma con el link (vuelve a pendiente). US-23 (Lisandro confirma un pendiente) se adelantó al Sprint 2.
+## Sprint 3 · Cuenta de pacientes
 
-## Sprint 4 · Despliegue
+A definir ítem por ítem cuando el dev confirme el Sprint 2. Previsto: login de pacientes con link mágico por email,
+en el mismo `/login` (US-27), con un ADR (hoy se reserva sin cuenta).
+
+## Sprint 4 · El paciente reserva online
+
+Previstos: T-7 protección de acciones públicas (rate limiting + honeypot), US-20 política de privacidad, US-21
+reserva online (nace pendiente), US-22 emails de la reserva («Recibimos tu solicitud» y aviso a Lisandro), US-24 el
+paciente cancela con el link, US-25 el paciente reprograma con el link (vuelve a pendiente). US-23 (Lisandro
+confirma un pendiente) se adelantó al Sprint 2.
+
+## Sprint 5 · Despliegue
 
 Previstos: despliegue (Vercel + Supabase + dominio verificado en Resend + admin de producción) y recordatorio por
 email 24 h antes (cron).
 
-## Sprint 5 · Cuenta de pacientes
-
-Previsto: login de pacientes con link mágico por email, con un ADR (hoy se reserva sin cuenta).
-
 **Preguntas abiertas de los sprints 2 a 5**
 
 - Ubicaciones reales, horarios, duración de la consulta, obras sociales y link de videollamada (los carga Lisandro).
+- Con la cuenta de pacientes antes que la reserva: ¿reservar va a pedir cuenta o se sigue pudiendo sin cuenta, como hoy?
 - Revisión de la política de privacidad y cuánto tiempo se guardan los datos de los pacientes (Ley 25.326).

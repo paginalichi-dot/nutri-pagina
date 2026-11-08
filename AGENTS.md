@@ -62,7 +62,7 @@ Detalle completo en `docs/features/agenda/README.md`, `docs/features/location/RE
 - **Disponibilidad.** Se calcula a partir de las franjas semanales de cada ubicación (hora argentina), una duración única para todos los turnos, los turnos activos y los bloqueos. Es lógica de `service` (`availableSlots`), con tests de nivel 3.
 - **Límites de reserva.** El paciente no puede reservar en el pasado ni con menos de 12 horas ⇒ `SLOT_TOO_SOON`, ni a más de 60 días. Lisandro, desde el panel, puede cargar turnos desde ahora.
 - **Estados.** `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`, y `CANCELADO` desde `PENDIENTE` o `CONFIRMADO` (en el código: `PENDING`, `CONFIRMED`, `ATTENDED`, `NO_SHOW`, `CANCELLED`). La reserva online nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado. Un turno cancelado libera el horario.
-- **Gestión por el paciente (Sprint 3).** Con el link del email de solicitud cancela o reprograma hasta 24 h antes (el turno reprogramado vuelve a pendiente). El link no cambia nada con un GET. No requiere cuenta.
+- **Gestión por el paciente (Sprint 4).** Con el link del email de solicitud cancela o reprograma hasta 24 h antes (el turno reprogramado vuelve a pendiente). El link no cambia nada con un GET. No requiere cuenta.
 - **Acciones públicas (sin sesión).** Solo estas: leer ubicaciones, horarios, obras sociales y disponibilidad; crear una reserva; gestionar un turno con token (cancelar o reprogramar); iniciar sesión en el panel (`login`). Llevan rate limiting (el login, bloqueo por intentos) y honeypot.
 
 ## Datos personales

@@ -9,11 +9,11 @@ a mano), US-17 (cancelar y asistencia), US-18 (reprogramar), US-23 (confirmar) y
   paciente (nombre, teléfono, email opcional, obra social opcional = Particular). Dos turnos no cancelados nunca se
   pisan, en ninguna ubicación (`EXCLUDE`); si chocan ⇒ `SLOT_TAKEN`.
 - **Estados**: `PENDING → CONFIRMED → ATTENDED | NO_SHOW`, y `CANCELLED` desde `PENDING` o `CONFIRMED`
-  (`canTransition`). En la UI: Pendiente, Confirmado, Asistió, Ausente, Cancelado. La reserva online (Sprint 3) nace
+  (`canTransition`). En la UI: Pendiente, Confirmado, Asistió, Ausente, Cancelado. La reserva online (Sprint 4) nace
   pendiente; el turno que carga Lisandro nace confirmado.
 - **Disponibilidad** (`availableSlots`, función pura): las franjas del día de la ubicación, cortadas en pasos de la
   duración desde el inicio de cada franja (un turno que no entra entero no se ofrece), menos los turnos activos de
-  cualquier ubicación y los bloqueos. El panel ofrece desde ahora; el paciente (Sprint 3), desde 12 h. Ambos hasta 60
+  cualquier ubicación y los bloqueos. El panel ofrece desde ahora; el paciente (Sprint 4), desde 12 h. Ambos hasta 60
   días. Todo se calcula en hora argentina y viaja en UTC.
 - **Turno a mano**: Lisandro elige ubicación, día y horario libre (sin el límite de 12 h) y carga nombre, teléfono,
   email opcional y obra social. Si el email ya tiene un turno por venir, avisa pero guarda. Con email, el paciente

@@ -11,7 +11,7 @@ Una sola aplicación **Next.js 16 (App Router)** con dos caras:
 
 | Cara | Rutas | Quién la usa | Cómo renderiza |
 |---|---|---|---|
-| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/login` (el mismo para todos), `/turno/[token]` (Sprint 3) | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
+| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/login` (el mismo para todos), `/turno/[token]` (Sprint 4) | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
 | Panel | `/admin/**` (agenda, turnos, bloqueos, pacientes, ubicaciones, ajustes, cuenta) | Lisandro (único admin), con login propio (JWT) | Server Components que leen con `guardAdminPage`; formularios Client Components + Server Actions |
 
 **Estilo arquitectónico.** En ejecución es cliente-servidor; en despliegue, un monolito modular. El código se
