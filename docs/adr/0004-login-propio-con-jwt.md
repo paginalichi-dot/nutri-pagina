@@ -1,6 +1,6 @@
 # 0004 — Login propio con JWT para el panel
 
-- **Estado**: Aceptado (2026-11-06) · Reemplaza a la parte de autenticación de [0003](0003-prisma-y-supabase-auth.md)
+- **Estado**: Aceptado (2026-11-06) · Reemplaza a la parte de autenticación de [0003](0003-prisma-y-supabase-auth.md) · [0006](0006-cuentas-de-pacientes-con-email-y-contrasena.md) lo amplía a admin y pacientes
 
 ## Contexto
 

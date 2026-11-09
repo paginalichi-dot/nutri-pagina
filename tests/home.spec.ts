@@ -71,11 +71,11 @@ test.describe('home', () => {
     await expect(section.getByText('meet.example.test')).toHaveCount(0);
   });
 
-  test('una flecha sutil abajo a la derecha avisa que se puede bajar, sin tapar el botón de reserva', async ({ page }) => {
+  test('una flecha junto a la frase avisa que se puede bajar, sin tapar el botón de reserva', async ({ page }) => {
     await page.goto('/');
-    const hints = page.locator('[data-scroll-hint]');
+    const hints = page.locator('[data-scroll-hint]:visible');
     await expect(hints).toHaveCount(2);
-    await expect(page.locator('[data-hero-frame] [data-scroll-hint]')).toBeVisible();
+    await expect(page.locator('[data-hero-frame] [data-scroll-hint]:visible')).toHaveCount(1);
     await expect(page.locator('#sobre-mi [data-scroll-hint]')).toHaveCount(1);
     await expect(page.locator('#sucursales [data-scroll-hint]')).toHaveCount(0);
     const [hint, button] = await Promise.all([hints.first().boundingBox(), page.getByRole('link', { name: 'Reservá tu turno' }).boundingBox()]);

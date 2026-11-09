@@ -10,7 +10,7 @@ export async function signedInAdmin(): Promise<{ id: string; token: string }> {
   await adminRepository.upsertAdmin({ email: TEST_ADMIN.email, passwordHash: await (hash ??= hashPassword(TEST_ADMIN.password)) });
   const admin = await adminRepository.findCredentialsByEmail(TEST_ADMIN.email);
   const id = admin?.id ?? '';
-  const token = await signSession({ adminId: id, sessionVersion: admin?.sessionVersion ?? 1 });
+  const token = await signSession({ subjectId: id, sessionVersion: admin?.sessionVersion ?? 1, role: 'admin' });
   cookieJar.set('session', token);
   return { id, token };
 }

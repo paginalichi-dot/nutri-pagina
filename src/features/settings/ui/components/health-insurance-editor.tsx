@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import type { ReactElement } from 'react';
 import { ActionButton } from '@/components/form/action-button';
-import { FormFeedback, INPUT, SubmitButton } from '@/components/form/form-parts';
+import { DARK_BUTTON, FormFeedback, INPUT, SubmitButton } from '@/components/form/form-parts';
 import { createHealthInsurance, renameHealthInsurance, setHealthInsuranceActive } from '../../actions/settings-changes';
 import type { HealthInsuranceRow } from '../../domain/settings.schema';
 
@@ -16,7 +16,9 @@ function AddForm(): ReactElement {
           Nueva obra social
           <input name='name' required maxLength={60} className={INPUT} />
         </label>
-        <SubmitButton pending={pending} idle='Agregar' busy='Agregando…' secondary />
+        <button type='submit' disabled={pending} className={DARK_BUTTON}>
+          {pending ? 'Agregando…' : 'Agregar'}
+        </button>
       </div>
       <FormFeedback state={state} />
     </form>
@@ -32,7 +34,7 @@ function Row({ row }: { row: HealthInsuranceRow }): ReactElement {
         <input type='hidden' name='version' value={row.version} />
         <div className='flex flex-col gap-3 sm:flex-row'>
           <input name='name' aria-label='Nombre' defaultValue={row.name} required maxLength={60} className={`${INPUT} ${row.active ? '' : 'line-through'}`} />
-          <SubmitButton pending={pending} idle='Guardar' busy='Guardando…' secondary />
+          <SubmitButton pending={pending} idle='Guardar' busy='Guardando…' />
         </div>
         <FormFeedback state={state} />
       </form>
@@ -41,6 +43,7 @@ function Row({ row }: { row: HealthInsuranceRow }): ReactElement {
         fields={{ id: row.id, version: String(row.version), active: String(!row.active) }}
         label={row.active ? 'Desactivar' : 'Reactivar'}
         busy='Guardando…'
+        tone={row.active ? 'danger' : 'secondary'}
       />
     </li>
   );

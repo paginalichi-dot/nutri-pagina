@@ -5,6 +5,8 @@ export const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 foc
 export const INPUT =
   'h-12 w-full rounded-control bg-secondary px-5 text-base text-foreground focus-visible:shadow-[0_0_0_6px_var(--primary)] focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-foreground';
 export const SECONDARY_BUTTON = `hover-shade flex h-11 items-center justify-center gap-2 rounded-control bg-secondary px-5 text-[15px] font-semibold text-secondary-foreground disabled:opacity-70 ${FOCUS}`;
+export const DANGER_BUTTON = `hover-shade flex h-11 items-center justify-center gap-2 rounded-control bg-destructive px-5 text-[15px] font-semibold text-background disabled:opacity-70 ${FOCUS}`;
+export const DARK_BUTTON = `hover-shade hover-shade-on-dark flex h-11 items-center justify-center gap-2 rounded-control bg-foreground px-5 text-[15px] font-semibold text-background disabled:opacity-70 ${FOCUS}`;
 export const PRIMARY_BUTTON = `hover-shade flex h-11 items-center justify-center gap-2 rounded-control bg-primary px-5 text-[15px] font-semibold text-primary-foreground disabled:opacity-70 ${FOCUS}`;
 
 type FieldProps = {

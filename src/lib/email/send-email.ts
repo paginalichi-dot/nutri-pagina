@@ -1,3 +1,4 @@
+import { createFileOutbox } from './file-outbox';
 export type EmailAttachment = { filename: string; content: string };
 
 export type EmailMessage = { to: string; subject: string; html: string; text: string; attachments?: EmailAttachment[] };
@@ -35,6 +36,10 @@ export function createResendSender({ apiKey, from, fetcher = fetch }: ResendConf
 }
 
 export function emailSenderFromEnv(env: Readonly<Record<string, string | undefined>>): EmailSender {
+  if (env.EMAIL_OUTBOX_DIR) {
+    if (env.APP_ENV === 'production') throw new Error('EMAIL_OUTBOX_DIR no se puede usar en producción.');
+    return createFileOutbox(env.EMAIL_OUTBOX_DIR);
+  }
   const apiKey = env.RESEND_API_KEY;
   if (!apiKey) {
     return async () => {

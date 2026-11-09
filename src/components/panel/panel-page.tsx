@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactElement, ReactNode } from 'react';
 
@@ -9,8 +10,9 @@ export function PanelPage({ title, lead, back, actions, children }: PanelPagePro
       {back ? (
         <Link
           href={back.href}
-          className='self-start text-[15px] font-semibold underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
+          className='hover-shade flex h-11 items-center gap-2 self-start rounded-control border border-muted-foreground bg-background pr-5 pl-3 text-[16px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
         >
+          <ArrowLeft aria-hidden='true' className='size-5' strokeWidth={2.75} />
           {back.label}
         </Link>
       ) : null}

@@ -1,7 +1,14 @@
 import { expect, type Page } from '@playwright/test';
 import { TEST_ADMIN } from '../../src/features/auth/testing/test-admin';
 
+const randomIp = (): string => `198.51.100.${Math.floor(Math.random() * 250) + 1}`;
+
+export async function freshClient(page: Page): Promise<void> {
+  await page.setExtraHTTPHeaders({ 'x-forwarded-for': `${randomIp()}, ${Date.now() % 255}.0.0.1` });
+}
+
 export async function signIn(page: Page, credentials: { email: string; password: string } = TEST_ADMIN): Promise<void> {
+  await freshClient(page);
   await page.goto('/login');
   await page.getByLabel('Email').fill(credentials.email);
   await page.getByLabel('Contraseña').fill(credentials.password);

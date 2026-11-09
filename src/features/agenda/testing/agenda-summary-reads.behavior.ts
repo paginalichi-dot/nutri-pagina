@@ -33,5 +33,14 @@ export function agendaSummaryReadsBehavior(name: string, setup: () => Promise<Ag
       await fixture.repository.createAppointment(aNewAppointment(centro, { ...rangeAt('2026-11-10T12:00:00.000Z'), patientPhone: '11 3333-3333' }));
       await expect(fixture.repository.listContactsBefore(new Date('2026-11-10T03:00:00Z'))).resolves.toEqual([{ phone: '11 1111-1111', email: null }]);
     });
+
+    it('US-31 CA-1: los turnos de un email salen ordenados y nunca los de otro', async () => {
+      const later = await fixture.repository.createAppointment(aNewAppointment(centro, { ...rangeAt('2026-11-10T12:00:00.000Z'), patientEmail: 'ana@ejemplo.test' }));
+      const first = await fixture.repository.createAppointment(aNewAppointment(centro, { patientEmail: 'ana@ejemplo.test' }));
+      await fixture.repository.createAppointment(aNewAppointment(centro, { ...rangeAt('2026-11-09T15:00:00.000Z'), patientEmail: 'otra@ejemplo.test' }));
+      const mine = await fixture.repository.listByPatientEmail('ana@ejemplo.test');
+      expect(mine.map(({ id }) => id)).toEqual([first, later]);
+      expect(mine[0]).toMatchObject({ place: { address: 'Calle Falsa 123' } });
+    });
   });
 }

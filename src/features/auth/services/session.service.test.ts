@@ -19,22 +19,27 @@ describe('sessionService.authenticate', () => {
   });
 
   it('con un token adulterado da UNAUTHENTICATED', async () => {
-    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 2 });
+    const token = await signSession({ subjectId: ADMIN_ID, sessionVersion: 2, role: 'admin' });
     await expect(service.authenticate(`${token}x`)).rejects.toMatchObject({ code: 'UNAUTHENTICATED' });
   });
 
+  it('T-8 CA-3: una sesión de paciente da UNAUTHENTICATED, aunque el id coincida', async () => {
+    const token = await signSession({ subjectId: ADMIN_ID, sessionVersion: 2, role: 'patient' });
+    await expect(service.authenticate(token)).rejects.toMatchObject({ code: 'UNAUTHENTICATED' });
+  });
+
   it('si el admin ya no existe da UNAUTHENTICATED', async () => {
-    const token = await signSession({ adminId: '00000000-0000-4000-8000-000000000000', sessionVersion: 2 });
+    const token = await signSession({ subjectId: '00000000-0000-4000-8000-000000000000', sessionVersion: 2, role: 'admin' });
     await expect(service.authenticate(token)).rejects.toMatchObject({ code: 'UNAUTHENTICATED' });
   });
 
   it('si la versión de sesión cambió (sesión cerrada) da SESSION_EXPIRED', async () => {
-    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
+    const token = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'admin' });
     await expect(service.authenticate(token)).rejects.toMatchObject({ code: 'SESSION_EXPIRED' });
   });
 
   it('con un token vigente devuelve el admin', async () => {
-    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 2 });
+    const token = await signSession({ subjectId: ADMIN_ID, sessionVersion: 2, role: 'admin' });
     await expect(service.authenticate(token)).resolves.toEqual({ adminId: ADMIN_ID, sessionVersion: 2 });
   });
 });

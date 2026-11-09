@@ -63,13 +63,15 @@ Detalle completo en `docs/features/agenda/README.md`, `docs/features/location/RE
 - **Límites de reserva.** El paciente no puede reservar en el pasado ni con menos de 12 horas ⇒ `SLOT_TOO_SOON`, ni a más de 60 días. Lisandro, desde el panel, puede cargar turnos desde ahora.
 - **Estados.** `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`, y `CANCELADO` desde `PENDIENTE` o `CONFIRMADO` (en el código: `PENDING`, `CONFIRMED`, `ATTENDED`, `NO_SHOW`, `CANCELLED`). La reserva online nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado. Un turno cancelado libera el horario.
 - **Gestión por el paciente (Sprint 4).** Con el link del email de solicitud cancela o reprograma hasta 24 h antes (el turno reprogramado vuelve a pendiente). El link no cambia nada con un GET. No requiere cuenta.
-- **Acciones públicas (sin sesión).** Solo estas: leer ubicaciones, horarios, obras sociales y disponibilidad; crear una reserva; gestionar un turno con token (cancelar o reprogramar); iniciar sesión en el panel (`login`). Llevan rate limiting (el login, bloqueo por intentos) y honeypot.
+- **Acciones públicas (sin sesión).** Solo estas: leer ubicaciones, horarios, obras sociales y disponibilidad; crear una reserva; gestionar un turno con token (cancelar o reprogramar); iniciar sesión (`login`, admin y pacientes); registrarse y reenviar la activación; pedir el link para restablecer la contraseña; y usar un link de un solo uso (activar la cuenta, restablecer la contraseña, confirmar un email nuevo). Llevan límite de intentos por IP y por email (`guardPublicAction`, T-7), honeypot y, el login, bloqueo por intentos.
+- **Cuentas de pacientes (Sprint 3, ADR 0006).** Email y contraseña por el mismo `/login`; el email se verifica antes de poder entrar; la sesión lleva el rol (`admin` o `patient`) y el proxy exige el de cada zona. Registro, reenvío y «olvidé» responden siempre lo mismo, exista o no el email. Los links de los emails no cambian nada con un GET.
 
 ## Datos personales
 
 Esta web maneja datos de pacientes en un contexto de salud (Ley 25.326).
 
 - Se piden solo los datos necesarios para el turno: nombre, email, teléfono y obra social opcional (en un turno que carga Lisandro, el email también es opcional). Nada de historia clínica.
+- La cuenta de paciente guarda nombre, email, teléfono, el hash de la contraseña y la fecha del consentimiento. El paciente la puede borrar desde «Mi espacio»; sus turnos quedan en la agenda de Lisandro.
 - **Cero datos personales en logs**, errores, reportes de tests o analytics. Los errores inesperados se loguean sólo con nombre y código (`src/lib/db-errors.ts`).
 - El formulario de reserva lleva consentimiento explícito y un link a la política de privacidad.
 - Los seeds y tests usan solo datos ficticios.

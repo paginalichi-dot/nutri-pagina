@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { type ReactElement, Suspense } from 'react';
 import { About } from '@/components/home/about';
 import { FloatingBookingButton } from '@/components/home/floating-booking-button';
 import { Hero } from '@/components/home/hero';
@@ -9,6 +9,8 @@ import { SmoothScroll } from '@/components/motion/smooth-scroll';
 import { getPublicLocations } from '@/features/location/actions/location-queries';
 import { LocationsSection } from '@/features/location/ui/components/locations-section';
 import { getActiveHealthInsurances } from '@/features/settings/actions/settings-queries';
+import { AccountMenu } from '@/features/patient/ui/components/account-menu';
+import { AccountStatus } from '@/features/patient/ui/components/account-status';
 
 export default async function Home(): Promise<ReactElement> {
   const [locations, insurances] = await Promise.all([getPublicLocations(), getActiveHealthInsurances()]);
@@ -19,7 +21,13 @@ export default async function Home(): Promise<ReactElement> {
         <SmoothScroll />
         <FloatingBookingButton />
         <HeroMotion>
-          <Hero />
+          <Hero
+            account={
+              <Suspense fallback={<AccountMenu viewer={null} />}>
+                <AccountStatus />
+              </Suspense>
+            }
+          />
         </HeroMotion>
         <AboutMotion>
           <About />

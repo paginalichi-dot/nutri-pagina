@@ -11,7 +11,8 @@ Una sola aplicación **Next.js 16 (App Router)** con dos caras:
 
 | Cara | Rutas | Quién la usa | Cómo renderiza |
 |---|---|---|---|
-| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/login` (el mismo para todos), `/turno/[token]` (Sprint 4) | Pacientes, sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
+| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/login` (el mismo para todos), `/registro`, `/recuperar`, `/verificar/[token]`, `/restablecer/[token]`, `/confirmar-email/[token]`, `/privacidad`, `/turno/[token]` (Sprint 4) | Pacientes, con o sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
+| Mi espacio | `/mi-espacio` (Sprint 3, ADR 0006) | Pacientes con cuenta verificada (rol `patient` en la sesión) | Server Component que lee con `guardPatientPage`; formularios Client Components + Server Actions |
 | Panel | `/admin/**` (agenda, turnos, bloqueos, pacientes, ubicaciones, ajustes, cuenta) | Lisandro (único admin), con login propio (JWT) | Server Components que leen con `guardAdminPage`; formularios Client Components + Server Actions |
 
 **Estilo arquitectónico.** En ejecución es cliente-servidor; en despliegue, un monolito modular. El código se
@@ -68,7 +69,7 @@ ui (src/app, features/*/ui) → actions → services → repository → db
 |---|---|---|
 | `src/app/**` | `features/*/ui`, `features/*/actions`, `features/*/domain`, `components/`, `hooks/`, `config/`, `lib/utils` | `repository`, `services`, `@/lib/db`, `@/generated/prisma` |
 | `features/<f>/ui` | `domain` y `actions` de cualquier feature, `components/`, `hooks/`, `config/` | `repository`, `services`, `@/lib/db` |
-| `features/<f>/actions` | `services` propios, `requireAdmin` de `features/auth/actions/require-admin` (ADR 0004), `domain`, `lib/auth`, `lib/errors`, `lib/action-result` | `repository`, `@/lib/db`, `ui` |
+| `features/<f>/actions` | `services` propios, `requireAdmin` de `features/auth/actions/require-admin` (ADR 0004), `requirePatient` / `guardPatientPage` de `features/patient/actions/require-patient` y `guardPublicAction` de `features/rate-limit` (ADR 0006), `domain`, `lib/auth`, `lib/errors`, `lib/action-result` | `repository`, `@/lib/db`, `ui` |
 | `features/<f>/services` | `repository` propio y, si la operación los abarca, de otros features; `domain`, `lib/errors`, `@/lib/db/transaction` | `actions`, `ui`, `next/*` |
 | `features/<f>/repository` | `@/lib/db`, `@/generated/prisma`, tipos de `domain`, `lib/errors` | `services`, `actions`, `next/*` |
 | `features/<f>/domain` | `zod` | `@/lib/db`, `@/generated/prisma`, `repository`, `next/*` |

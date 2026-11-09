@@ -10,6 +10,7 @@
   --secondary: #f2f3f4;
   --secondary-foreground: #1f3d2b;
   --muted: #f6f5ef;
+  --panel: #ece9df;
   --muted-foreground: #666666;
   --accent: #f6f5ef;
   --accent-foreground: #1f3d2b;
@@ -41,6 +42,7 @@
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
+  --color-panel: var(--panel);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);

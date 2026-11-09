@@ -3,9 +3,7 @@ import type { ReactElement } from 'react';
 import type { AgendaSummary } from '../../domain/appointment.schema';
 
 const MINUS = '−';
-const hoursFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 1 });
-
-export const formatHours = (minutes: number): string => hoursFormat.format(minutes / 60);
+export const formatHours = (minutes: number): string => `${Math.floor(minutes / 60)}:${String(Math.round(minutes % 60)).padStart(2, '0')}`;
 
 const signed = (value: number): string => (value > 0 ? `+${value}` : `${MINUS}${-value}`);
 

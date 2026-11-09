@@ -28,7 +28,7 @@ test.describe('panel: ajustes y ubicaciones', () => {
     await page.goto('/admin/ubicaciones/nueva');
     await page.getByLabel('Nombre').fill(name);
     await page.getByLabel('Dirección').fill('Calle E2E 456');
-    await page.getByRole('button', { name: 'Guardar ubicación' }).click();
+    await page.getByRole('button', { name: 'Guardar consultorio' }).click();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(name);
 
     const hours = page.getByRole('form', { name: 'Agregar una franja' });

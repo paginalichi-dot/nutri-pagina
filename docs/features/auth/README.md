@@ -4,17 +4,22 @@ Decisión de base: [ADR 0004](../../adr/0004-login-propio-con-jwt.md). Plan: [T-
 
 ## Qué hace
 
-- Todos entran por `/login` (US-27): hoy la única cuenta es la del admin, que va a `/admin`; cualquier otro email o
-  contraseña da `INVALID_CREDENTIALS`. Las cuentas de pacientes (Sprint 3) entrarán por la misma página. Se entra con email y contraseña. No hay registro público ni "olvidé mi contraseña".
+- Todos entran por `/login` (US-27, US-29): el servicio busca el email en `admin_user` y en `patient` (gana el admin)
+  y siempre compara un solo `scrypt`. El admin va a `/admin` y el paciente a `/mi-espacio`; un paciente sin activar
+  recibe `EMAIL_NOT_VERIFIED` sólo si la contraseña es correcta. Registro y «olvidé mi contraseña» son del feature
+  [`patient`](../patient/README.md) (ADR 0006); el admin no tiene ni registro ni «olvidé».
 - La sesión es un JWT HS256 (`jose`, `JWT_SECRET`) sin vencimiento, en la cookie `session` (`httpOnly`, `Secure`,
-  `SameSite=Lax`, 400 días). El proxy la renueva en cada navegación real del navegador (`sec-fetch-dest: document`) a `/admin/**` y la borra si el token es inválido.
-- El token lleva `sub` (id del admin) y `sv` (`session_version`). `requireAdmin()` verifica la firma y compara
+  `SameSite=Lax`, 400 días). El proxy la renueva en cada navegación real del navegador (`sec-fetch-dest: document`) a `/admin/**` o a `/mi-espacio/**` y la borra si el token es inválido.
+- El token lleva `sub` (id de la cuenta), `sv` (`session_version`) y `r` (rol: `admin` o `patient`; sin `r` es admin,
+  como los tokens anteriores al Sprint 3). El proxy exige el rol de cada zona (`/admin/**` admin, `/mi-espacio/**`
+  paciente) y `requireAdmin` rechaza la sesión de un paciente. `requireAdmin()` verifica la firma y compara
   `sv` con la base: si no coincide, la sesión está cerrada (`SESSION_EXPIRED`). Cambiar email o contraseña (US-5)
   incrementa la `session_version` y cierra las demás sesiones.
 - Cualquiera que entre a `/admin` o `/admin/**` sin una sesión válida ve "Acceso denegado" (`noindex`; responde 200, ver "Riesgos" en el plan). Ningún
   link lleva al login. Una sesión cerrada desde otro dispositivo vuelve a `/login`.
 - Las contraseñas se guardan con `scrypt` (`node:crypto`, sal de 16 bytes) y se comparan con `timingSafeEqual`. Un
-  email inexistente se compara contra un hash de relleno, para que tarde lo mismo.
+  email inexistente se compara contra un hash de relleno, para que tarde lo mismo. El intento fallido de un email
+  con cuenta se guarda con `after()`, después de responder: si no, esa escritura de más lo delataría.
 - 5 intentos fallidos seguidos bloquean el login 15 minutos. El contador vive en la fila del admin
   (`failed_attempts`, `locked_until`) y vuelve a cero con un login correcto o cuando vence el bloqueo.
 - La cuenta de prueba la crea `npm run db:seed` (datos ficticios en `src/features/auth/testing/test-admin.ts`). El
@@ -32,7 +37,7 @@ Decisión de base: [ADR 0004](../../adr/0004-login-propio-con-jwt.md). Plan: [T-
 
 | Action | Entrada | Salida | Pública |
 |---|---|---|---|
-| `login` (`actions/login.ts`) | `FormData`: `email`, `password`, `website` (honeypot vacío) | `ActionResult`; si sale bien, cookie + `redirect('/admin')` | Sí (honeypot + bloqueo por intentos) |
+| `login` (`actions/login.ts`) | `FormData`: `email`, `password`, `website` (honeypot vacío) | `ActionResult`; si sale bien, cookie + `redirect` a `/admin` o `/mi-espacio` según el rol | Sí (honeypot, 20 intentos cada 15 min por IP y bloqueo por cuenta) |
 | `logout` (`actions/logout.ts`) | — | borra la cookie + `redirect('/login')` | — |
 
 `requireAdmin()`, `hasAdminSession()` y `guardAdminPage()` viven en `actions/require-admin.ts` (no son Server

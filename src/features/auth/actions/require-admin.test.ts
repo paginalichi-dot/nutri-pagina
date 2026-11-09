@@ -12,7 +12,7 @@ vi.mock('../repository/admin.repository', async () => (await import('../testing/
 
 async function adminToken(sessionVersion = 1): Promise<string> {
   const admin = await adminRepository.findCredentialsByEmail(TEST_ADMIN.email);
-  return signSession({ adminId: admin?.id ?? '', sessionVersion });
+  return signSession({ subjectId: admin?.id ?? '', sessionVersion, role: 'admin' });
 }
 
 describe('sesión del panel (contrato)', () => {

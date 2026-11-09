@@ -47,6 +47,8 @@ function fakeReads(state: FakeState): Omit<AgendaRepository, keyof ReturnType<ty
       const row = active().find((candidate) => candidate.patientEmail === email && candidate.startsAt > now);
       return row ? { startsAt: row.startsAt, endsAt: row.endsAt } : null;
     },
+    listByPatientEmail: async (email) =>
+      [...state.appointments.values()].filter((row) => row.patientEmail === email).sort((a, b) => +a.startsAt - +b.startsAt).map((row) => detail(state, row)),
     countActiveAppointments: async (range) => active().filter((row) => overlaps(row, range)).length,
     listBlocks: async (range) => [...state.blocks.values()].filter((row) => overlaps(row, range)).map((row) => ({ ...row })),
   };

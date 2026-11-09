@@ -34,6 +34,7 @@ export type AgendaRepository = {
   listContactsBefore(before: Date): Promise<PatientContact[]>;
   getSlotMinutes(): Promise<number | null>;
   findActiveByEmail(email: string, now: Date): Promise<TimeRange | null>;
+  listByPatientEmail(email: string): Promise<AppointmentDetail[]>;
   countActiveAppointments(range: TimeRange): Promise<number>;
   listBlocks(range: TimeRange): Promise<BlockRow[]>;
   createAppointment(data: NewAppointment): Promise<string>;

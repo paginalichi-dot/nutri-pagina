@@ -2,7 +2,7 @@ import { addDays, argentinaInstant } from '@/lib/argentina-time';
 import { emailSenderFromEnv } from '@/lib/email/send-email';
 import { AppError } from '@/lib/errors';
 import type { RecordRef } from '@/lib/record-ref';
-import type { AgendaSummary, AgendaView, AppointmentDetail } from '../domain/appointment.schema';
+import { ACTIVE_STATUSES, type AgendaSummary, type AgendaView, type AppointmentDetail, type MyAppointments } from '../domain/appointment.schema';
 import type { BlockInput } from '../domain/block.schema';
 import type { SlotQuery } from '../domain/booking.schema';
 import { agendaRepository } from '../repository/agenda.repository';
@@ -14,11 +14,19 @@ import { mustFind, slotsFor } from './slot-check';
 export type AgendaService = AppointmentCommands & {
   agenda(day: string, days: number): Promise<AgendaView>;
   summary(): Promise<AgendaSummary>;
+  mine(email: string): Promise<MyAppointments>;
   appointment(id: string): Promise<AppointmentDetail>;
   slots(query: SlotQuery, scope: AvailabilityScope, ignoreId?: string | null): Promise<Date[]>;
   createBlock(input: BlockInput): Promise<void>;
   deleteBlock(ref: RecordRef): Promise<void>;
 };
+
+const isActive = ({ status }: AppointmentDetail): boolean => ACTIVE_STATUSES.some((active) => active === status);
+
+function splitMine(rows: AppointmentDetail[], now: Date): MyAppointments {
+  const upcoming = rows.filter((row) => row.startsAt >= now && isActive(row));
+  return { upcoming, past: rows.filter((row) => !upcoming.includes(row)).reverse() };
+}
 
 export function createAgendaService(dependencies: AgendaDependencies): AgendaService {
   const { repository, clock } = dependencies;
@@ -30,6 +38,7 @@ export function createAgendaService(dependencies: AgendaDependencies): AgendaSer
       return { appointments, blocks };
     },
     summary: () => agendaSummary(repository, clock()),
+    mine: async (email) => splitMine(await repository.listByPatientEmail(email), clock()),
     appointment: (id) => mustFind(repository, id),
     slots: async ({ locationId, day }, scope, ignoreId = null) => (await slotsFor(repository, { locationId, day, scope, now: clock(), ignoreId })).slots,
     createBlock: (input) =>

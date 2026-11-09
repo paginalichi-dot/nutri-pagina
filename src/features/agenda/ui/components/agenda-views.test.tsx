@@ -46,8 +46,8 @@ describe('DayTimeline (US-26 CA-4)', () => {
   it('ubica cada turno según su hora: el de las 9:00 queda una hora debajo de las 8:00', () => {
     render(<DayTimeline day='2026-11-09' view={VIEW} />);
     const first = within(screen.getByRole('list', { name: 'Turnos del día' })).getAllByRole('listitem').at(1);
-    expect(first?.style.top).toBe('64px');
-    expect(first?.style.height).toBe('48px');
+    expect(first?.style.top).toBe('54px');
+    expect(first?.style.height).toBe('40.5px');
   });
 
   it('US-13 CA-7: un día sin turnos lo dice', () => {

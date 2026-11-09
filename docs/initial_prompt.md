@@ -1,6 +1,6 @@
 # Prompt inicial: contexto completo de pagina-lichi
 
-> Foto del proyecto al **2026-11-08**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
+> Foto del proyecto al **2026-11-09**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
 
 ## 1. Quién sos y con quién trabajás
 
@@ -15,8 +15,8 @@ Web profesional de Lisandro con tres objetivos:
 
 1. **Presentarlo** y generar confianza en pacientes nuevos (home, sobre mí, servicios, preguntas frecuentes).
 2. **Mostrar sus sucursales**: dirección, mapa, días y horarios de cada consultorio.
-3. **Gestionar turnos**: los pacientes reservan online **sin crear cuenta**; Lisandro administra la agenda desde
-   un panel privado (`/admin`).
+3. **Gestionar turnos**: los pacientes reservan online **sin crear cuenta** (Sprint 4); si quieren, se registran
+   para ver sus turnos en «Mi espacio» (Sprint 3). Lisandro administra la agenda desde un panel privado (`/admin`).
 
 Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios profesionales.
 
@@ -25,7 +25,9 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - Next.js 16 creado con `create-next-app`, movido a `src/`.
 - Base técnica copiada y adaptada de *gestor-empanaderia* (T-1, ADR 0001): `AGENTS.md`, `docs/`, ESLint con
   reglas duras, lefthook, commitlint, CI, Vitest, Stryker, Playwright y las skills propias.
-- Prisma 7 configurado (`prisma/schema.prisma`, `prisma.config.ts`) con un solo modelo, `AdminUser` (T-3).
+- Prisma 7 configurado (`prisma/schema.prisma`, `prisma.config.ts`). Modelos: `AdminUser` (T-3); `Location`,
+  `WeeklyHours`, `AgendaSettings`, `HealthInsurance`, `Appointment` y `TimeBlock` (Sprint 2); `Patient`,
+  `PatientToken` y `RateLimit` (Sprint 3).
 - `src/lib/`: catálogo de errores, `ActionResult`, `db-errors`, `format-date-time`, `database-config`, cliente
   Prisma y `withTransaction`.
 - Login del panel (T-3): JWT propio en la cookie `session`, sesión permanente, cuenta de prueba con `npm run db:seed`.
@@ -34,9 +36,9 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - "Mi cuenta" (US-5): en `/admin/cuenta` el admin cambia su email y su contraseña; cada cambio cierra las demás sesiones.
 - Tokens de `DESIGN.md` en `src/app/tokens.css` (T-2): colores, radios, sombras y Manrope; shadcn/ui inicializado
   sin componentes todavía. ESLint rechaza colores hex en el código.
-- `main` sólo tiene el primer commit; todo lo demás está en `develop`, publicado en GitHub
-  (`paginalichi-dot/nutri-pagina`). `main` no se toca hasta que el dev revise el Sprint 1. Sin despliegue.
-- Sprint 1 hecho en `develop` (en revisión):
+- `develop` y `main` publicados en GitHub (`paginalichi-dot/nutri-pagina`). `main` tiene los Sprints 1 y 2, con
+  los tags `sprint-1` y `sprint-2`. Sin despliegue.
+- Sprint 1 cerrado (`Hecho`, tag `sprint-1`):
   - Hero según el wireframe del dev (US-1 y US-6): «LISANDRO LÓPEZ» en gigante, la foto tapando la base del nombre y
     la frase del cliente a los costados.
   - "Sobre mí" con placeholder de foto (US-2) y botón flotante "Reservá tu turno" hacia `/reservar` ("Próximamente",
@@ -44,7 +46,7 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   - Movimiento con Lenis + GSAP (US-3), intro de marca (US-7: una caja con «Lic. Lisandro López» que se expande
     hasta ser el hero) y scroll con profundidad (US-8: cada sección se aleja al fondo y la siguiente la tapa). Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
 - Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
-- Sprint 2 («Lisandro maneja su agenda») integrado en `develop`, en revisión del dev: menú del panel, ubicaciones con
+- Sprint 2 («Lisandro maneja su agenda») cerrado (`Hecho`, tag `sprint-2`): menú del panel, ubicaciones con
   horarios semanales, duración y obras sociales, agenda día y semana, bloqueos, disponibilidad, turnos cargados a
   mano (cancelar, asistencia, reprogramar) con email por Resend y WhatsApp (`wa.me`), y «Dónde atiendo» en la home.
   Features nuevos: `location`, `settings` y `agenda`
@@ -53,11 +55,22 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   (`docs/wireframes/panel-administrador.png`: sidebar con «Pacientes» en «Próximamente», métricas, línea de horas,
   próximo turno y calendario; botones del panel con radio 12px), «Confirmar» un pendiente (US-23, adelantada del
   Sprint 4) y un solo login en `/login` (US-27). Los bloqueos se quedan.
+- Sprint 3 («Cuenta de pacientes», rama `feat/sprint-3-cuenta-pacientes`, sin commitear al 2026-11-09):
+  - cuentas de pacientes con email y contraseña, por el mismo `/login`, con el rol en la sesión
+    ([ADR 0006](adr/0006-cuentas-de-pacientes-con-email-y-contrasena.md));
+  - registro con consentimiento, activación por email, «olvidé mi contraseña» y «Mi espacio» (`/mi-espacio`):
+    turnos, datos, contraseña, email y baja;
+  - límite de intentos en las acciones públicas (T-7) y política de privacidad (`/privacidad`, US-20);
+  - diseño: login partido con la luz Verde Lima, ícono de cuenta en el hero, líneas a mano y la flecha para bajar
+    en su nuevo lugar.
+  Features nuevos: `patient` y `rate-limit`. Con `EMAIL_OUTBOX_DIR` (sólo fuera de producción) los emails se
+  escriben en una carpeta en vez de mandarse; los E2E lo usan.
 
 ## 4. Stack
 
 Next.js 16 (App Router, Cache Components) · React 19 · TypeScript `strict` · Tailwind CSS v4 + shadcn/ui ·
-Zod 4 · Prisma 7 + PostgreSQL (Docker en local, Supabase en producción) · login propio con JWT (`jose`, sólo el panel) ·
+Zod 4 · Prisma 7 + PostgreSQL (Docker en local, Supabase en producción) · login propio con JWT (`jose`, admin y
+pacientes, con el rol en la sesión) ·
 Vercel · Vitest 5 · Testing Library · fast-check · Stryker · Playwright.
 
 ## 5. Arquitectura en un minuto
@@ -82,7 +95,9 @@ mostradas en Argentina, cero datos personales en logs, sólo tokens de `DESIGN.m
 - Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario. La reserva online (Sprint 4)
   nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado.
 - El paciente cancela o reprograma con el link del email hasta 24 h antes (Sprint 4). Emails con Resend; el
-  recordatorio y el dominio propio llegan con el despliegue (Sprint 5); la cuenta de pacientes, en el Sprint 3.
+  recordatorio y el dominio propio llegan con el despliegue (Sprint 5).
+- Cuenta de pacientes (Sprint 3, ADR 0006): optativa. «Mis turnos» muestra los turnos cuyo email coincide con el
+  de la cuenta.
 
 ## 8. Cómo se trabaja
 

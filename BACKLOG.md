@@ -1028,15 +1028,372 @@ online y al final el despliegue.
 
 ## Sprint 3 · Cuenta de pacientes
 
-A definir ítem por ítem cuando el dev confirme el Sprint 2. Previsto: login de pacientes con link mágico por email,
-en el mismo `/login` (US-27), con un ADR (hoy se reserva sin cuenta).
+Origen: descubrimiento con el dev (2026-11-08), sobre los wireframes `login.png`, `hero-animado.png`,
+`cuenta-1.png`, `cuenta-2.png` y `cambio-de-lugar-flecha(-mobile).png`. Plan único del sprint:
+[`docs/plans/sprint-3-cuenta-pacientes.md`](docs/plans/sprint-3-cuenta-pacientes.md); decisión de arquitectura:
+[ADR 0006](docs/adr/0006-cuentas-de-pacientes-con-email-y-contrasena.md).
+
+Decisiones del dev:
+
+- **Ingreso**: sólo email y contraseña (sin Google), por el mismo `/login` que Lisandro.
+- **Alta**: registro libre con consentimiento y política de privacidad; el email se verifica con un link y sin
+  verificar no se entra.
+- **Mi espacio**: próximos turnos y anteriores (los de su email) y sus datos, contraseña, email y baja. Nunca
+  historia clínica. «Pacientes» del panel sigue en «Próximamente».
+- **Olvidé mi contraseña**: link de 1 h y un solo uso.
+- **Diseño**: login según `login.png` (sin Google, textos de Lisandro), luz verde que respira, ícono de cuenta en el
+  hero, líneas a mano que se dibujan al terminar la intro y la flecha para bajar junto a la frase de apertura
+  (desktop). Los ajustes finos que pidió el dev durante el sprint están en `DESIGN.md` y en los criterios.
+- T-7 y US-20 suben del Sprint 4 porque el registro es una acción pública con datos personales.
+
+Implementación: como en el Sprint 2, el sprint entero de una y la revisión al final, en un solo commit.
+
+### T-7 · Límite de intentos en las acciones públicas
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero que nadie pueda probar emails o contraseñas sin freno, de forma que las cuentas y la casilla de Resend estén a salvo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · La tabla `rate_limit` guarda claves hasheadas (nunca una IP ni un email en claro), con incremento atómico y vencimiento · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · El schema de cada acción pública valida el honeypot y `guardPublicAction` corta con `RATE_LIMITED` al pasar el límite por IP o por email (el login, por IP y con el bloqueo de 5 intentos de cada cuenta) · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Dos pedidos simultáneos cuentan dos (integración) · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · Lo usan el login, el registro, el reenvío de la activación, «olvidé mi contraseña» y los botones de los links · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-20 · Política de privacidad
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | S           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero saber qué datos míos se guardan y para qué, de forma que pueda aceptar el registro sabiendo a qué me comprometo (Ley 25.326).
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · `/privacidad` explica finalidad, datos, plazo, derechos (acceso, rectificación y supresión) y contacto · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Lo que falta (responsable, contacto y plazo de guarda) aparece como `[Completar: …]` visible · Estimación: 10 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · El registro la enlaza junto al consentimiento · Estimación: 10 min · Completado: 2026-11-09 02:23
+
+### T-8 · Modelo de pacientes y rol en la sesión
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como dev quiero cuentas de pacientes separadas de la del admin y un rol en la sesión, de forma que un paciente nunca entre al panel.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Migración `patient_account`: email único en minúscula, tokens con hash único, un solo token activo por propósito y borrado en cascada · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · El JWT lleva el rol; uno sin rol sigue siendo de admin, así las sesiones abiertas no se caen · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Una cookie de paciente en `/admin` ve «Acceso denegado» y `requireAdmin` la rechaza · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · `requirePatient` exige rol, cuenta, `session_version` y email verificado · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-28 · El paciente se registra y activa su cuenta
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | L           |
+| Depende de   | T-7, T-8, US-20 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero crear mi cuenta con mi email, de forma que pueda ver mis turnos sin pedírselos a Lisandro.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Registro con nombre, email, teléfono, contraseña (8 a 128) y consentimiento obligatorio · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · La respuesta es la misma exista o no el email; a una cuenta ya verificada le llega «Ya tenés una cuenta» · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · El link de activación vence a las 24 h, sirve una vez y sólo actúa con el botón (abrirlo no cambia nada) · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · Registrarse de nuevo sobre una cuenta sin verificar pisa sus datos y anula el link anterior · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-29 · El paciente entra por `/login`
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-28 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero entrar con mi email y mi contraseña por la misma página que Lisandro, de forma que llegue directo a mi espacio.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · El admin va a `/admin` y el paciente a `/mi-espacio`; `/login` con sesión redirige según el rol · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Sin activar, con la contraseña correcta, ve «Activá tu cuenta con el link que te mandamos.» y «Reenviar el email» · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · El bloqueo por 5 intentos fallidos también vale para pacientes · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · Los tiempos de respuesta no delatan si el email tiene cuenta · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-30 · El paciente recupera su contraseña
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero restablecer mi contraseña si me la olvido, de forma que no pierda mi cuenta.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · «¿Olvidaste tu contraseña?» manda un link de 1 h y un solo uso; la respuesta es siempre la misma · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Restablecer cierra las otras sesiones y limpia el bloqueo por intentos · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Un link vencido, usado o reemplazado dice «El link no es válido o ya venció.» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-31 · Mi espacio: mis turnos
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero ver mis próximos turnos y los anteriores, de forma que sepa cuándo y dónde me atiendo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Próximos turnos (del más cercano) y anteriores (del más reciente), sólo los de su email · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Fecha y hora en hora argentina, con ubicación y estado · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Sin turnos dice «Todavía no tenés turnos.»; sin sesión lleva a `/login` · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+### US-32 · Mi espacio: mis datos, mi contraseña y la baja
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero corregir mis datos, cambiar mi contraseña o borrar mi cuenta, de forma que mis datos estén al día o dejen de estar.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Edita nombre y teléfono; si cambiaron en otra pestaña da `STALE_VERSION` · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Cambiar la contraseña pide la actual y cierra las otras sesiones · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · «Eliminar mi cuenta» pide la contraseña y una confirmación; borra la cuenta y deja los turnos en la agenda · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · «Cerrar sesión» · Estimación: 10 min · Completado: 2026-11-09 02:23
+
+### US-33 · Mi espacio: cambiar el email
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-32 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero cambiar mi email, de forma que los avisos me lleguen a la casilla que uso.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Pide la contraseña y manda un link al email nuevo; hasta tocarlo sigue el anterior · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · El link vence a las 24 h y sirve una vez; un email ocupado dice «Ese email ya lo usa otra cuenta.» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Al confirmar se cierran las otras sesiones · Estimación: 10 min · Completado: 2026-11-09 02:23
+
+### US-34 · Login con el diseño nuevo
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero un login claro y con la marca de Lisandro, como `docs/wireframes/login.png`, de forma que confíe en dónde dejo mis datos.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Desde 1024px, panel Verde Bosque con «Tu salud, en foco.», la bajada y los íconos Turnos e Historial; en el celular, la tarjeta con el logo arriba · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · La tarjeta tiene una luz Verde Lima detrás que se prende y se apaga cada 1 s (entre 60 % y 85 % de opacidad); queda quieta con «reducir movimiento» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Botón para mostrar la contraseña y links a «¿Olvidaste tu contraseña?» y «Registrate» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop, con teclado · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-35 · Ícono de cuenta en el hero
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero entrar a mi cuenta desde la home, como `docs/wireframes/cuenta-1.png` y `cuenta-2.png`, de forma que no tenga que conocer la dirección del login.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Botón redondo arriba a la derecha del hero, con tres chispas y un brillo de vidrio cada 1 s, que abre la tarjeta «Mi espacio» con «Iniciar sesión» y «Registrate» · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Con sesión de paciente dice «Hola, Nombre», con «Ir a mi espacio» y «Cerrar sesión»; con la del admin, «Hola, Lisandro» e «Ir al panel» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Se abre con clic, toque o teclado; Escape y un clic afuera la cierran · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · La home sigue prerenderizada (PPR) y el ícono no mueve nada al cargar · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+### US-36 · Líneas a mano en el hero
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | S           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como visitante quiero un hero con más vida, como `docs/wireframes/hero-animado.png`, de forma que la presentación se sienta dibujada a mano.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Trazos Verde Lima finos: en desktop, tres curvas alrededor de Lisandro, un subrayado bajo la frase de apertura y un corchete recto que se vuelve subrayado junto a la de cierre; en el celular, las tres curvas (más chicas) y un subrayado bajo cada frase · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Se dibujan al terminar la intro; con «reducir movimiento» ya están dibujados · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-37 · La flecha para bajar en su nuevo lugar
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | S           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como visitante quiero ver la flecha para bajar cerca del texto, como `docs/wireframes/cambio-de-lugar-flecha.png` y su versión mobile, de forma que no se pierda en la esquina.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Desktop: a la derecha de la frase de apertura, a la altura de su última línea, entre el texto y la foto · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Celular: a la izquierda, a la altura de «la base de tu salud», sin pisar el botón flotante · Estimación: 15 min · Completado: 2026-11-09 02:23
 
 ## Sprint 4 · El paciente reserva online
 
-Previstos: T-7 protección de acciones públicas (rate limiting + honeypot), US-20 política de privacidad, US-21
+Previstos (T-7 y US-20 subieron al Sprint 3): US-21
 reserva online (nace pendiente), US-22 emails de la reserva («Recibimos tu solicitud» y aviso a Lisandro), US-24 el
 paciente cancela con el link, US-25 el paciente reprograma con el link (vuelve a pendiente). US-23 (Lisandro
 confirma un pendiente) se adelantó al Sprint 2.
+
+### BUG-1 · Las frases del hero no se leen en pantallas de 1024px de ancho y mucho alto
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | Pendiente |
+| Dueño        | —         |
+| Inicio       | —         |
+| Tamaño       | S         |
+| Depende de   | —         |
+| Plan         | —         |
+| Merge        | —         |
+| Horas reales | —         |
+
+Encontrado en la revisión de diseño del Sprint 3 (2026-11-09). No se tocó porque cambia lo que se ve: lo decide el
+dev.
+
+**Actual**: el ancho de cada frase (`--phrase-w` en `src/components/home/hero.tsx`) sale de restar el ancho de la
+foto, que crece con el alto de la pantalla. A 1024×900 las frases quedan de unos 5px, ilegibles. En un iPad Pro
+vertical (1024×1366) el ancho da negativo. A 1024 de ancho, además, el ícono de cuenta tapa la «Z» de LÓPEZ.
+
+**Esperado**: las frases se leen en cualquier pantalla desde 1024px. Por ejemplo:
+
+- un mínimo para el tamaño de letra y para el ancho;
+- o pasar a la disposición en columna cuando no entran.
+
+**Criterios de aceptación**
+
+- [ ] **CA-1** · A 1024×900 y 1024×1366 las dos frases se leen (16px o más) y nada las tapa · Estimación: 30 min · Completado: —
+
+- [ ] **CA-2** · El ícono de cuenta no pisa el nombre a 1024 de ancho · Estimación: 15 min · Completado: —
 
 ## Sprint 5 · Despliegue
 

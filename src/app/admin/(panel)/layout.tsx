@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: 'Panel · Lisandro López', robots: {
 export default async function PanelLayout({ children }: Readonly<{ children: ReactNode }>): Promise<ReactElement> {
   await guardAdminPage();
   return (
-    <div className='flex flex-1 bg-muted'>
+    <div className='flex flex-1 bg-panel'>
       <PanelNav footer={<LogoutButton onDark />} />
       <div className='flex min-w-0 flex-1 flex-col pb-24 md:pb-0'>{children}</div>
     </div>

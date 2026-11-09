@@ -19,7 +19,7 @@ beforeAll(async () => {
 describe('authService.login', () => {
   it('con la contraseña correcta devuelve el admin y su versión de sesión', async () => {
     const { service } = setup();
-    await expect(service.login({ email: EMAIL, password: 'clave-buena' })).resolves.toEqual({ adminId: ADMIN_ID, sessionVersion: 2 });
+    await expect(service.login({ email: EMAIL, password: 'clave-buena' })).resolves.toEqual({ subjectId: ADMIN_ID, sessionVersion: 2, role: 'admin' });
   });
 
   it('con un email inexistente da INVALID_CREDENTIALS después de comparar contra un hash de relleno', async () => {

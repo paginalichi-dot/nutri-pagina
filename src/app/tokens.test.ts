@@ -14,6 +14,10 @@ function token(name: string): string {
 const TEXT_PAIRS = [
   ['foreground', 'background'],
   ['foreground', 'muted'],
+  ['foreground', 'panel'],
+  ['background', 'destructive'],
+  ['background', 'foreground'],
+  ['muted-foreground', 'panel'],
   ['foreground', 'secondary'],
   ['foreground', 'primary'],
   ['foreground', 'confirmed'],
@@ -37,7 +41,7 @@ describe('tokens de DESIGN.md', () => {
     expect(contrastRatio(token(text), token(background))).toBeGreaterThanOrEqual(4.5);
   });
 
-  it.each(['background', 'muted', 'secondary'])('el anillo de foco se distingue de --%s (≥ 3:1)', (background) => {
+  it.each(['background', 'muted', 'secondary', 'panel'])('el anillo de foco se distingue de --%s (≥ 3:1)', (background) => {
     expect(contrastRatio(token('ring'), token(background))).toBeGreaterThanOrEqual(3);
   });
 

@@ -22,7 +22,7 @@ describe('session-cookie', () => {
 
   it('startSession firma la sesión y la guarda en la cookie', async () => {
     vi.stubEnv('JWT_SECRET', 'secreto-de-prueba-con-mas-de-32-caracteres');
-    const session = { adminId: '7d3f8a3e-2f4b-4c1d-9a7e-1b2c3d4e5f60', sessionVersion: 3 };
+    const session = { subjectId: '7d3f8a3e-2f4b-4c1d-9a7e-1b2c3d4e5f60', sessionVersion: 3, role: 'admin' } as const;
     await startSession(session);
     await expect(verifySession((await readSessionToken()) ?? '')).resolves.toEqual(session);
   });

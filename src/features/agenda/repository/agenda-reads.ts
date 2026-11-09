@@ -41,6 +41,11 @@ async function contactsBefore(client: DbTransaction, before: Date): Promise<Pati
   return rows.map(({ patientPhone, patientEmail }) => ({ phone: patientPhone, email: patientEmail }));
 }
 
+async function byPatientEmail(client: DbTransaction, email: string): Promise<AppointmentDetail[]> {
+  const rows = await client.appointment.findMany({ where: { patientEmail: email }, select: ROW, orderBy: { startsAt: 'asc' } });
+  return rows.map(toDetail);
+}
+
 export function agendaReads(client: DbTransaction): AgendaReads {
   return {
     async listAppointments(range: TimeRange): Promise<AppointmentRow[]> {
@@ -72,6 +77,7 @@ export function agendaReads(client: DbTransaction): AgendaReads {
     async findActiveByEmail(email: string, now: Date): Promise<TimeRange | null> {
       return client.appointment.findFirst({ where: { patientEmail: email, status: ACTIVE, startsAt: { gt: now } }, select: RANGE, orderBy: { startsAt: 'asc' } });
     },
+    listByPatientEmail: (email: string): Promise<AppointmentDetail[]> => byPatientEmail(client, email),
     countActiveAppointments: (range: TimeRange): Promise<number> => client.appointment.count({ where: { ...overlapping(range), status: ACTIVE } }),
     async listBlocks(range: TimeRange): Promise<BlockRow[]> {
       const rows = await client.timeBlock.findMany({ where: overlapping(range), select: { id: true, startsAt: true, endsAt: true, reason: true, version: true }, orderBy: { startsAt: 'asc' } });

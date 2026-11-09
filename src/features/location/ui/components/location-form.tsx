@@ -8,6 +8,11 @@ import type { LocationRow } from '../../domain/location.schema';
 
 type Kind = LocationRow['kind'];
 
+export const KIND_TEXTS: Readonly<Record<Kind, { title: string; save: string; example: string }>> = {
+  IN_PERSON: { title: 'Nuevo consultorio', save: 'Guardar consultorio', example: '«Consultorio Centro»' },
+  ONLINE: { title: 'Nueva atención online', save: 'Guardar atención online', example: '«Consulta online»' },
+};
+
 const KIND_LABELS: ReadonlyArray<readonly [Kind, string]> = [
   ['IN_PERSON', 'Presencial'],
   ['ONLINE', 'Online'],
@@ -39,15 +44,21 @@ function InPersonFields({ location }: { location?: LocationRow }): ReactElement 
   );
 }
 
-export function LocationForm({ location }: { location?: LocationRow }): ReactElement {
+type FormProps = { location?: LocationRow; onKindChange?: (kind: Kind) => void };
+
+export function LocationForm({ location, onKindChange }: FormProps): ReactElement {
   const [state, action, pending] = useActionState(saveLocation, null);
   const [kind, setKind] = useState<Kind>(location?.kind ?? 'IN_PERSON');
+  const choose = (next: Kind): void => {
+    setKind(next);
+    onKindChange?.(next);
+  };
   return (
     <form action={action} aria-label='Datos de la ubicación' className='flex flex-col gap-5'>
       {location ? <input type='hidden' name='id' value={location.id} /> : null}
       {location ? <input type='hidden' name='version' value={location.version} /> : null}
-      <KindPicker kind={kind} onChange={setKind} />
-      <Field name='name' label='Nombre' defaultValue={location?.name ?? ''} hint='Así la ven los pacientes, por ejemplo «Consultorio Centro».' />
+      <KindPicker kind={kind} onChange={choose} />
+      <Field name='name' label='Nombre' defaultValue={location?.name ?? ''} hint={`Así la ven los pacientes, por ejemplo ${KIND_TEXTS[kind].example}.`} />
       {kind === 'IN_PERSON' ? (
         <InPersonFields location={location} />
       ) : (
@@ -55,7 +66,7 @@ export function LocationForm({ location }: { location?: LocationRow }): ReactEle
       )}
       <FormFeedback state={state} />
       <div className='self-start'>
-        <SubmitButton pending={pending} idle='Guardar ubicación' busy='Guardando…' />
+        <SubmitButton pending={pending} idle={KIND_TEXTS[kind].save} busy='Guardando…' />
       </div>
     </form>
   );
