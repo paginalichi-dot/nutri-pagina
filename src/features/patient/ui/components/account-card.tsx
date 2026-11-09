@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from 'react';
-import { PUBLIC_SECONDARY } from '@/components/form/public-form-parts';
+import { PUBLIC_DARK } from '@/components/form/public-form-parts';
 
 export function AccountCard({ title, children }: { title: string; children: ReactNode }): ReactElement {
   return (
@@ -14,7 +14,7 @@ type SubmitProps = { pending: boolean; idle: string; busy: string };
 
 export function SubmitPill({ pending, idle, busy }: SubmitProps): ReactElement {
   return (
-    <button type='submit' disabled={pending} className={`${PUBLIC_SECONDARY} sm:self-start`}>
+    <button type='submit' disabled={pending} className={PUBLIC_DARK}>
       {pending ? busy : idle}
     </button>
   );

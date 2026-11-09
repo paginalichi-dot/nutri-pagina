@@ -2,13 +2,15 @@ import type { ReactElement } from 'react';
 import { FOCUS } from './form-parts';
 
 export const PUBLIC_INPUT =
-  'h-12 w-full rounded-input bg-secondary px-5 text-base text-foreground focus-visible:shadow-[0_0_0_6px_var(--primary)] focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-foreground';
+  'h-12 w-full rounded-input border border-border bg-secondary px-5 text-base text-foreground focus-visible:shadow-[0_0_0_6px_var(--primary)] focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-foreground';
 
 export const PUBLIC_PRIMARY = `hover-shade flex h-12 w-full items-center justify-center rounded-full bg-primary px-6 text-[17px] font-semibold text-primary-foreground disabled:opacity-70 ${FOCUS}`;
 
 export const PUBLIC_SECONDARY = `hover-shade flex h-12 items-center justify-center rounded-full bg-secondary px-6 text-[16px] font-semibold text-secondary-foreground disabled:opacity-70 ${FOCUS}`;
 
 export const PUBLIC_LINK = `rounded-sm font-semibold underline underline-offset-4 ${FOCUS}`;
+
+export const PUBLIC_DARK = `hover-shade hover-shade-on-dark flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 text-[16px] font-semibold text-background disabled:opacity-70 ${FOCUS}`;
 
 type FieldProps = { name: string; label: string; type?: string; autoComplete?: string; defaultValue?: string; placeholder?: string; required?: boolean };
 

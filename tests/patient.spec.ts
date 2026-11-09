@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { TEST_PATIENT } from '../src/features/patient/testing/test-patient';
-import { activePatient, card, newEmail, openAccountMenu, openLink, PASSWORD, registerPatient, signInAs } from './pages/patient';
+import { activePatient, card, newEmail, openAccountMenu, openLink, openTab, PASSWORD, registerPatient, signInAs } from './pages/patient';
 import { freshClient } from './pages/panel';
 import { emailsSentTo, linkSentTo } from './support/outbox';
 
@@ -23,6 +23,8 @@ test.describe('cuentas de pacientes (Sprint 3)', () => {
     await signInAs(page, TEST_PATIENT.email, TEST_PATIENT.password);
     await expect(page).toHaveURL(/\/mi-espacio$/);
     await expect(card(page, 'Tus próximos turnos').getByText('Consultorio de ejemplo').first()).toBeVisible();
+    await page.getByRole('link', { name: /Ver todos/ }).click();
+    await expect(page).toHaveURL(/\/mi-espacio\/turnos$/);
     await expect(card(page, 'Tus turnos anteriores').getByText('Asistió')).toBeVisible();
     await page.goto('/admin');
     await expect(page.getByRole('heading', { name: /Acceso/ })).toBeVisible();
@@ -49,7 +51,7 @@ test.describe('cuentas de pacientes (Sprint 3)', () => {
   test('US-33: cambia el email con el link que llega al email nuevo', async ({ page }) => {
     await activePatient(page);
     const next = newEmail();
-    const form = card(page, 'Tu email');
+    const form = await openTab(page, 'Tu email');
     await form.getByLabel('Email nuevo').fill(next);
     await form.getByLabel('Contraseña actual').fill(PASSWORD);
     await form.getByRole('button', { name: 'Cambiar el email' }).click();
@@ -61,7 +63,7 @@ test.describe('cuentas de pacientes (Sprint 3)', () => {
 
   test('US-32: elimina la cuenta y ya no puede entrar', async ({ page }) => {
     const email = await activePatient(page);
-    const form = card(page, 'Eliminar mi cuenta');
+    const form = await openTab(page, 'Eliminar mi cuenta');
     await form.getByLabel('Contraseña actual').fill(PASSWORD);
     await form.getByRole('checkbox').check();
     await form.getByRole('button', { name: 'Eliminar mi cuenta' }).click();

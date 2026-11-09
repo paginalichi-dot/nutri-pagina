@@ -64,7 +64,7 @@ export function FormFeedback<T>({ state }: { state: ActionResult<T> | null }): R
   if (!state) return null;
   if (!state.success) return <ErrorMessage>{state.error}</ErrorMessage>;
   return state.message ? (
-    <p role='status' className='rounded-input bg-confirmed px-5 py-3 text-[15px] font-medium'>
+    <p role='status' className='rounded-input bg-confirmed px-5 py-3 text-[15px] font-medium text-primary-foreground'>
       {state.message}
     </p>
   ) : null;

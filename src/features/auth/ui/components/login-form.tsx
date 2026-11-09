@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { type ReactElement, useActionState, useState } from 'react';
 import { login } from '../../actions/login';
@@ -23,14 +24,15 @@ export function LoginForm(): ReactElement {
         <PublicField name='email' label='Email' type='email' autoComplete='username' placeholder='tu@email.com' />
         <div className='flex flex-col gap-2'>
           <PasswordField name='password' label='Contraseña' autoComplete='current-password' />
-          <Link href='/recuperar' className={`${PUBLIC_LINK} relative self-end text-[14px] after:absolute after:-inset-x-2 after:-top-2 after:-bottom-4`}>
+          <Link href='/recuperar' className={`${PUBLIC_LINK} relative self-end text-[14px] text-muted-foreground after:absolute after:-inset-x-2 after:-top-2 after:-bottom-4`}>
             ¿Olvidaste tu contraseña?
           </Link>
         </div>
         <Honeypot />
         <FormFeedback state={state} />
-        <button type='submit' disabled={pending} className={PUBLIC_PRIMARY}>
+        <button type='submit' disabled={pending} className={`${PUBLIC_PRIMARY} gap-2`}>
           {pending ? 'Entrando…' : 'Entrar'}
+          <ArrowRight aria-hidden='true' className='size-5' />
         </button>
       </form>
       {unverified ? <ResendForm email={email} /> : null}

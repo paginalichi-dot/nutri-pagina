@@ -21,6 +21,9 @@ Decisión de base: [ADR 0006](../../adr/0006-cuentas-de-pacientes-con-email-y-co
   igual a su email), nombre y teléfono, cambio de contraseña (cierra las otras sesiones), cambio de email (se aplica
   al tocar el link que llega al email nuevo, 24 h; cierra las otras sesiones) y «Eliminar mi cuenta» (borra la
   cuenta y sus links; los turnos quedan en la agenda).
+- **Diseño vigente** (US-38): Mi espacio con la tarjeta Verde Bosque de próximos turnos (hasta 2 y «Ver todos» →
+  `/mi-espacio/turnos`, con los próximos y los anteriores), «Recordatorios» y «Mi cuenta» con pestañas. Registro y
+  «olvidé» terminan en «¡Ya casi está!» (`EmailSent`).
 - **Ícono del hero** (US-35): con o sin sesión, una tarjeta con «Iniciar sesión» y «Registrate», o «Hola, Nombre».
 
 ## Quién lo usa

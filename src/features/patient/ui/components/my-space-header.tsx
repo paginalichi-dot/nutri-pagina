@@ -1,27 +1,23 @@
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactElement } from 'react';
-import { PUBLIC_LINK, PUBLIC_SECONDARY } from '@/components/form/public-form-parts';
-import { logoutPatient } from '../../actions/logout-patient';
+import { FOCUS } from '@/components/form/form-parts';
 import { firstName } from './first-name';
 
-const MARK = 'bg-[linear-gradient(transparent_62%,var(--primary)_62%,var(--primary)_88%,transparent_88%)]';
+const MARK = 'bg-[linear-gradient(transparent_70%,var(--primary)_70%,var(--primary)_88%,transparent_88%)]';
 
-export function MySpaceHeader({ name }: { name: string }): ReactElement {
+type Props = { name: string; back?: { href: string; label: string } };
+
+export function MySpaceHeader({ name, back = { href: '/', label: 'Volver al inicio' } }: Props): ReactElement {
   return (
-    <header className='flex flex-col gap-5 md:flex-row md:items-end md:justify-between'>
-      <div className='flex flex-col gap-3'>
-        <h1 className='text-[28px] font-medium md:text-[38.4px]'>
-          Hola, <strong className={`font-bold ${MARK}`}>{firstName(name)}</strong>
-        </h1>
-        <Link href='/' className={`${PUBLIC_LINK} relative self-start text-[15px] after:absolute after:-inset-x-2 after:-inset-y-[11px]`}>
-          Volver al inicio
-        </Link>
-      </div>
-      <form action={logoutPatient}>
-        <button type='submit' className={PUBLIC_SECONDARY}>
-          Cerrar sesión
-        </button>
-      </form>
+    <header className='flex flex-col gap-3'>
+      <h1 className='text-[34px] leading-tight font-bold md:text-[48px]'>
+        Hola, <span className={MARK}>{firstName(name)}</span>
+      </h1>
+      <Link href={back.href} className={`relative flex items-center gap-2 self-start rounded-sm text-[15px] font-medium text-muted-foreground after:absolute after:-inset-x-2 after:-inset-y-[11px] ${FOCUS}`}>
+        <ArrowLeft aria-hidden='true' className='size-4' />
+        {back.label}
+      </Link>
     </header>
   );
 }

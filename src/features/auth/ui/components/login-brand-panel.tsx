@@ -18,7 +18,7 @@ export function LoginBrandPanel(): ReactElement {
         <p className='text-[clamp(3.5rem,6.2vw,6.5rem)] leading-[0.98] font-extrabold'>
           Tu salud,
           <br />
-          en <span className='text-transparent [-webkit-text-stroke:2px_var(--primary)]'>foco.</span>
+          en <span className='text-primary'>foco.</span>
         </p>
         <p className='text-xl font-medium text-footer-text'>Tus turnos de nutrición, en un solo lugar.</p>
       </div>

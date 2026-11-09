@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { RegisterForm } from './register-form';
 
 vi.mock('@/features/patient/actions/register', () => ({ register: vi.fn() }));
+vi.mock('@/components/auth/brand-logo', () => ({ BrandLogo: () => null }));
 
 describe('RegisterForm', () => {
   it('pide el consentimiento y linkea a la política de privacidad', () => {

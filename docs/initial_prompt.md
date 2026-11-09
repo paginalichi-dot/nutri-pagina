@@ -94,8 +94,9 @@ mostradas en Argentina, cero datos personales en logs, sólo tokens de `DESIGN.m
   reserva con 12 h de anticipación como mínimo y hasta 60 días; el panel, desde ahora.
 - Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario. La reserva online (Sprint 4)
   nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado.
-- El paciente cancela o reprograma con el link del email hasta 24 h antes (Sprint 4). Emails con Resend; el
-  recordatorio y el dominio propio llegan con el despliegue (Sprint 5).
+- El paciente cancela o reprograma con el link del email hasta 24 h antes (Sprint 4). Emails con Resend (cuenta
+  de prueba) hasta el despliegue (Sprint 5), donde pasan a una cuenta de Gmail dedicada (T-9, sin dominio propio) y
+  llega el recordatorio.
 - Cuenta de pacientes (Sprint 3, ADR 0006): optativa. «Mis turnos» muestra los turnos cuyo email coincide con el
   de la cuenta.
 

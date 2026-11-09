@@ -9,7 +9,7 @@ export function AuthDone({ message }: { message: string }): ReactElement {
   useEffect(() => status.current?.focus(), []);
   return (
     <div className='flex flex-col gap-5'>
-      <p ref={status} role='status' tabIndex={-1} className='rounded-input bg-confirmed px-5 py-3 text-[15px] font-medium outline-none'>
+      <p ref={status} role='status' tabIndex={-1} className='rounded-input bg-confirmed px-5 py-3 text-[15px] font-medium text-primary-foreground outline-none'>
         {message}
       </p>
       <Link href='/login' className={PUBLIC_PRIMARY}>

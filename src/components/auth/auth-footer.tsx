@@ -8,7 +8,7 @@ export function AuthFooter({ text, href, label }: Props): ReactElement {
   return (
     <p className='text-center text-[15px] font-medium text-muted-foreground'>
       {text}{' '}
-      <Link href={href} className={`${PUBLIC_LINK} text-foreground`}>
+      <Link href={href} className={`${PUBLIC_LINK} text-primary`}>
         {label}
       </Link>
     </p>

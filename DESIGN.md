@@ -208,18 +208,24 @@ Verde Bosque con borde `line-on-dark`, radio 25px, padding 20px, 18rem de ancho 
 - El ícono es un hueco dinámico (PPR): la home se pre-renderiza con el ícono sin sesión y `AccountStatus` lo
   reemplaza, ya con la sesión leída, sin cambiar de tamaño. Lleva `data-intro`: aparece al final de la intro.
 
-### Mi espacio (US-31 a US-33)
-Página `/mi-espacio` del paciente, en el lenguaje del sitio público: fondo Hueso, contenido de hasta 1100px y
-tarjetas Papel con radio 30px (padding 24px mobile, 32px desktop). Cabecera con «Hola, **Nombre**» (38.4px/28px, el
-nombre en 700 con subrayado Verde Lima), el link «Volver al inicio» y «Cerrar sesión» como píldora Gris Nube. En
-mobile, una sola columna; desde 1024px, a la izquierda los turnos y a la derecha los datos.
-- «Tus próximos turnos» y «Tus turnos anteriores» (se omite si no hay): una fila por turno con fecha y hora argentina
-  (17px/600), chip de estado en píldora (confirmado `bg-confirmed`, pendiente Hueso con borde Línea Salvia, resto Gris
-  Nube; cancelado tachado), ubicación y dirección o «Por videollamada». Sin turnos: «Todavía no tenés turnos.» y la
-  píldora Verde Lima «Reservá tu turno» con disco de flecha, la única de la página.
-- «Tus datos», «Tu email», «Tu contraseña» y «Eliminar mi cuenta»: formularios con los inputs del sitio público
-  (radio 25px, Gris Nube) y su botón en píldora Gris Nube; el resultado va en `FormFeedback`. La baja pide la
-  contraseña y una casilla obligatoria, sin rojo: es serio, no alarmante.
+### Mi espacio (US-31 a US-33, rediseñado en US-38 según `docs/wireframes/bandeja-usuario.png`)
+Página `/mi-espacio` del paciente sobre Hueso, contenido de hasta 1100px.
+- Barra superior: logo LLN y «LIC. LISANDRO LÓPEZ» (link al inicio), la píldora Verde Bosque «Cerrar sesión» con
+  ícono `LogOut` y un disco Verde Lima con la inicial.
+- «Hola, Nombre» en 700, grande (48px desktop / 34px mobile), con el nombre subrayado en Verde Lima, y «← Volver al
+  inicio» en Gris Piedra.
+- A la izquierda (desde 1024px), la tarjeta Verde Bosque «Tus próximos turnos» (clase `theme-forest`, ver Tokens):
+  disco Verde Lima con calendario, «Ver todos ›» hacia `/mi-espacio/turnos`, hasta dos turnos en filas translúcidas
+  («Martes 12 de noviembre · 10:30 hs», ubicación y dirección o «Por videollamada», chip de estado; confirmado en Verde
+  Lima con tilde) y la píldora Verde Lima «Reservá tu turno» con disco Verde Bosque. Sin «Cancelar» hasta el Sprint 4.
+  Debajo, la tarjeta Papel «Recordatorios» («Te avisamos por email 24 h antes de tu turno.»).
+- A la derecha, la tarjeta Papel «Mi cuenta» con pestañas (`role="tablist"`, flechas del teclado): Tus datos, Tu
+  email, Tu contraseña y, al pie, «Eliminar mi cuenta» en Pimentón con `Trash2`. Desde 1280px van en columna a la
+  izquierda (activa con fondo Verde Lima al 20% y barra Verde Lima); más angosto, en una fila que se desplaza arriba del formulario. Los
+  botones de los formularios son píldoras Verde Bosque a todo el ancho (`PUBLIC_DARK`).
+- Pie: «Lic. Lisandro López · Nutrición».
+- `/mi-espacio/turnos`: la misma barra, «← Volver a Mi espacio» y las tarjetas Papel «Tus próximos turnos» y «Tus
+  turnos anteriores».
 
 ### Píldora Verde Lima con flecha (CTA principal)
 Relleno Verde Lima, 88px de alto (64px en mobile), radio 9999px, padding 0 37px, label Verde Bosque 18px/500 y un círculo blanco con flecha Verde Bosque en el extremo derecho. Sombra `rgba(0,0,0,0.05) 0 6px 34px`. Sin borde. **Una sola por pantalla.**
@@ -344,19 +350,26 @@ como **nutricionista**.
 - **Login (T-3, US-34; `docs/wireframes/login.png`):** en `/login`, el mismo para el admin y los pacientes, con los
   controles del sitio público (inputs radio 25px, botones píldora). Desde 1024px, dos mitades: a la izquierda un panel
   Verde Bosque a toda la altura con el logo en un disco Verde Lima y «LIC. LISANDRO LÓPEZ» (15px/600, +1px, blanco),
-  el título «Tu salud, / en **foco.**» (800, blanco; «foco.» en contorno Verde Lima con relleno transparente, como
-  «LÓPEZ» del hero), la bajada en Niebla y dos íconos Lucide en discos con borde (Turnos, Historial). A la derecha,
-  Hueso con la tarjeta Papel (radio 30px): «Ingresá a tu **cuenta**», «Gestioná tus turnos y tu historial», Email,
-  Contraseña (con ojo, `aria-pressed`), «¿Olvidaste tu contraseña?» a la derecha en Verde Bosque subrayado (nunca
-  Verde Lima sobre blanco), el botón Verde Lima «Entrar» a todo el ancho y «¿No tenés cuenta? Registrate». Sin Google
-  ni separador «o». Detrás de la tarjeta, una luz Verde Lima desenfocada que se prende y se apaga cada 1 s
-  (entre 60 % y 85 % de opacidad: nunca deja de verse; sólo `opacity` y `transform`; quieta con «reducir movimiento»). Debajo de 1024px sólo se ve la tarjeta sobre Hueso, con el logo
-  arriba. Si el login responde «Activá tu cuenta», debajo del error aparece el botón Gris Nube «Reenviar el email».
-- **Registro, Recuperar y links de email (US-28, US-30):** la misma tarjeta con luz sobre Hueso, sin el panel verde.
-  `/registro` («Creá tu cuenta»): nombre, email, teléfono, contraseña con la pista «Al menos 8 caracteres.», casilla
-  obligatoria «Leí y acepto la política de privacidad» (link subrayado a `/privacidad`) y «Crear mi cuenta»; al
-  terminar, una franja `bg-confirmed` con el aviso y la píldora «Ingresar». `/recuperar` («Recuperá tu contraseña»):
-  email y «Mandarme el link». `/verificar/[token]`, `/restablecer/[token]` y `/confirmar-email/[token]`: el GET no
+  el título «Tu salud, / en **foco.**» (800, blanco; «foco.» en Verde Lima macizo, US-38), la bajada en Niebla y dos
+  íconos Lucide en discos con borde (Turnos, Historial). A la derecha, Hueso con la tarjeta **Verde Bosque** (US-38,
+  `docs/wireframes/componente-login-verde.png`; radio 30px, borde Verde Lima al 60%, clase `theme-forest`): logo y
+  «LIC. LISANDRO LÓPEZ», «Ingresá a tu cuenta», «Gestioná tus turnos y tu historial» en Niebla, Email, Contraseña (con
+  ojo, `aria-pressed`) con inputs translúcidos de borde claro, «¿Olvidaste tu contraseña?» subrayado en Niebla, el
+  botón Verde Lima «Entrar →» y «¿No tenés cuenta? **Registrate**» (Registrate en Verde Lima). Sin Google ni separador
+  «o». Los errores van en una franja Papel con texto Pimentón (sobre Verde Bosque no se leen). Detrás de la tarjeta, una luz Verde Lima desenfocada que se prende y se apaga cada 1 s
+  (entre 60 % y 85 % de opacidad: nunca deja de verse; sólo `opacity` y `transform`; quieta con «reducir movimiento»). Debajo de 1024px sólo se ve la tarjeta sobre Hueso.
+  Si el login responde «Activá tu cuenta», debajo del error aparece «Reenviar el email», y su aviso sale debajo del
+  botón.
+- **Registro, Recuperar y links de email (US-28, US-30, US-38):** la misma tarjeta Verde Bosque con luz sobre Hueso,
+  sin el panel verde. `/registro` («Creá tu cuenta», centrado, según `docs/wireframes/planilla-creacion-cuenta.png`,
+  con «LIC. LISANDRO LÓPEZ» en Verde Lima): nombre, email, teléfono, contraseña con la pista «Al menos 8 caracteres.»,
+  casilla Verde Lima «Leí y acepto la política de privacidad» (link Verde Lima) y «Crear mi cuenta» con disco de
+  flecha. `/recuperar` («Recuperá tu contraseña»): email y «Mandarme el link».
+- **«¡Ya casi está!» (US-38, `docs/wireframes/cuenta-creada.png`):** al terminar el registro o «olvidé mi
+  contraseña», la página muestra sólo una tarjeta **Papel** con luz y dos hojas Verde Lima translúcidas detrás: un
+  sobre (`Mail`) sobre una nube Verde Lima suave con un disco de tilde y dos chispas, «¡Ya casi está!» (700, recibe el
+  foco), el texto en Gris Piedra, un recuadro Verde Lima al 15% con reloj e indicación, y la píldora con borde
+  «Volver a iniciar sesión →». En «olvidé» el texto sigue siendo genérico («Si el email tiene una cuenta…»). `/verificar/[token]`, `/restablecer/[token]` y `/confirmar-email/[token]`: el GET no
   toca nada; sólo muestra un botón (Activar mi cuenta, Guardar la contraseña, Confirmar mi email). Son `noindex` y
   sin `referrer`. Una sola píldora Verde Lima por pantalla.
 - **Política de privacidad (US-20):** `/privacidad`, indexable. Banda Hueso con una tarjeta Papel (radio 30px) y texto
@@ -490,6 +503,9 @@ Solo tema claro. No se implementa modo oscuro en esta etapa.
   `rounded-hero-mobile` (40px), `rounded-header-button` (50px), `rounded-toggle` (100px), `rounded-testimonial`
   (8px), `rounded-panel` (16px), `rounded-control` (12px, controles del panel). Las píldoras usan `rounded-full`.
 - Sombras: `shadow-halo`, `shadow-glow`, `shadow-toggle`, `shadow-benefit`, `shadow-modal`.
+- Tema oscuro local (US-38): la clase `theme-forest` (en `tokens.css`) redefine adentro `--background` (Verde
+  Bosque), `--foreground` (Papel), `--secondary` y `--border` (blanco translúcido) y `--muted-foreground` (Niebla). Así
+  los mismos controles del sitio público se ven bien sobre Verde Bosque sin duplicar componentes.
 - Fuente: Manrope con `next/font/google` (`--font-manrope`), aplicada como `font-sans`.
 - `npm run lint` rechaza cualquier color hex escrito en `src/**/*.{ts,tsx}`, y `src/app/tokens.test.ts` verifica
   el contraste AA de cada par de colores de texto.
@@ -518,6 +534,8 @@ Solo tema claro. No se implementa modo oscuro en esta etapa.
 - No usar el Pimentón en botones ni títulos. Va solo en precios y errores. Única excepción, en el panel: el botón
   «Desactivar» de las obras sociales en Ajustes (`DANGER_BUTTON`, texto blanco, 5.1:1), con «Guardar» en Verde Lima y
   «Agregar» en Verde Bosque (`DARK_BUTTON`), a pedido del dev (2026-11-09). En el celular los tres ocupan todo el ancho.
+  Otra excepción (US-38, wireframe del dev): la pestaña «Eliminar mi cuenta» de Mi espacio va en Pimentón sobre Papel
+  (5.1:1).
 - No usar estética hospitalaria: azul médico, cruces, estetoscopios ni fotos de stock de "doctor con planilla".
 - No mostrar fotos de cuerpos, básculas ni "antes y después". La comunicación es positiva, sin culpa ni promesas de resultados.
 - No inventar testimonios ni métricas.

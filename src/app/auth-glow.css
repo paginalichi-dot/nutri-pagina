@@ -1,4 +1,11 @@
 @layer components {
+  .theme-forest [role='alert'] {
+    border-radius: 16px;
+    background: var(--paper);
+    padding: 10px 16px;
+    color: var(--price);
+  }
+
   .auth-glow {
     position: relative;
     isolation: isolate;

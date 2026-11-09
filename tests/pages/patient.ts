@@ -16,7 +16,7 @@ export async function registerPatient(page: Page, email: string): Promise<void> 
   await page.getByLabel('Contraseña', { exact: true }).fill(PASSWORD);
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Crear mi cuenta' }).click();
-  await expect(page.getByText('te mandamos un email para activar tu cuenta')).toBeVisible();
+  await expect(page.getByText('Te enviamos un correo electrónico para activar tu cuenta.')).toBeVisible();
 }
 
 export async function openLink(page: Page, { email, path, button }: { email: string; path: string; button: string }): Promise<void> {
@@ -42,7 +42,12 @@ export async function activePatient(page: Page): Promise<string> {
   return email;
 }
 
-export const card = (page: Page, title: string): Locator => page.locator('section', { has: page.getByRole('heading', { name: title }) });
+export const card = (page: Page, title: string): Locator => page.locator('section', { has: page.getByRole('heading', { name: title }) }).last();
+
+export async function openTab(page: Page, name: string): Promise<Locator> {
+  await page.getByRole('tab', { name }).click();
+  return card(page, name);
+}
 
 export async function openAccountMenu(page: Page): Promise<Locator> {
   const account = page.getByRole('button', { name: 'Mi cuenta' });

@@ -11,10 +11,10 @@ export function ResendForm({ email }: { email: string }): ReactElement {
     <form action={action} className='flex flex-col gap-3'>
       <input type='hidden' name='email' value={email} />
       <Honeypot />
-      <FormFeedback state={state} />
       <button type='submit' disabled={pending} className={PUBLIC_SECONDARY}>
         {pending ? 'Reenviando…' : 'Reenviar el email'}
       </button>
+      <FormFeedback state={state} />
     </form>
   );
 }

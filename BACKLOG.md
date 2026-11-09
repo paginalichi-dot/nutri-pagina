@@ -1357,6 +1357,39 @@ Implementación: como en el Sprint 2, el sprint entero de una y la revisión al 
 
 - [x] **CA-2** · Celular: a la izquierda, a la altura de «la base de tu salud», sin pisar el botón flotante · Estimación: 15 min · Completado: 2026-11-09 02:23
 
+### US-38 · Iteración de diseño: Mi espacio, ingreso verde y «¡Ya casi está!»
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-09  |
+| Tamaño       | M           |
+| Depende de   | US-31, US-34 |
+| Plan         | iteración pedida por el dev en el chat (2026-11-09), con 4 wireframes |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero un Mi espacio y un ingreso como los wireframes `bandeja-usuario.png`,
+`componente-login-verde.png`, `planilla-creacion-cuenta.png` y `cuenta-creada.png`, de forma que la cuenta se sienta
+parte de la marca.
+
+Decisiones del dev (2026-11-09): sin Google; «Cancelar» oculto hasta el Sprint 4; «Recordatorios» dice «por email»;
+«Ver todos» lleva a `/mi-espacio/turnos`; pie «Lic. Lisandro López · Nutrición»; «foco.» relleno; todas las pantallas
+de ingreso en verde; «¡Ya casi está!» también tras «olvidé mi contraseña».
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Mi espacio como `bandeja-usuario.png`: barra con logo, «Cerrar sesión» e inicial; tarjeta Verde Bosque con hasta 2 próximos turnos y «Ver todos»; «Recordatorios»; «Mi cuenta» con pestañas que se usan con el teclado · Estimación: 1 h · Completado: 2026-11-09 12:34
+
+- [x] **CA-2** · `/mi-espacio/turnos` muestra los próximos y los anteriores · Estimación: 15 min · Completado: 2026-11-09 12:34
+
+- [x] **CA-3** · Login, registro, recuperar y los links de email en la tarjeta Verde Bosque con la luz; «foco.» relleno; el aviso de «Reenviar el email» va debajo del botón · Estimación: 45 min · Completado: 2026-11-09 12:34
+
+- [x] **CA-4** · Tras registrarse o pedir «olvidé», la página muestra «¡Ya casi está!» con el foco en el título · Estimación: 30 min · Completado: 2026-11-09 12:34
+
+- [x] **CA-5** · Anda en 375px y desktop, sin scroll horizontal, con teclado; revisado con `impeccable` · Estimación: 20 min · Completado: 2026-11-09 12:34
+
 ## Sprint 4 · El paciente reserva online
 
 Previstos (T-7 y US-20 subieron al Sprint 3): US-21
@@ -1397,8 +1430,40 @@ vertical (1024×1366) el ancho da negativo. A 1024 de ancho, además, el ícono 
 
 ## Sprint 5 · Despliegue
 
-Previstos: despliegue (Vercel + Supabase + dominio verificado en Resend + admin de producción) y recordatorio por
-email 24 h antes (cron).
+Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gmail (T-9) y recordatorio por email
+24 h antes (cron).
+
+### T-9 · Emails por Gmail (SMTP) en lugar de Resend
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | Pendiente |
+| Dueño        | —         |
+| Inicio       | —         |
+| Tamaño       | S         |
+| Depende de   | —         |
+| Plan         | —         |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como Lisandro quiero que los emails salgan de una cuenta de Gmail, de forma que les lleguen a todos los
+pacientes sin pagar un dominio.
+
+Decisión del dev (2026-11-09): no se compra un dominio. Sin dominio verificado, Resend sólo entrega a la casilla dueña
+de la cuenta y cae en spam. Hasta este ítem sigue Resend con la cuenta de prueba.
+
+**Criterios de aceptación**
+
+- [ ] **CA-1** · `src/lib/email/send-email.ts` manda por SMTP de Gmail (`nodemailer`) con `GMAIL_USER` y `GMAIL_APP_PASSWORD` (contraseña de aplicación, sólo en el servidor); sale `RESEND_API_KEY` y `EMAIL_FROM` queda para el nombre visible · Estimación: 40 min · Completado: —
+
+- [ ] **CA-2** · Sin credenciales o si Gmail falla, el envío devuelve `false` y sólo se loguea el motivo; la outbox de los E2E (`EMAIL_OUTBOX_DIR`) sigue igual · Estimación: 20 min · Completado: —
+
+- [ ] **CA-3** · `.env.example`, docs y un ADR que reemplaza a Resend (gratis, llega a todos, unos 500 emails por día, cuenta dedicada y nunca la personal) · Estimación: 20 min · Completado: —
+
+**Preguntas abiertas**
+
+- La cuenta de Gmail dedicada a la web, con la verificación en dos pasos y una contraseña de aplicación (la crean
+  el dev y Lisandro).
 
 **Preguntas abiertas de los sprints 2 a 5**
 
