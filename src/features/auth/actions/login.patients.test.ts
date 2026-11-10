@@ -43,6 +43,18 @@ describe('login de pacientes (contrato, US-29)', () => {
     await expect(verifySession(cookieJar.get('session')?.value ?? '')).resolves.toEqual({ subjectId: PATIENT_ID, sessionVersion: 1, role: 'patient' });
   });
 
+  it('US-21 CA-1: con «volver» interno vuelve ahí; uno externo se ignora', async () => {
+    addPatient(sharedStore, hash);
+    const withReturn = (volver: string): FormData => {
+      const data = form();
+      data.set('volver', volver);
+      return data;
+    };
+    await expect(login(null, withReturn('/reservar?ubicacion=x'))).rejects.toThrow('NEXT_REDIRECT:/reservar?ubicacion=x');
+    await expect(login(null, withReturn('//evil.test'))).rejects.toThrow('NEXT_REDIRECT:/mi-espacio');
+    await expect(login(null, withReturn('https://evil.test'))).rejects.toThrow('NEXT_REDIRECT:/mi-espacio');
+  });
+
   it('CA-2: sin activar, con la contraseña correcta, da EMAIL_NOT_VERIFIED y no deja sesión', async () => {
     addPatient(sharedStore, hash, { emailVerifiedAt: null });
     await expect(login(null, form())).resolves.toEqual({ success: false, code: 'EMAIL_NOT_VERIFIED', error: 'Activá tu cuenta con el link que te mandamos.' });

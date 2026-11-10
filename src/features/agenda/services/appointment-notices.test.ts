@@ -51,6 +51,12 @@ describe('appointmentEmail', () => {
     expect(Buffer.from(email?.attachments?.[0]?.content ?? '', 'base64').toString()).toContain('DESCRIPTION:Videollamada: https://meet.example.test/sala');
   });
 
+  it('Sprint 4: un turno online pendiente que cambia de horario no lleva el link de la videollamada', () => {
+    const email = appointmentEmail({ kind: 'rescheduled', detail: { ...ONLINE, status: 'PENDING' }, now: NOW, previous: NOW });
+    expect(email?.text).not.toContain('meet.example.test');
+    expect(Buffer.from(email?.attachments?.[0]?.content ?? '', 'base64').toString()).not.toContain('meet.example.test');
+  });
+
   it('una presencial sin dirección no muestra botón', () => {
     const email = appointmentEmail({ kind: 'confirmed', detail: { ...BASE, place: { ...BASE.place, address: null } }, now: NOW });
     expect(email?.text).not.toContain('Cómo llegar');

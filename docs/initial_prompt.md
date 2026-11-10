@@ -15,8 +15,9 @@ Web profesional de Lisandro con tres objetivos:
 
 1. **Presentarlo** y generar confianza en pacientes nuevos (home, sobre mí, servicios, preguntas frecuentes).
 2. **Mostrar sus sucursales**: dirección, mapa, días y horarios de cada consultorio.
-3. **Gestionar turnos**: los pacientes reservan online **sin crear cuenta** (Sprint 4); si quieren, se registran
-   para ver sus turnos en «Mi espacio» (Sprint 3). Lisandro administra la agenda desde un panel privado (`/admin`).
+3. **Gestionar turnos**: los pacientes se registran (Sprint 3) y reservan online **con su cuenta** (Sprint 4,
+   ADR 0007); ven, cancelan y reprograman sus turnos en «Mi espacio». Lisandro administra la agenda desde un panel
+   privado (`/admin`).
 
 Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios profesionales.
 
@@ -65,6 +66,18 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
     en su nuevo lugar.
   Features nuevos: `patient` y `rate-limit`. Con `EMAIL_OUTBOX_DIR` (sólo fuera de producción) los emails se
   escriben en una carpeta en vez de mandarse; los E2E lo usan.
+- Sprint 4 («El paciente reserva online», rama `feat/sprint-4-reserva-online`, sin commitear al 2026-11-09,
+  [ADR 0007](adr/0007-la-reserva-online-pide-cuenta.md)):
+  - `/reservar` con cuenta (sin sesión pasa por `/login?volver=`): primero la modalidad (presencial o virtual, con
+    entrada animada) y después los pasos con «Continuar» y «Atrás» y la tarjeta «Tu turno», todo en la URL (US-40,
+    wireframes del dev); nace pendiente; hasta 2 turnos por venir por paciente;
+  - Mi espacio: detalle de cada turno con «Cancelar» y «Reprogramar» hasta 24 h antes (reprogramar vuelve a
+    pendiente) y, después, «Escribile a Lisandro» (`LISANDRO_WHATSAPP`);
+  - emails «Recibimos tu solicitud / tu cambio» al paciente y avisos a Lisandro; en el panel, contador de
+    solicitudes y `/admin/solicitudes`;
+  - las solicitudes sin confirmar vencen 12 h antes (`/api/cron/expire-pending` con `CRON_SECRET`; el cron, en el
+    Sprint 5);
+  - las animaciones de entrada (también la intro de la home) se repiten en cada llegada (SCROLL.md).
 
 ## 4. Stack
 
@@ -91,12 +104,12 @@ mostradas en Argentina, cero datos personales en logs, sólo tokens de `DESIGN.m
 - Ubicaciones: consultorios y una «Online» (link fijo de videollamada). Franjas semanales en hora argentina, una
   duración única para todos los turnos y una lista de obras sociales (más «Particular»). Sin tipos de consulta.
 - La disponibilidad sale de las franjas, la duración, los turnos activos y los bloqueos (globales). El paciente
-  reserva con 12 h de anticipación como mínimo y hasta 60 días; el panel, desde ahora.
+  reserva con 12 h de anticipación como mínimo y hasta 60 días, con hasta 2 turnos por venir; el panel, desde ahora.
 - Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario. La reserva online (Sprint 4)
-  nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado.
-- El paciente cancela o reprograma con el link del email hasta 24 h antes (Sprint 4). Emails con Resend (cuenta
-  de prueba) hasta el despliegue (Sprint 5), donde pasan a una cuenta de Gmail dedicada (T-9, sin dominio propio) y
-  llega el recordatorio.
+  nace pendiente y la confirma Lisandro (si no, vence 12 h antes); el turno que carga él nace confirmado.
+- El paciente cancela o reprograma desde Mi espacio hasta 24 h antes (Sprint 4). Emails con Resend (cuenta de
+  prueba) hasta el despliegue (Sprint 5), donde pasan a una cuenta de Gmail dedicada (T-9, sin dominio propio) y
+  llegan el recordatorio y el cron de las solicitudes.
 - Cuenta de pacientes (Sprint 3, ADR 0006): optativa. «Mis turnos» muestra los turnos cuyo email coincide con el
   de la cuenta.
 

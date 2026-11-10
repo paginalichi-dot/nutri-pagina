@@ -15,6 +15,11 @@ describe('UpcomingCard', () => {
     expect(screen.getByRole('link', { name: /Reservá tu turno/ }).getAttribute('href')).toBe('/reservar');
   });
 
+  it('US-25 CA-2: cada turno abre su detalle, donde se cancela o se reprograma', () => {
+    render(<UpcomingCard upcoming={[anAppointment({ id: 'turno-1' })]} />);
+    expect(screen.getByRole('link', { name: /Martes 10 de noviembre/ }).getAttribute('href')).toBe('/mi-espacio/turnos/turno-1');
+  });
+
   it('muestra como mucho dos turnos', () => {
     render(<UpcomingCard upcoming={[later('a', '10'), later('b', '11'), later('c', '12')]} />);
     expect(screen.getAllByRole('listitem')).toHaveLength(2);

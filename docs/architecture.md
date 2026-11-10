@@ -11,8 +11,8 @@ Una sola aplicación **Next.js 16 (App Router)** con dos caras:
 
 | Cara | Rutas | Quién la usa | Cómo renderiza |
 |---|---|---|---|
-| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/login` (el mismo para todos), `/registro`, `/recuperar`, `/verificar/[token]`, `/restablecer/[token]`, `/confirmar-email/[token]`, `/privacidad`, `/turno/[token]` (Sprint 4) | Pacientes, con o sin cuenta | Server Components; la reserva y sus pasos, Client Components + Server Actions |
-| Mi espacio | `/mi-espacio` (Sprint 3, ADR 0006) | Pacientes con cuenta verificada (rol `patient` en la sesión) | Server Component que lee con `guardPatientPage`; formularios Client Components + Server Actions |
+| Sitio público | `/` (home, con «Dónde atiendo»), `/reservar`, `/login` (el mismo para todos), `/registro`, `/recuperar`, `/verificar/[token]`, `/restablecer/[token]`, `/confirmar-email/[token]`, `/privacidad` | Pacientes, con o sin cuenta | Server Components con Client Components + Server Actions en los formularios |
+| Mi espacio y reserva | `/mi-espacio`, `/mi-espacio/turnos/[id]` (y `/reprogramar`) y `/reservar` (Sprint 4, ADR 0007) | Pacientes con cuenta verificada (rol `patient` en la sesión) | Server Components que leen con `guardPatientPage`; los pasos de la reserva van en la URL (sin JS); formularios Client Components + Server Actions |
 | Panel | `/admin/**` (agenda, turnos, bloqueos, pacientes, ubicaciones, ajustes, cuenta) | Lisandro (único admin), con login propio (JWT) | Server Components que leen con `guardAdminPage`; formularios Client Components + Server Actions |
 
 **Estilo arquitectónico.** En ejecución es cliente-servidor; en despliegue, un monolito modular. El código se
@@ -122,9 +122,11 @@ panel llaman a `guardAdminPage()`; las públicas usan `'use cache'` con un tag q
 ## Flujo de una mutación (ejemplo: reservar un turno)
 
 1. **El cliente valida** con el schema de `domain` para dar feedback inmediato. No es una medida de seguridad.
-2. **La action es la barrera real.** Las públicas (reservar, cancelar con token) aplican rate limiting y honeypot;
-   las del panel verifican la sesión. Todas validan con `z.strictObject`.
-3. **El service aplica las reglas** (horario disponible, anticipación mínima) y abre la transacción.
+2. **La action es la barrera real.** Las públicas (login, registro, links de un solo uso) aplican rate limiting y
+   honeypot; las del paciente (reservar, cancelar, reprogramar) verifican su sesión y limitan los intentos por cuenta;
+   las del panel verifican la sesión del admin. Todas validan con `z.strictObject`.
+3. **El service aplica las reglas** (horario disponible, anticipación mínima, tope de 2 turnos por venir) y abre la
+   transacción `Serializable`.
 4. **La base garantiza lo que importa:** dos reservas simultáneas del mismo horario chocan contra la restricción y
    una recibe `SLOT_TAKEN`.
 5. **La action nunca lanza hacia el cliente.** Devuelve `ActionResult`.

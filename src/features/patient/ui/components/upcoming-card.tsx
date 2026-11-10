@@ -18,20 +18,26 @@ const CHIP: Readonly<Record<AppointmentDetail['status'], string>> = {
 
 function Row({ appointment }: { appointment: AppointmentDetail }): ReactElement {
   return (
-    <li className='flex flex-wrap items-center gap-x-4 gap-y-2 rounded-input border border-border bg-secondary p-4'>
-      <span aria-hidden='true' className='hidden size-11 shrink-0 items-center justify-center rounded-full bg-secondary sm:flex'>
-        <CalendarDays className='size-5' />
-      </span>
-      <div className='flex min-w-0 flex-1 flex-col gap-1'>
-        <time dateTime={appointment.startsAt.toISOString()} className='text-[16px] font-semibold'>
-          {appointmentDay(appointment.startsAt)}
-        </time>
-        <p className='text-[14px] text-muted-foreground'>{placeOf(appointment)}</p>
-      </div>
-      <span className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-[13px] font-semibold ${CHIP[appointment.status]}`}>
-        {appointment.status === 'CONFIRMED' ? <Check aria-hidden='true' className='size-4' strokeWidth={3} /> : null}
-        {STATUS_LABELS[appointment.status]}
-      </span>
+    <li>
+      <Link
+        href={`/mi-espacio/turnos/${appointment.id}`}
+        className={`hover-shade hover-shade-on-dark flex flex-wrap items-center gap-x-4 gap-y-2 rounded-input border border-border bg-secondary p-4 ${FOCUS}`}
+      >
+        <span aria-hidden='true' className='hidden size-11 shrink-0 items-center justify-center rounded-full bg-secondary sm:flex'>
+          <CalendarDays className='size-5' />
+        </span>
+        <div className='flex min-w-0 flex-1 flex-col gap-1'>
+          <time dateTime={appointment.startsAt.toISOString()} className='text-[16px] font-semibold'>
+            {appointmentDay(appointment.startsAt)}
+          </time>
+          <p className='text-[14px] text-muted-foreground'>{placeOf(appointment)}</p>
+        </div>
+        <span className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-[13px] font-semibold ${CHIP[appointment.status]}`}>
+          {appointment.status === 'CONFIRMED' ? <Check aria-hidden='true' className='size-4' strokeWidth={3} /> : null}
+          {STATUS_LABELS[appointment.status]}
+        </span>
+        <ChevronRight aria-hidden='true' className='size-5 shrink-0' />
+      </Link>
     </li>
   );
 }

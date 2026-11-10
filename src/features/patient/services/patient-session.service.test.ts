@@ -15,7 +15,7 @@ describe('sesión del paciente (T-8 CA-4)', () => {
   it('con su sesión vigente devuelve el paciente y su nombre', async () => {
     const { store } = patientFixture();
     addPatient(store, 'scrypt$x$y');
-    await expect(createPatientSessionService(store.patients).authenticate(await token('patient'))).resolves.toEqual({ patientId: PATIENT_ID, sessionVersion: 1, name: TEST_PATIENT.name, email: TEST_PATIENT.email });
+    await expect(createPatientSessionService(store.patients).authenticate(await token('patient'))).resolves.toEqual({ patientId: PATIENT_ID, sessionVersion: 1, name: TEST_PATIENT.name, email: TEST_PATIENT.email, phone: TEST_PATIENT.phone });
   });
 
   it('sin token, con la sesión del admin, sin cuenta o sin verificar da UNAUTHENTICATED', async () => {

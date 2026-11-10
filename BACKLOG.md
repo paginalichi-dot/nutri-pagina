@@ -1392,16 +1392,189 @@ de ingreso en verde; «¡Ya casi está!» también tras «olvidé mi contraseña
 
 ## Sprint 4 · El paciente reserva online
 
-Previstos (T-7 y US-20 subieron al Sprint 3): US-21
-reserva online (nace pendiente), US-22 emails de la reserva («Recibimos tu solicitud» y aviso a Lisandro), US-24 el
-paciente cancela con el link, US-25 el paciente reprograma con el link (vuelve a pendiente). US-23 (Lisandro
-confirma un pendiente) se adelantó al Sprint 2.
+Origen: descubrimiento con el dev (2026-11-09). Plan único del sprint:
+[`docs/plans/sprint-4-reserva-online.md`](docs/plans/sprint-4-reserva-online.md); decisión de arquitectura: ADR 0007
+(la reserva online pide cuenta). T-7 y US-20 subieron al Sprint 3 y US-23 (confirmar) se adelantó al Sprint 2.
+
+Decisiones del dev: reservar pide cuenta; hasta 2 turnos por venir por paciente; las solicitudes sin confirmar se
+cancelan solas 12 h antes (cron en el Sprint 5); el paciente cancela o reprograma desde Mi espacio hasta 24 h antes y
+reprogramar vuelve a pendiente; Lisandro recibe un email por cada solicitud, cancelación y reprogramación, y ve un
+contador de solicitudes; la reserva no pide datos extra.
+
+### US-21 · El paciente reserva su turno online
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | L         |
+| Depende de   | US-29, US-15 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente quiero reservar un turno desde la web, de forma que no tenga que escribirle a Lisandro para conseguir un horario.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · «Reservá tu turno» sin sesión lleva a `/login?volver=/reservar` y, al entrar, vuelve a la reserva; `volver` sólo acepta rutas internas · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · Pasos Ubicación → Día → Horario → Confirmar (obra social opcional), en la URL, mobile first y con teclado · Estimación: 1 h 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-3** · Sólo ofrece horarios libres desde 12 h y hasta 60 días; el turno nace pendiente y `ONLINE`; dos reservas simultáneas al mismo horario dan una sola (`SLOT_TAKEN`) · Estimación: 40 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-4** · Con 2 turnos por venir (contando los que cargó Lisandro) da `BOOKING_LIMIT`, también con dos pedidos a la vez · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-5** · Termina en «¡Solicitud enviada!» y el turno se ve pendiente en Mi espacio · Estimación: 20 min · Completado: 2026-11-09 20:05
+
+### US-22 · Emails de la reserva
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | M         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente y como Lisandro quiero un email por cada movimiento del turno, de forma que nadie se entere tarde.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Al paciente: «Recibimos tu solicitud» y «Recibimos tu cambio», con «Gestionar mi turno» hacia Mi espacio · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · A Lisandro (email de su cuenta): nueva solicitud, cancelación y reprogramación del paciente, con el link al turno en el panel · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-3** · Los emails salen después de responder (`after()`); si fallan, el turno queda igual · Estimación: 15 min · Completado: 2026-11-09 20:05
+
+### US-24 · El paciente cancela desde Mi espacio
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | S         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente quiero cancelar mi turno sin escribirle a Lisandro, de forma que el horario le quede libre a otro.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · «Cancelar» pide confirmación y funciona hasta 24 h antes; después da `CHANGE_TOO_LATE` y ofrece WhatsApp · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · Sólo sus turnos (por email); el de otro da `NOT_FOUND`; libera el horario · Estimación: 20 min · Completado: 2026-11-09 20:05
+
+### US-25 · El paciente reprograma desde Mi espacio
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | M         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente quiero cambiar el horario de mi turno, de forma que no tenga que cancelar y reservar de nuevo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Elige otro horario público libre (cualquier ubicación) hasta 24 h antes; el turno vuelve a pendiente · Estimación: 40 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · `/mi-espacio/turnos/[id]` muestra el turno (destino de «Gestionar mi turno») con sus acciones · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+### US-39 · Lisandro ve las solicitudes por confirmar
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | S         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como Lisandro quiero saber cuántas solicitudes tengo sin confirmar, de forma que ningún paciente quede esperando.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Contador en «Agenda» (menú lateral y barra de abajo) y, si hay alguna, una tarjeta en el tablero · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · `/admin/solicitudes` lista las solicitudes por venir con «Confirmar», «Reprogramar» y «Cancelar» (al confirmarla sale de la lista) · Estimación: 40 min · Completado: 2026-11-09 20:05
+
+### T-10 · Las solicitudes sin confirmar vencen 12 h antes
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | S         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como Lisandro quiero que una solicitud que no confirmé se cancele sola antes del turno, de forma que el paciente sepa a tiempo que no va.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Servicio que cancela los pendientes que empiezan en 12 h o menos y le manda «Tu turno se canceló» a cada paciente; correrlo dos veces no duplica nada · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · `/api/cron/expire-pending` protegido con `CRON_SECRET` (sin él, 401); el cron de Vercel lo programa el Sprint 5 · Estimación: 20 min · Completado: 2026-11-09 20:05
+
+### US-40 · La reserva según los wireframes del dev (modalidad, pasos y «Tu turno»)
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | L         |
+| Depende de   | US-21, US-25 |
+| Plan         | [US-40](docs/plans/US-40-reserva-wireframes.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+Origen: wireframes del dev del 2026-11-09 (`docs/wireframes/paso-previo-reserva.png`, `flujo-presencial-*.png` y
+`flujo-virtual-*.png`), con las correcciones que pidió en el chat.
+
+**Historia**: Como paciente quiero elegir primero si mi consulta es presencial o virtual y ver mi turno armándose al
+costado, de forma que reservar sea claro y rápido.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Pantalla previa a pantalla completa, sin barra ni pregunta y con «Cerrar sesión» arriba a la derecha: Presencial (Verde Bosque) y Virtual (Papel), cada mitad entera es el link de su modalidad (con hover y foco) y se despliega entera desde su lado (en mobile, desde arriba y abajo), en cada llegada; quietas con «reducir movimiento». Al elegir, la barra baja y el resto entra desde la izquierda; cada paso nuevo entra desde la izquierda; al terminar, el último paso queda con tilde (iteración del dev, 2026-11-10) · Estimación: 1 h 30 min · Completado: 2026-11-10 02:05
+
+- [x] **CA-2** · Presencial: Ubicación (sólo presenciales) → Día → Horario → Confirmar; virtual: Día → Horario → Confirmar, con la ubicación online por detrás · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-3** · Cada paso marca la opción y avanza con «Continuar» (gris hasta elegir); «Atrás» vuelve; todo en la URL y sin JS · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-4** · Tarjeta «Tu turno» (Lugar o Modalidad, Día, Horario, «Paso X de N», «Cambiar» y el aviso de las 24 h); en mobile, arriba y compacta · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-5** · Calendario de a un mes con flechas (L M X J V S D) y horarios en 3 columnas con los ocupados tachados · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-6** · Confirmar con filas de ícono y obra social; final «¡Solicitud enviada!» con «Ver mis turnos» y «Reservar otro turno»; reprogramar usa el mismo flujo · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-7** · La intro de la home también se repite al volver navegando (SCROLL.md cambia la regla) · Estimación: 30 min · Completado: 2026-11-10 02:05
 
 ### BUG-1 · Las frases del hero no se leen en pantallas de 1024px de ancho y mucho alto
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
+| Estado       | Hecho     |
 | Dueño        | —         |
 | Inicio       | —         |
 | Tamaño       | S         |
@@ -1411,7 +1584,7 @@ confirma un pendiente) se adelantó al Sprint 2.
 | Horas reales | —         |
 
 Encontrado en la revisión de diseño del Sprint 3 (2026-11-09). No se tocó porque cambia lo que se ve: lo decide el
-dev.
+dev. **Cerrado por el dev (2026-11-09): ya está resuelto.**
 
 **Actual**: el ancho de cada frase (`--phrase-w` en `src/components/home/hero.tsx`) sale de restar el ancho de la
 foto, que crece con el alto de la pantalla. A 1024×900 las frases quedan de unos 5px, ilegibles. En un iPad Pro
@@ -1431,7 +1604,10 @@ vertical (1024×1366) el ancho da negativo. A 1024 de ancho, además, el ícono 
 ## Sprint 5 · Despliegue
 
 Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gmail (T-9) y recordatorio por email
-24 h antes (cron).
+24 h antes (cron), más el cron que vence las solicitudes (T-10).
+
+Para más adelante (sin sprint, wireframes del dev del 2026-11-09): la lista de Pacientes del panel
+(`docs/wireframes/lista-pacientes.png`) y el nuevo diseño de Ubicaciones (`docs/wireframes/apartado-de-ubicacion.png`).
 
 ### T-9 · Emails por Gmail (SMTP) en lugar de Resend
 
@@ -1468,5 +1644,4 @@ de la cuenta y cae en spam. Hasta este ítem sigue Resend con la cuenta de prueb
 **Preguntas abiertas de los sprints 2 a 5**
 
 - Ubicaciones reales, horarios, duración de la consulta, obras sociales y link de videollamada (los carga Lisandro).
-- Con la cuenta de pacientes antes que la reserva: ¿reservar va a pedir cuenta o se sigue pudiendo sin cuenta, como hoy?
 - Revisión de la política de privacidad y cuánto tiempo se guardan los datos de los pacientes (Ley 25.326).

@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { loginPathFor } from '@/lib/auth/return-path';
 import { SESSION_COOKIE, SESSION_COOKIE_OPTIONS, type SessionRole, verifySession } from '@/lib/auth/session-token';
 
 const ZONES: ReadonlyArray<{ prefix: string; role: SessionRole }> = [
   { prefix: '/admin', role: 'admin' },
   { prefix: '/mi-espacio', role: 'patient' },
+  { prefix: '/reservar', role: 'patient' },
 ];
 
 const zoneOf = (pathname: string): SessionRole | null =>
@@ -12,8 +14,8 @@ const zoneOf = (pathname: string): SessionRole | null =>
 
 // Por qué: con Cache Components la página empieza a enviarse antes que el layout del panel; el proxy decide primero.
 function deniedResponse(request: NextRequest, role: SessionRole): NextResponse {
-  const target = role === 'admin' ? '/acceso-denegado' : '/login';
-  return role === 'admin' ? NextResponse.rewrite(new URL(target, request.url)) : NextResponse.redirect(new URL(target, request.url));
+  if (role === 'admin') return NextResponse.rewrite(new URL('/acceso-denegado', request.url));
+  return NextResponse.redirect(new URL(loginPathFor(request.nextUrl.pathname, request.nextUrl.search), request.url));
 }
 
 // Por qué: renovar en una action o en una precarga puede revivir la cookie que "Cerrar sesión" acaba de borrar.

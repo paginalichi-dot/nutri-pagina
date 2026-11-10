@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { after } from 'next/server';
 import { guardPublicAction } from '@/features/rate-limit/actions/guard-public-action';
 import { type ActionFailure, type ActionResult, fail } from '@/lib/action-result';
+import { safeReturnPath } from '@/lib/auth/return-path';
 import { startSession } from '@/lib/auth/session-cookie';
 import { HOME_BY_ROLE, type SessionRole } from '@/lib/auth/session-token';
 import { toActionFailure } from '@/lib/db-errors';
@@ -32,5 +33,5 @@ export async function login(_previous: ActionResult | null, formData: FormData):
   const role = await signIn(parsed.data);
   if (typeof role !== 'string') return role;
   revalidatePath(HOME_BY_ROLE[role], 'layout');
-  redirect(HOME_BY_ROLE[role]);
+  redirect((role === 'patient' ? safeReturnPath(formData.get('volver')) : null) ?? HOME_BY_ROLE[role]);
 }

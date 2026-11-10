@@ -5,6 +5,7 @@
 @import "./motion.css";
 @import "./hover-shade.css";
 @import "./auth-glow.css";
+@import "./entrance.css";
 
 @custom-variant short (@media (min-width: 768px) and (max-height: 760px));
 

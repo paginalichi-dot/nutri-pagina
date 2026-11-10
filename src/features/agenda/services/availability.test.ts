@@ -1,7 +1,7 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { argentinaTime } from '@/lib/format-date-time';
-import { type AvailabilityInput, availableSlots, bookingWindow } from './availability';
+import { type AvailabilityInput, availableSlots, bookingWindow, slotGrid } from './availability';
 
 const MONDAY = '2026-11-09';
 const NOW = new Date('2026-11-07T12:00:00Z');
@@ -32,6 +32,12 @@ describe('availableSlots', () => {
   it('US-15 CA-2: descuenta turnos y bloqueos de cualquier ubicación, aunque se pisen apenas', () => {
     const busy = [at('2026-11-09T13:30:00Z', 15), at('2026-11-09T14:00:00Z', 60)];
     expect(times({ busy })).toEqual(['09:00', '12:00']);
+  });
+
+  it('US-40 CA-5: la grilla trae también los ocupados, marcados, y respeta la ventana pública', () => {
+    const grid = slotGrid({ ...BASE, busy: [at('2026-11-09T13:30:00Z', 15)] });
+    expect(grid.map(({ startsAt, free }) => [argentinaTime(startsAt), free])).toEqual([['09:00', true], ['10:00', false], ['11:00', true], ['12:00', true]]);
+    expect(slotGrid({ ...BASE, now: new Date('2026-11-09T01:00:00Z') }).map(({ startsAt }) => argentinaTime(startsAt))).toEqual(['10:00', '11:00', '12:00']);
   });
 
   it('US-15 CA-2: un turno que termina justo cuando empieza otro no lo bloquea', () => {

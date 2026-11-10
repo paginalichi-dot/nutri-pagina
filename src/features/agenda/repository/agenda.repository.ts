@@ -4,6 +4,7 @@ import { type DbTransaction, withSerializableTransaction } from '@/lib/db/transa
 import type { RecordRef } from '@/lib/record-ref';
 import type { AppointmentDetail, AppointmentRow, AppointmentStatus, PatientContact, TimeRange } from '../domain/appointment.schema';
 import type { BlockInput, BlockRow } from '../domain/block.schema';
+import { agendaPendingReads } from './agenda-pending-reads';
 import { agendaReads } from './agenda-reads';
 import { agendaWrites } from './agenda-writes';
 
@@ -22,7 +23,7 @@ export type NewAppointment = {
   healthInsuranceId: string | null;
 };
 
-export type AppointmentMove = { locationId: string; startsAt: Date; endsAt: Date };
+export type AppointmentMove = { locationId: string; startsAt: Date; endsAt: Date; status?: AppointmentStatus };
 
 export type AgendaRepository = {
   listAppointments(range: TimeRange): Promise<AppointmentRow[]>;
@@ -35,6 +36,10 @@ export type AgendaRepository = {
   getSlotMinutes(): Promise<number | null>;
   findActiveByEmail(email: string, now: Date): Promise<TimeRange | null>;
   listByPatientEmail(email: string): Promise<AppointmentDetail[]>;
+  countUpcomingByEmail(email: string, now: Date): Promise<number>;
+  countPending(now: Date): Promise<number>;
+  listPending(now: Date): Promise<AppointmentRow[]>;
+  listExpiringPending(range: TimeRange): Promise<AppointmentDetail[]>;
   countActiveAppointments(range: TimeRange): Promise<number>;
   listBlocks(range: TimeRange): Promise<BlockRow[]>;
   createAppointment(data: NewAppointment): Promise<string>;
@@ -62,6 +67,7 @@ async function serializable<T>(work: (repository: AgendaRepository) => Promise<T
 function createAgendaRepository(client: DbTransaction, transactional: boolean): AgendaRepository {
   const repository: AgendaRepository = {
     ...agendaReads(client),
+    ...agendaPendingReads(client),
     ...agendaWrites(client),
     inTransaction: (work) => (transactional ? work(repository) : serializable(work)),
   };

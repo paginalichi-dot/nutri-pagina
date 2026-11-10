@@ -32,8 +32,8 @@ describe('login (contrato)', () => {
     await adminRepository.upsertAdmin({ email: TEST_ADMIN.email, passwordHash: hash });
   });
 
-  it('con email y contraseña correctos deja una sesión válida y lleva a /admin', async () => {
-    await expect(login(null, form({ email: '  ADMIN@ejemplo.test ' }))).rejects.toThrow('NEXT_REDIRECT:/admin');
+  it('con email y contraseña correctos deja una sesión válida y lleva a /admin, aunque venga «volver»', async () => {
+    await expect(login(null, form({ email: '  ADMIN@ejemplo.test ', volver: '/reservar' }))).rejects.toThrow('NEXT_REDIRECT:/admin');
     const token = cookieJar.get('session')?.value ?? '';
     await expect(verifySession(token)).resolves.toMatchObject({ sessionVersion: 1 });
     expect(cookieJar.optionsOf('session')).toMatchObject({ httpOnly: true, secure: true, sameSite: 'lax' });

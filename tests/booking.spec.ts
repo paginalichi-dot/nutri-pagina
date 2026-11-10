@@ -23,22 +23,12 @@ test.describe('botón flotante "Reservá tu turno"', () => {
     expect((lastBox?.y ?? 0) + (lastBox?.height ?? 0)).toBeLessThanOrEqual(buttonBox?.y ?? 0);
   });
 
-  test('se alcanza con Tab, tiene un área táctil de al menos 44px y lleva a /reservar', async ({ page }) => {
+  test('se alcanza con Tab, tiene un área táctil de al menos 44px y lleva a /reservar (sin sesión, por el login)', async ({ page }) => {
     await page.goto('/');
     await page.keyboard.press('Tab');
     await expect(button(page)).toBeFocused();
     expect((await button(page).boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
     await page.keyboard.press('Enter');
-    await expect(page).toHaveURL(/\/reservar$/);
-  });
-
-  test('/reservar avisa que la reserva online está por llegar y no muestra el botón', async ({ page }) => {
-    await page.goto('/reservar');
-    await expect(page).toHaveTitle('Reservá tu turno · Lisandro López');
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Reservá tu turno');
-    await expect(page.getByText('La reserva online está por llegar.')).toBeVisible();
-    await expect(button(page)).toHaveCount(0);
-    await page.getByRole('link', { name: 'Volver al inicio' }).click();
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lisandro López');
+    await expect(page).toHaveURL(/\/login\?volver=%2Freservar$/);
   });
 });

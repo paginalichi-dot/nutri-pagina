@@ -5,7 +5,7 @@ import { isAppError } from '@/lib/errors';
 import type { PatientClaims } from '../domain/patient.schema';
 import { patientSessionService } from '../services/patient-session.service';
 
-export type CurrentPatient = PatientClaims & { name: string; email: string };
+export type CurrentPatient = PatientClaims & { name: string; email: string; phone: string };
 
 export async function requirePatient(): Promise<CurrentPatient> {
   return patientSessionService.authenticate(await readSessionToken());

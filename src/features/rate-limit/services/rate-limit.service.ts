@@ -4,7 +4,7 @@ import { type RateLimitRepository, rateLimitRepository } from '../repository/rat
 
 export type RateRule = { limit: number; minutes: number };
 
-export type PublicAction = 'login' | 'register' | 'resend' | 'forgot' | 'link';
+export type PublicAction = 'login' | 'register' | 'resend' | 'forgot' | 'link' | 'booking';
 
 export const RATE_RULES: Readonly<Record<PublicAction, { ip: RateRule; email?: RateRule }>> = {
   login: { ip: { limit: 20, minutes: 15 } },
@@ -12,6 +12,7 @@ export const RATE_RULES: Readonly<Record<PublicAction, { ip: RateRule; email?: R
   resend: { ip: { limit: 10, minutes: 60 }, email: { limit: 3, minutes: 60 } },
   forgot: { ip: { limit: 10, minutes: 60 }, email: { limit: 3, minutes: 60 } },
   link: { ip: { limit: 20, minutes: 60 } },
+  booking: { ip: { limit: 30, minutes: 60 }, email: { limit: 10, minutes: 60 } },
 };
 
 export type RateCheck = { action: PublicAction; scope: 'ip' | 'email'; value: string; rule: RateRule };

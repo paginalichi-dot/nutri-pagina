@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactElement, ReactNode } from 'react';
 import { PanelNav } from '@/components/panel/panel-nav';
+import { getPendingCount } from '@/features/agenda/actions/agenda-queries';
 import { guardAdminPage } from '@/features/auth/actions/require-admin';
 import { LogoutButton } from '@/features/auth/ui/components/logout-button';
 
@@ -10,9 +11,10 @@ export const metadata: Metadata = { title: 'Panel · Lisandro López', robots: {
 
 export default async function PanelLayout({ children }: Readonly<{ children: ReactNode }>): Promise<ReactElement> {
   await guardAdminPage();
+  const pending = await getPendingCount();
   return (
     <div className='flex flex-1 bg-panel'>
-      <PanelNav footer={<LogoutButton onDark />} />
+      <PanelNav footer={<LogoutButton onDark />} pending={pending} />
       <div className='flex min-w-0 flex-1 flex-col pb-24 md:pb-0'>{children}</div>
     </div>
   );

@@ -30,11 +30,19 @@ test.describe('intro de marca', () => {
     expect((await transformOf(page, '[data-hero-phrase]:nth-of-type(1)')).x).toBe(0);
   });
 
-  test('al volver a la home desde otra página no se repite: el hero se ve enseguida', async ({ page }) => {
-    await page.goto('/reservar');
+  test('US-40 CA-7: al volver a la home navegando, la intro se repite y después deja la home libre', async ({ page }) => {
+    await page.goto('/acceso-denegado');
     await page.getByRole('link', { name: 'Volver al inicio' }).click();
     await expect(page).toHaveURL('/');
+    await expect(page.locator(PRELOADER)).toBeVisible();
+    await introDone(page);
+    await expect(page.locator(PRELOADER)).toBeHidden();
     await expect(page.locator('[data-hero-name]')).toHaveCSS('opacity', '1');
+    expect(await clipOfMain(page)).toBe('none');
+  });
+
+  test('US-40 CA-7: entrando a un ancla de la home no hay intro', async ({ page }) => {
+    await page.goto('/#sobre-mi');
     await expect(page.locator(PRELOADER)).toBeHidden();
     expect(await clipOfMain(page)).toBe('none');
   });

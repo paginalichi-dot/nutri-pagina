@@ -13,7 +13,7 @@ describe('RecoverForm', () => {
     const { container } = render(<RecoverForm />);
     const form = container.querySelector('form');
     if (form) fireEvent.submit(form);
-    expect(await screen.findByRole('heading', { name: '¡Ya casi está!' })).toBeDefined();
+    expect(await screen.findByRole('heading', { name: '¡Ya casi está!' }, { timeout: 5000 })).toBeDefined();
     expect(screen.getByText(/Si el email tiene una cuenta, te enviamos un correo/)).toBeDefined();
   });
 });

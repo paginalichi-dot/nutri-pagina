@@ -2,12 +2,13 @@ import type { DbTransaction } from '@/lib/db/transaction';
 import { type AppointmentDetail, AppointmentDetailSchema, type AppointmentRow, AppointmentRowSchema, type PatientContact, type TimeRange } from '../domain/appointment.schema';
 import { type BlockRow, BlockRowSchema } from '../domain/block.schema';
 import type { AgendaRepository, LocationSchedule, WeeklySlot } from './agenda.repository';
+import type { PendingReads } from './agenda-pending-reads';
 
-type AgendaReads = Omit<AgendaRepository, 'createAppointment' | 'updateStatus' | 'moveAppointment' | 'createBlock' | 'deleteBlock' | 'inTransaction'>;
+type AgendaReads = Omit<AgendaRepository, keyof PendingReads | 'createAppointment' | 'updateStatus' | 'moveAppointment' | 'createBlock' | 'deleteBlock' | 'inTransaction'>;
 
-const ACTIVE = { in: ['PENDING' as const, 'CONFIRMED' as const] };
+export const ACTIVE = { in: ['PENDING' as const, 'CONFIRMED' as const] };
 const RANGE = { startsAt: true, endsAt: true } as const;
-const ROW = {
+export const ROW = {
   id: true,
   locationId: true,
   startsAt: true,
@@ -26,11 +27,11 @@ type Row = { location: { name: string; kind: string; address: string | null; dir
 
 const overlapping = ({ startsAt, endsAt }: TimeRange): { startsAt: { lt: Date }; endsAt: { gt: Date } } => ({ startsAt: { lt: endsAt }, endsAt: { gt: startsAt } });
 
-function toRow<T extends Row>({ location, healthInsurance, ...row }: T): AppointmentRow {
+export function toRow<T extends Row>({ location, healthInsurance, ...row }: T): AppointmentRow {
   return AppointmentRowSchema.parse({ ...row, locationName: location.name, healthInsuranceName: healthInsurance?.name ?? null });
 }
 
-function toDetail<T extends Row>(row: T): AppointmentDetail {
+export function toDetail<T extends Row>(row: T): AppointmentDetail {
   const { kind, address, directions, videoUrl } = row.location;
   return AppointmentDetailSchema.parse({ ...toRow(row), place: { kind, address, directions, videoUrl } });
 }

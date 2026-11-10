@@ -1,6 +1,6 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import { ManualAppointmentInputSchema, SlotQuerySchema } from './booking.schema';
+import { ManualAppointmentInputSchema, OnlineBookingInputSchema, SlotQuerySchema } from './booking.schema';
 
 const LOCATION = '7b0f1a52-4a5c-4c1e-9a43-1f3b5a7c9d10';
 const VALID = { locationId: LOCATION, startsAt: '2026-11-10T13:00:00.000Z', name: ' Ana Prueba ', phone: '11 2345-6789', email: ' Ana@Ejemplo.TEST ', healthInsuranceId: '' };
@@ -42,6 +42,26 @@ describe('ManualAppointmentInputSchema', () => {
     fc.assert(
       fc.property(fc.anything(), (input) => {
         expect(() => ManualAppointmentInputSchema.safeParse(input)).not.toThrow();
+      })
+    );
+  });
+});
+
+describe('OnlineBookingInputSchema', () => {
+  const ONLINE = { locationId: LOCATION, startsAt: '2026-11-10T13:00:00.000Z', healthInsuranceId: '' };
+
+  it('US-21 CA-2: sólo ubicación, horario y obra social opcional (Particular = null)', () => {
+    expect(OnlineBookingInputSchema.parse(ONLINE)).toEqual({ locationId: LOCATION, startsAt: new Date('2026-11-10T13:00:00.000Z'), healthInsuranceId: null });
+  });
+
+  it('no acepta datos del paciente: salen de la cuenta', () => {
+    expect(OnlineBookingInputSchema.safeParse({ ...ONLINE, name: 'Otra' }).success).toBe(false);
+  });
+
+  it('nunca lanza con entradas arbitrarias', () => {
+    fc.assert(
+      fc.property(fc.anything(), (input) => {
+        expect(() => OnlineBookingInputSchema.safeParse(input)).not.toThrow();
       })
     );
   });

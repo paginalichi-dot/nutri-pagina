@@ -20,6 +20,13 @@ describe('PanelNav', () => {
     expect(screen.getByText('NUTRICIONISTA')).toBeDefined();
   });
 
+  it('US-39 CA-1: Agenda lleva el contador de solicitudes por confirmar; sin solicitudes, nada', () => {
+    const { rerender } = render(<PanelNav footer={null} pending={3} />);
+    expect(screen.getByRole('link', { name: /^Agenda/ }).textContent).toBe('Agenda3 solicitudes por confirmar');
+    rerender(<PanelNav footer={null} pending={0} />);
+    expect(screen.getByRole('link', { name: /^Agenda/ }).textContent).toBe('Agenda');
+  });
+
   it('T-4 CA-2: marca sólo la sección actual con aria-current', () => {
     pathname.value = '/admin/ubicaciones/123';
     render(<PanelNav footer={null} />);

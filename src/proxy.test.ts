@@ -57,7 +57,14 @@ describe('proxy', () => {
     const allowed = await proxy(request('/mi-espacio', patient, page));
     expect(passes(allowed)).toBe(true);
     expect(allowed.cookies.get('session')).toMatchObject({ value: patient });
-    for (const token of [undefined, admin]) expect((await proxy(request('/mi-espacio/datos', token))).headers.get('location')).toBe('http://localhost/login');
+    for (const token of [undefined, admin]) expect((await proxy(request('/mi-espacio/datos', token))).headers.get('location')).toBe('http://localhost/login?volver=%2Fmi-espacio%2Fdatos');
+  });
+
+  it('US-21 CA-1: /reservar sin sesión de paciente lleva al login con la ruta para volver, incluidos los pasos', async () => {
+    const patient = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'patient' });
+    expect(passes(await proxy(request('/reservar', patient)))).toBe(true);
+    const response = await proxy(request('/reservar?ubicacion=x&dia=2026-11-10'));
+    expect(response.headers.get('location')).toBe('http://localhost/login?volver=%2Freservar%3Fubicacion%3Dx%26dia%3D2026-11-10');
   });
 
   it('con un token adulterado borra la cookie y lo trata como sin sesión', async () => {
@@ -70,7 +77,7 @@ describe('proxy', () => {
   it.each([
     ['el sitio público, aunque haya token', request('/', 'cualquiera')],
     ['una ruta que sólo empieza parecido', request('/administracion', 'cualquiera')],
-    ['/reservar, que es pública', request('/reservar', 'cualquiera')],
+    ['una ruta que sólo empieza como /reservar', request('/reservarlo', 'cualquiera')],
     ['/login, el login de todos', request('/login', 'cualquiera')],
   ])('no toca %s', async (_caso, incoming) => {
     const response = await proxy(incoming);

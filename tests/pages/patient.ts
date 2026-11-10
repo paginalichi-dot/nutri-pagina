@@ -7,10 +7,10 @@ export const PASSWORD = 'clave-e2e-paciente';
 
 export const newEmail = (): string => `e2e-${randomUUID()}@ejemplo.test`;
 
-export async function registerPatient(page: Page, email: string): Promise<void> {
+export async function registerPatient(page: Page, email: string, name = 'Paciente E2E'): Promise<void> {
   await freshClient(page);
   await page.goto('/registro');
-  await page.getByLabel('Nombre y apellido').fill('Paciente E2E');
+  await page.getByLabel('Nombre y apellido').fill(name);
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Teléfono (WhatsApp)').fill('11 2345-6789');
   await page.getByLabel('Contraseña', { exact: true }).fill(PASSWORD);

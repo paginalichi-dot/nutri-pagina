@@ -23,6 +23,8 @@ describe('catálogo de errores', () => {
     { code: 'BLOCK_HAS_APPOINTMENTS', message: 'En ese rango hay turnos. Cancelalos o reprogramalos antes de bloquear.' },
     { code: 'INVALID_TRANSITION', message: 'Ese cambio no se puede hacer en el estado actual del turno.' },
     { code: 'NO_SLOT_DURATION', message: 'Todavía no definiste la duración de los turnos. Hacelo en Ajustes.' },
+    { code: 'BOOKING_LIMIT', message: 'Ya tenés dos turnos por venir. Cancelá o reprogramá uno para reservar otro.' },
+    { code: 'CHANGE_TOO_LATE', message: 'Faltan menos de 24 h para tu turno. Escribile a Lisandro para cambiarlo.' },
     { code: 'UNEXPECTED', message: 'No se pudo procesar el turno. Intentá de nuevo en unos minutos.' },
   ] as const)('$code tiene su mensaje en español', ({ code, message }) => {
     expect(errorMessage(code, 'el turno')).toBe(message);

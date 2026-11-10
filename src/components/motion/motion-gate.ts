@@ -14,7 +14,7 @@ export function isIntroRunning(): boolean {
 }
 
 export function claimIntro(): boolean {
-  if (!isIntroRunning()) return false;
+  if (!isIntroRunning() && location.hash !== '') return false;
   document.documentElement.dataset.introState = 'playing';
   window.scrollTo(0, 0);
   return true;

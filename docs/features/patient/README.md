@@ -24,6 +24,12 @@ Decisión de base: [ADR 0006](../../adr/0006-cuentas-de-pacientes-con-email-y-co
 - **Diseño vigente** (US-38): Mi espacio con la tarjeta Verde Bosque de próximos turnos (hasta 2 y «Ver todos» →
   `/mi-espacio/turnos`, con los próximos y los anteriores), «Recordatorios» y «Mi cuenta» con pestañas. Registro y
   «olvidé» terminan en «¡Ya casi está!» (`EmailSent`).
+- **Turnos desde Mi espacio** (Sprint 4, ADR 0007): cada turno abre su detalle (`/mi-espacio/turnos/[id]`, destino de
+  «Gestionar mi turno» de los emails). Con más de 24 h: «Reprogramar» (los mismos pasos que `/reservar`) y «Cancelar
+  turno»; con menos, «Escribile a Lisandro» por WhatsApp. El link de la videollamada sólo con el turno confirmado. La
+  reserva y estas acciones viven en el feature `agenda`.
+- **`volver`** (US-21): sin sesión, el proxy manda `/reservar` y `/mi-espacio/**` a `/login?volver=<ruta>`; al entrar, el
+  paciente vuelve ahí. Sólo se aceptan rutas internas (`safeReturnPath`); el admin siempre va a `/admin`.
 - **Ícono del hero** (US-35): con o sin sesión, una tarjeta con «Iniciar sesión» y «Registrate», o «Hola, Nombre».
 
 ## Quién lo usa
@@ -32,7 +38,8 @@ Decisión de base: [ADR 0006](../../adr/0006-cuentas-de-pacientes-con-email-y-co
 |---|---|---|---|
 | Registrarse, reenviar la activación, pedir el link de «olvidé» | Sí | Sí | Sí |
 | Usar un link de un solo uso | Sí (el link es la credencial) | Sí | Sí |
-| Ver `/mi-espacio` y cambiar sus datos | No: va a `/login` | Sí | No: va a `/login` |
+| Ver `/mi-espacio` y cambiar sus datos | No: va a `/login?volver=` | Sí | No: va a `/login` |
+| Reservar (`/reservar`), cancelar y reprogramar sus turnos | No: va a `/login?volver=` | Sí | No |
 
 ## Server Actions
 

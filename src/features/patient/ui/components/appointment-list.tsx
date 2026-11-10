@@ -1,8 +1,11 @@
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import type { ReactElement } from 'react';
+import { FOCUS } from '@/components/form/form-parts';
 import { type AppointmentDetail, STATUS_LABELS } from '@/features/agenda/domain/appointment.schema';
 import { formatDateTime } from '@/lib/format-date-time';
 
-const CHIP: Readonly<Record<AppointmentDetail['status'], string>> = {
+export const STATUS_CHIP: Readonly<Record<AppointmentDetail['status'], string>> = {
   PENDING: 'border border-border bg-muted',
   CONFIRMED: 'bg-confirmed',
   ATTENDED: 'bg-secondary',
@@ -15,15 +18,20 @@ const placeOf = (appointment: AppointmentDetail): string =>
 
 function Item({ appointment }: { appointment: AppointmentDetail }): ReactElement {
   return (
-    <li className='flex flex-col gap-1 rounded-input border border-border p-4'>
-      <div className='flex flex-wrap items-center justify-between gap-2'>
-        <time dateTime={appointment.startsAt.toISOString()} className='text-[17px] font-semibold'>
-          {formatDateTime(appointment.startsAt)}
-        </time>
-        <span className={`rounded-full px-3 py-1 text-[13px] font-semibold ${CHIP[appointment.status]}`}>{STATUS_LABELS[appointment.status]}</span>
-      </div>
-      <p className='text-[15px] font-medium'>{appointment.locationName}</p>
-      {placeOf(appointment) ? <p className='text-[15px] text-muted-foreground'>{placeOf(appointment)}</p> : null}
+    <li>
+      <Link href={`/mi-espacio/turnos/${appointment.id}`} className={`hover-shade flex items-center gap-3 rounded-input border border-border p-4 ${FOCUS}`}>
+        <div className='flex min-w-0 flex-1 flex-col gap-1'>
+          <div className='flex flex-wrap items-center justify-between gap-2'>
+            <time dateTime={appointment.startsAt.toISOString()} className='text-[17px] font-semibold'>
+              {formatDateTime(appointment.startsAt)}
+            </time>
+            <span className={`rounded-full px-3 py-1 text-[13px] font-semibold ${STATUS_CHIP[appointment.status]}`}>{STATUS_LABELS[appointment.status]}</span>
+          </div>
+          <p className='text-[15px] font-medium'>{appointment.locationName}</p>
+          {placeOf(appointment) ? <p className='text-[15px] text-muted-foreground'>{placeOf(appointment)}</p> : null}
+        </div>
+        <ChevronRight aria-hidden='true' className='size-5 shrink-0 text-muted-foreground' />
+      </Link>
     </li>
   );
 }

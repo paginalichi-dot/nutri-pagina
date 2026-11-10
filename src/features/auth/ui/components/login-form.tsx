@@ -10,7 +10,7 @@ import { FormFeedback } from '@/components/form/form-parts';
 import { PasswordField } from '@/components/form/password-field';
 import { Honeypot, PUBLIC_LINK, PUBLIC_PRIMARY, PublicField } from '@/components/form/public-form-parts';
 
-export function LoginForm(): ReactElement {
+export function LoginForm({ returnTo = null }: { returnTo?: string | null }): ReactElement {
   const [state, action, pending] = useActionState(login, null);
   const [email, setEmail] = useState('');
   const unverified = state?.success === false && state.code === 'EMAIL_NOT_VERIFIED';
@@ -29,6 +29,7 @@ export function LoginForm(): ReactElement {
           </Link>
         </div>
         <Honeypot />
+        {returnTo ? <input type='hidden' name='volver' value={returnTo} /> : null}
         <FormFeedback state={state} />
         <button type='submit' disabled={pending} className={`${PUBLIC_PRIMARY} gap-2`}>
           {pending ? 'Entrando…' : 'Entrar'}

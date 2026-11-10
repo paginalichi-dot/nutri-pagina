@@ -25,6 +25,8 @@ const CATALOG = {
   BLOCK_HAS_APPOINTMENTS: () => 'En ese rango hay turnos. Cancelalos o reprogramalos antes de bloquear.',
   INVALID_TRANSITION: () => 'Ese cambio no se puede hacer en el estado actual del turno.',
   NO_SLOT_DURATION: () => 'Todavía no definiste la duración de los turnos. Hacelo en Ajustes.',
+  BOOKING_LIMIT: () => 'Ya tenés dos turnos por venir. Cancelá o reprogramá uno para reservar otro.',
+  CHANGE_TOO_LATE: () => 'Faltan menos de 24 h para tu turno. Escribile a Lisandro para cambiarlo.',
   UNEXPECTED: (entity: string) => `No se pudo procesar ${entity}. Intentá de nuevo en unos minutos.`,
 } satisfies Record<string, (entity: string) => string>;
 
