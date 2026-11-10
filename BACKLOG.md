@@ -1744,6 +1744,55 @@ sin apretar las flechas muchas veces.
 
 - [x] **CA-2** · Se usa con teclado (Enter va a la fecha escrita) y una fecha incompleta o anterior al año 2000 no navega · Estimación: 15 min · Completado: 2026-11-10 16:05
 
+### US-46 · El login se despliega como la elección de modalidad
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | XS          |
+| Depende de   | US-34, US-40 |
+| Plan         | pedido del dev en el chat (2026-11-10) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-10): el mismo efecto de la elección de modalidad (US-40) en `/login`.
+
+**Historia**: Como paciente o Lisandro quiero que el login entre con el mismo despliegue que la reserva, de forma que
+el sitio se sienta uno solo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Al entrar a `/login`, las dos mitades entran enteras (fondo y contenido) desde afuera de la pantalla hasta juntarse en el centro: el panel verde desde la izquierda y la del formulario desde la derecha (debajo de 1024px sólo está la del formulario, que sube desde abajo en el celular); se repite en cada llegada y queda quieto con «reducir movimiento» · Estimación: 20 min · Completado: 2026-11-10 21:35
+
+### US-47 · Hero potenciado: los trazos a mano del wireframe
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | S           |
+| Depende de   | US-36       |
+| Plan         | [US-47](docs/plans/US-47-hero-potenciado.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-10): replicar los trazos de `docs/wireframes/hero-potenciado.png`, menos las tres líneas
+sobre la «L» de LISANDRO y la estrella de cuatro puntas.
+
+**Historia**: Como visitante quiero un hero con trazos a mano más ricos, de forma que la presentación tenga más vida
+sin tapar el contenido.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Alrededor de Lisandro: dos curvas a su izquierda (a la altura del cuello y del hombro), una curva larga a la derecha que baja desde el cuello hasta el hombro, una ramita de tres hojas a la derecha de la cabeza y, abajo, dos rayitas a la izquierda y una curva con una rayita a la derecha del botón flotante · Estimación: 40 min · Completado: 2026-11-10 21:53
+
+- [x] **CA-2** · Dos chispas arriba a la izquierda de «La alimentación…», el subrayado bajo «nuestra vida» y un subrayado bajo «la base de tu salud» en lugar del corchete; sin las líneas sobre la «L» ni la estrella · Estimación: 20 min · Completado: 2026-11-10 21:53
+
+- [x] **CA-3** · Se ven en desktop y en el celular, se dibujan al final de la intro y quedan dibujados con «reducir movimiento» · Estimación: 15 min · Completado: 2026-11-10 21:53
+
 ## Sprint 5 · Despliegue
 
 Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gmail (T-9) y recordatorio por email

@@ -136,12 +136,14 @@ Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y r
   nombre (pedido del dev, 2026-11-07). Debajo de 1024px va en columna, debajo de la foto, a
   `clamp(1.25rem, 5.2vw, 1.875rem)`.
 - Sin píldora del hero ni selector de sucursal: reservar es el botón flotante.
-- Líneas a mano (US-36, `hero-strokes.tsx`, según `docs/wireframes/hero-animado.png`): trazos finos Verde Lima
-  (2.5px, sin relleno, `aria-hidden`). Desde 1024px, tres curvas alrededor de Lisandro (hombro izquierdo, cuello a la
-  derecha y largo del brazo derecho); bajo la frase de apertura, un subrayado corto (el corchete de su derecha se
-  sacó a pedido del dev, 2026-11-08); junto a la de cierre, un corchete recto, de líneas verticales y horizontales, a
-  su izquierda que baja y se vuelve subrayado. En mobile, las tres curvas del cuerpo (más chicas, con la foto) y un subrayado corto bajo cada frase. Tras la entrada del
-  hero se revelan con una máscara de izquierda a derecha (`clip-path`: DrawSVG no puede medir trazos con
+- Líneas a mano (US-36, rehechas en US-47 según `docs/wireframes/hero-potenciado.png`; `hero-strokes.tsx`): trazos
+  finos Verde Lima (2.5px, sin relleno, `aria-hidden`), iguales en desktop y en el celular porque se dibujan sobre la
+  foto (viewBox del retrato): dos curvas a la izquierda de Lisandro (cuello y hombro), una curva larga a la derecha
+  que baja del cuello al hombro, una ramita de tres hojas junto a la cabeza y, abajo, dos rayitas a la izquierda y una
+  curva con una rayita a la derecha del botón flotante. En la frase de apertura, dos chispas arriba a la izquierda y
+  un subrayado bajo «nuestra vida»; en la de cierre, un subrayado bajo «la base de tu salud» (ya no lleva corchete).
+  Sin las líneas sobre la «L» ni la estrella de cuatro puntas del wireframe (pedido del dev, 2026-11-10). Tras la
+  entrada del hero se revelan con una máscara de izquierda a derecha (`clip-path`: DrawSVG no puede medir trazos con
   `non-scaling-stroke` en un SVG estirado); sin intro, quedan dibujadas.
 - En notebooks bajas (p. ej. 1280×600) el marco baja hasta 520px y el nombre se limita también por alto
   (`min(8.4vw, 8.5rem, 15svh)`); el ancho de la frase se mide sobre el marco (`cqw`), no sobre la ventana, para que
@@ -461,7 +463,10 @@ como **nutricionista**.
   ojo, `aria-pressed`) con inputs translúcidos de borde claro, «¿Olvidaste tu contraseña?» subrayado en Niebla, el
   botón Verde Lima «Entrar →» y «¿No tenés cuenta? **Registrate**» (Registrate en Verde Lima). Sin Google ni separador
   «o». Los errores van en una franja Papel con texto Pimentón (sobre Verde Bosque no se leen). Detrás de la tarjeta, una luz Verde Lima desenfocada que se prende y se apaga cada 1 s
-  (entre 60 % y 85 % de opacidad: nunca deja de verse; sólo `opacity` y `transform`; quieta con «reducir movimiento»). Debajo de 1024px sólo se ve la tarjeta sobre Hueso.
+  (entre 60 % y 85 % de opacidad: nunca deja de verse; sólo `opacity` y `transform`; quieta con «reducir movimiento»). Debajo de 1024px sólo se ve la tarjeta sobre Hueso. Al entrar
+  (cada vez, US-46), las dos mitades se despliegan como en la elección de modalidad: el panel verde desde la izquierda
+  y la mitad Hueso del formulario desde la derecha (en el celular, desde abajo), con `data-enter` de
+  `src/app/entrance.css`; quietas con «reducir movimiento».
   Si el login responde «Activá tu cuenta», debajo del error aparece «Reenviar el email», y su aviso sale debajo del
   botón.
 - **Registro, Recuperar y links de email (US-28, US-30, US-38):** la misma tarjeta Verde Bosque con luz sobre Hueso,

@@ -9,7 +9,7 @@ const PERKS: ReadonlyArray<{ label: string; Icon: ComponentType<{ className?: st
 
 export function LoginBrandPanel(): ReactElement {
   return (
-    <aside className='hidden flex-col justify-between bg-foreground p-12 text-background lg:flex xl:p-16'>
+    <aside data-enter='unfold-left' className='hidden flex-col justify-between bg-foreground p-12 text-background lg:flex xl:p-16'>
       <div className='flex items-center gap-4'>
         <BrandLogo alt='' />
         <span className='text-[15px] font-semibold tracking-[1px] uppercase'>Lic. Lisandro López</span>

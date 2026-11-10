@@ -19,4 +19,16 @@ test.describe('acceso de pacientes (Sprint 3)', () => {
     await page.goto('/login');
     await expect(page).toHaveURL(/\/mi-espacio$/);
   });
+
+  test('US-46: al entrar al login, las dos mitades se despliegan hacia el centro; quietas con «reducir movimiento»', async ({ browser }) => {
+    for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+      const context = await browser.newContext({ reducedMotion, viewport: { width: 1280, height: 800 } });
+      const page = await context.newPage();
+      await page.goto('/login');
+      const names = await page.locator('main > [data-enter]').evaluateAll((elements) => elements.map((element) => getComputedStyle(element).animationName));
+      expect(names).toEqual(reducedMotion === 'reduce' ? ['none', 'none'] : ['unfold-from-left', 'unfold-from-right']);
+      await expect(page.getByRole('button', { name: 'Entrar' })).toBeVisible();
+      await context.close();
+    }
+  });
 });

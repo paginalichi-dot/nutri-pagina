@@ -17,9 +17,9 @@ export default async function LoginPage({ searchParams }: PageProps<'/login'>): 
   if (await hasAdminSession()) redirect('/admin');
   if (await currentPatient()) redirect(returnTo ?? '/mi-espacio');
   return (
-    <main className='grid min-h-svh overflow-x-clip bg-muted lg:grid-cols-2'>
+    <main className='grid min-h-svh overflow-clip bg-background lg:grid-cols-2'>
       <LoginBrandPanel />
-      <div className='flex flex-col items-center justify-center px-4 py-12 md:px-8'>
+      <div data-enter='unfold-right' className='flex flex-col items-center justify-center bg-muted px-4 py-12 md:px-8'>
         <AuthCard title='Ingresá a tu cuenta' lead='Gestioná tus turnos y tu historial'>
           <LoginForm returnTo={returnTo} />
         </AuthCard>

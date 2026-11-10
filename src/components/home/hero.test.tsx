@@ -44,6 +44,17 @@ describe('Hero', () => {
     expect(body?.getAttribute('class')).not.toMatch(/hidden/);
   });
 
+  it('US-47: trazos del wireframe potenciado, con la ramita y sin el corchete de la frase de cierre', () => {
+    const { container } = render(<Hero />);
+    const body = container.querySelector('[data-hero-photo] svg[data-hero-strokes]');
+    expect(body?.querySelectorAll('path[data-draw]').length).toBe(11);
+    expect(body?.querySelectorAll('path[d$="Z"]').length).toBe(3);
+    const [opening, closing] = container.querySelectorAll('[data-hero-phrase]');
+    expect(opening?.querySelectorAll('svg[data-hero-strokes] path').length).toBe(3);
+    expect(closing?.querySelectorAll('svg[data-hero-strokes]').length).toBe(1);
+    expect(closing?.querySelector('path[d^="M4 0V"]')).toBeNull();
+  });
+
   it('la flecha para bajar va junto a la frase de apertura en desktop y a la de cierre en el celular, y es decorativa', () => {
     const { container } = render(<Hero />);
     const [opening, closing] = container.querySelectorAll('[data-hero-phrase]');
