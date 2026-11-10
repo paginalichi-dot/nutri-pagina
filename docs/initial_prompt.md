@@ -1,6 +1,6 @@
 # Prompt inicial: contexto completo de pagina-lichi
 
-> Foto del proyecto al **2026-11-09**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
+> Foto del proyecto al **2026-11-10**. Se adapta en cada avance significativo (`docs/how-to-document.md`).
 
 ## 1. Quién sos y con quién trabajás
 
@@ -56,7 +56,7 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   (`docs/wireframes/panel-administrador.png`: sidebar con «Pacientes» en «Próximamente», métricas, línea de horas,
   próximo turno y calendario; botones del panel con radio 12px), «Confirmar» un pendiente (US-23, adelantada del
   Sprint 4) y un solo login en `/login` (US-27). Los bloqueos se quedan.
-- Sprint 3 («Cuenta de pacientes», rama `feat/sprint-3-cuenta-pacientes`, sin commitear al 2026-11-09):
+- Sprint 3 («Cuenta de pacientes», integrado en `develop`):
   - cuentas de pacientes con email y contraseña, por el mismo `/login`, con el rol en la sesión
     ([ADR 0006](adr/0006-cuentas-de-pacientes-con-email-y-contrasena.md));
   - registro con consentimiento, activación por email, «olvidé mi contraseña» y «Mi espacio» (`/mi-espacio`):
@@ -66,7 +66,7 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
     en su nuevo lugar.
   Features nuevos: `patient` y `rate-limit`. Con `EMAIL_OUTBOX_DIR` (sólo fuera de producción) los emails se
   escriben en una carpeta en vez de mandarse; los E2E lo usan.
-- Sprint 4 («El paciente reserva online», rama `feat/sprint-4-reserva-online`, sin commitear al 2026-11-09,
+- Sprint 4 («El paciente reserva online», integrado en `develop` el 2026-11-10,
   [ADR 0007](adr/0007-la-reserva-online-pide-cuenta.md)):
   - `/reservar` con cuenta (sin sesión pasa por `/login?volver=`): primero la modalidad (presencial o virtual, con
     entrada animada) y después los pasos con «Continuar» y «Atrás» y la tarjeta «Tu turno», todo en la URL (US-40,
@@ -78,6 +78,13 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
   - las solicitudes sin confirmar vencen 12 h antes (`/api/cron/expire-pending` con `CRON_SECRET`; el cron, en el
     Sprint 5);
   - las animaciones de entrada (también la intro de la home) se repiten en cada llegada (SCROLL.md).
+- Iteración del panel (US-41 a US-45, rama `feat/panel-iteracion`, wireframes del dev del 2026-11-10):
+  - Ubicaciones con lista y ficha lado a lado (horarios que se editan al instante, turnos y bloqueos del mes) y
+    «Nueva ubicación» en un solo paso, con sus franjas y la «Vista del paciente»;
+  - Pacientes: la lista junta cuentas y turnos sin cuenta (por email o teléfono), con estados, buscador, filtros y la
+    ficha de cada paciente; sólo lectura;
+  - Ajustes en dos pestañas; la duración acepta cualquier entero de minutos mayor que 0 (migración del `CHECK`);
+  - en la agenda, un calendario junto al título para ir directo a una fecha (o a su semana).
 
 ## 4. Stack
 

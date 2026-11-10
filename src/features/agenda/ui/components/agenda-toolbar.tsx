@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { ReactElement } from 'react';
 import { FOCUS } from '@/components/form/form-parts';
 import { addDays, argentinaWeekday, longDate, startOfWeek, WEEKDAY_NAMES } from '@/lib/argentina-time';
+import { DateJump } from './date-jump';
 
 export type AgendaMode = 'dia' | 'semana';
 
@@ -35,7 +36,10 @@ export function AgendaToolbar({ day, mode, today }: { day: string; mode: AgendaM
   const step = mode === 'semana' ? 7 : 1;
   return (
     <div className='flex flex-wrap items-center justify-between gap-3'>
-      <h2 className='text-[18px] font-semibold md:text-[20px]'>{boardTitle({ day, mode, today })}</h2>
+      <div className='flex items-center gap-3'>
+        <h2 className='text-[18px] font-semibold md:text-[20px]'>{boardTitle({ day, mode, today })}</h2>
+        <DateJump day={day} mode={mode} />
+      </div>
       <div className='flex items-center gap-1.5 md:gap-2'>
         <ModeToggle day={day} mode={mode} />
         <Link href={agendaHref(addDays(day, -step), mode)} aria-label={mode === 'semana' ? 'Semana anterior' : 'Día anterior'} className={SQUARE}>

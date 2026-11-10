@@ -3,7 +3,7 @@ import { AppError } from '@/lib/errors';
 import type { AgendaSettingsRow, HealthInsuranceRow } from '../domain/settings.schema';
 import type { SettingsRepository } from '../repository/settings.repository';
 
-export function createFakeSettingsRepository(): SettingsRepository {
+export function createFakeSettingsRepository(appointments: ReadonlyMap<string, number> = new Map()): SettingsRepository {
   let settings: AgendaSettingsRow | null = null;
   const insurances = new Map<string, HealthInsuranceRow>();
 
@@ -38,5 +38,6 @@ export function createFakeSettingsRepository(): SettingsRepository {
     async setHealthInsuranceActive({ id, version }, active) {
       versioned(id, version).active = active;
     },
+    appointmentsByHealthInsurance: async () => appointments,
   };
 }

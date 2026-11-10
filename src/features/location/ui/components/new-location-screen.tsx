@@ -1,16 +1,20 @@
 'use client';
 
 import { type ReactElement, useState } from 'react';
-import { PanelCard, PanelPage } from '@/components/panel/panel-page';
-import { KIND_TEXTS, LocationForm } from './location-form';
+import { PanelPage } from '@/components/panel/panel-page';
+import type { LocationRow } from '../../domain/location.schema';
+import { NewLocationForm } from './new-location-form';
 
 export function NewLocationScreen(): ReactElement {
-  const [kind, setKind] = useState<keyof typeof KIND_TEXTS>('IN_PERSON');
+  const [kind, setKind] = useState<LocationRow['kind']>('IN_PERSON');
   return (
-    <PanelPage title={KIND_TEXTS[kind].title} back={{ href: '/admin/ubicaciones', label: 'Volver a ubicaciones' }}>
-      <PanelCard>
-        <LocationForm onKindChange={setKind} />
-      </PanelCard>
+    <PanelPage
+      wide
+      title={kind === 'ONLINE' ? 'Nuevo espacio online' : 'Nuevo consultorio'}
+      lead='Configurá los datos y los horarios en un solo paso.'
+      back={{ href: '/admin/ubicaciones', label: 'Volver a ubicaciones' }}
+    >
+      <NewLocationForm kind={kind} onKindChange={setKind} />
     </PanelPage>
   );
 }

@@ -3,6 +3,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 import { z } from 'zod';
 import { guardAdminPage } from '@/features/auth/actions/require-admin';
 import { isAppError } from '@/lib/errors';
+import type { LocationStats } from '../domain/new-location.schema';
 import type { LocationWithHours, PublicLocation } from '../domain/public-location.schema';
 import { locationService } from '../services/location.service';
 import { LOCATIONS_TAG } from './refresh-locations';
@@ -21,6 +22,11 @@ export async function getLocation(id: string): Promise<LocationWithHours | null>
     if (isAppError(error) && error.code === 'NOT_FOUND') return null;
     throw error;
   }
+}
+
+export async function getLocationStats(id: string): Promise<LocationStats> {
+  await guardAdminPage();
+  return locationService.stats(id);
 }
 
 export async function getPublicLocations(): Promise<PublicLocation[]> {

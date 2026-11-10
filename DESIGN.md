@@ -389,7 +389,8 @@ como **nutricionista**.
   - Cuatro tarjetas Papel radio 16px: disco Verde Lima al 25% con el ícono, label 14px/500, número 28px/700 y bajada
     13px Gris Piedra («+2 que ayer», «+12% vs. semana anterior», «Esta semana», «De 10 disponibles» u «Hoy no atendés»).
     2×2 hasta 1280px; en mobile, sin el disco del ícono.
-  - A la izquierda, la tarjeta de la agenda: título «Hoy, 8 de noviembre de 2026» y, a la derecha, el toggle
+  - A la izquierda, la tarjeta de la agenda: título «Hoy, 8 de noviembre de 2026» con, al lado, un cuadrado de 44px
+    con calendario (US-45) que abre el selector de fecha del navegador y va a ese día (o a su semana); a la derecha, el toggle
     Día/Semana, flechas cuadradas con borde Línea Salvia y «Hoy» en Gris Nube. La vista día es una
     línea de horas (de 08:00 a 18:00, estirada si algo cae afuera; 54px por hora, más compacta para que el día entre en la pantalla) con cada turno en su lugar: bloque
     radio 6px con barra izquierda de 4px, «**Nombre** · Obra social» y «09:00 – 09:45 · Ubicación»; confirmado en
@@ -408,7 +409,38 @@ como **nutricionista**.
     calendario del mes (L a D, el día elegido en disco Verde Bosque, punto en los días con turnos (Verde
     Bosque; Verde Lima sobre el elegido), hoy en 700 con un aro Línea Salvia, días de otros meses en Gris Piedra; cada día
     de 44px es un link).
-- **Pacientes (US-26):** por ahora, una tarjeta «Próximamente».
+- **Pacientes (US-43, `docs/wireframes/lista-pacientes.png`):** «Pacientes» y «N pacientes registrados»; un
+  buscador (input del panel sobre Papel, con lupa) y los filtros Todos / Activos / Nuevos este mes / Sin turno próximo
+  (controles de 12px, el activo en Verde Bosque). Tarjeta Papel radio 16px con la tabla: encabezados 12px en mayúsculas
+  con +1px en Gris Piedra; Paciente (iniciales en disco Verde Lima o Verde Bosque con iniciales Verde Lima, alternados,
+  nombre 600 y email), Teléfono, Último turno, Próximo turno (punto Verde Lima delante), Estado (chips Activo
+  `bg-confirmed`, Nuevo Verde Lima al 25%, Inactivo Gris Nube) y «Ver» + «⋯» (WhatsApp y Nuevo turno). En mobile, una
+  tarjeta por paciente. Abajo «Mostrando 1–20 de N» y el paginado (flechas con borde Línea Salvia y la página en Verde
+  Bosque). La ficha (`/admin/pacientes/[id]`): datos, WhatsApp y «Nuevo turno» en Gris Nube, y dos tarjetas con los
+  turnos por venir y anteriores. Sin «Nuevo paciente» ni «Exportar».
+- **Ubicaciones (US-41, `docs/wireframes/apartado-de-ubicacion.png`):** «Tus **ubicaciones**» con «+ Nueva ubicación»
+  (Verde Lima). Desde 1024px, lista (5/12) y ficha (7/12) en tarjetas Papel radio 16px. Cada fila: miniatura Gris Nube
+  de 56px con disco Verde Lima y pin (o cámara), nombre 17px/600, dirección o «Videollamada», chip Presencial
+  (`bg-confirmed`), Online (Gris Nube) o Desactivada, y chevron; la elegida con fondo Verde Lima al 15% y barra Verde
+  Lima a la izquierda. La ficha: nombre 24px/700, chip, «⋯» (Editar datos), el mapa radio 16px con «Abrir en Google
+  Maps ↗» subrayado, «HORARIOS DE ATENCIÓN» (13px, mayúsculas, +1px), una fila por franja (lápiz y tacho de 44px) o
+  «sin atención», «+ Agregar horario» subrayado, una caja Gris Nube con dos números (28px/700: turnos y bloqueos del
+  mes) y, abajo a la derecha, «Desactivar ubicación» en Pimentón. Sin «Guardar cambios», % de asistencia ni
+  «Exportar» (decisión del dev).
+- **Nueva ubicación (US-42, `docs/wireframes/nueva-ubicacion1/2/3.png`):** «Nuevo consultorio» / «Nuevo espacio
+  online» en Manrope (el wireframe usa una serifa). Cuatro tarjetas Papel radio 30px con disco Verde Bosque numerado
+  (número Verde Lima): 1 Tipo de atención (dos tarjetas Gris Nube radio 16px con disco e ícono; la elegida con borde
+  Verde Lima de 2px, fondo Verde Lima al 20% y tilde), 2 Datos, 3 Horarios (un interruptor por día: pista Verde
+  Bosque con perilla Verde Lima; prendido muestra desde/hasta y «+ Franja»; sin atajos) y 4 Visibilidad (caja Gris
+  Nube con ojo en disco Verde Lima e interruptor). A la derecha (`sticky`, 340px; abajo en mobile) la tarjeta «Vista
+  del paciente» (`theme-forest`, luz Verde Lima): chip Visible/Oculta, la ubicación como la ve el paciente, la semana
+  y «Horas por semana» en 32px/700. Abajo, «Guardar consultorio» / «Guardar ubicación online» (Verde Lima radio 12px,
+  56px de alto, con disco Verde Bosque y tilde) y «Cancelar».
+- **Ajustes (US-44, `docs/wireframes/nuevo-ajustes1.png` y `2`):** «Ajustes» y «Configurá cómo funciona tu agenda.»;
+  pestañas «Duración de los turnos» y «Obras sociales» (12px; la activa en Verde Bosque). Duración: 30, 45, 60 y 90
+  minutos en Gris Nube (la elegida en Verde Lima), un separador, el campo «Minutos, por ejemplo 50» y «Guardar
+  cambios». Obras sociales: «+ Nueva obra social» (Verde Lima) y, por fila, nombre, chip Gris Nube «N turnos»,
+  interruptor y lápiz; la desactivada en Gris Piedra. Sin la pestaña «Recordatorios» ni la «Anticipación máxima».
 - **Solicitudes (US-39):** el link «Agenda» del menú lleva un contador Verde Lima con las solicitudes por confirmar
   (en mobile, arriba a la derecha del ícono). En el tablero, si hay alguna, una tarjeta Papel arriba de las métricas
   («Tenés N solicitudes por confirmar», disco Verde Lima al 25% con `Inbox` y «Ver solicitudes» en Verde Bosque).
@@ -607,7 +639,8 @@ Solo tema claro. No se implementa modo oscuro en esta etapa.
   «Desactivar» de las obras sociales en Ajustes (`DANGER_BUTTON`, texto blanco, 5.1:1), con «Guardar» en Verde Lima y
   «Agregar» en Verde Bosque (`DARK_BUTTON`), a pedido del dev (2026-11-09). En el celular los tres ocupan todo el ancho.
   Otra excepción (US-38, wireframe del dev): la pestaña «Eliminar mi cuenta» de Mi espacio va en Pimentón sobre Papel
-  (5.1:1).
+  (5.1:1). Y otra (US-41, wireframe del dev): «Desactivar ubicación» en la ficha de la ubicación, como texto Pimentón
+  sobre Papel (5.1:1). Desde US-44 las obras sociales ya no usan «Desactivar» rojo: se apagan con un interruptor.
 - No usar estética hospitalaria: azul médico, cruces, estetoscopios ni fotos de stock de "doctor con planilla".
 - No mostrar fotos de cuerpos, básculas ni "antes y después". La comunicación es positiva, sin culpa ni promesas de resultados.
 - No inventar testimonios ni métricas.

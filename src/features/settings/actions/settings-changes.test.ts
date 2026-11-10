@@ -25,7 +25,7 @@ describe('acciones de ajustes (contrato)', () => {
   it('US-11 CA-1 y CA-4: guarda la duración; fuera de rango da VALIDATION y una versión vieja STALE_VERSION', async () => {
     await signedInAdmin();
     await expect(saveSlotMinutes(null, formData({ slotMinutes: '45', version: '0' }))).resolves.toEqual({ success: true, message: 'Listo: los turnos duran 45 minutos.' });
-    await expect(saveSlotMinutes(null, formData({ slotMinutes: '200', version: '1' }))).resolves.toEqual({ success: false, code: 'VALIDATION', error: 'La duración va de 15 a 120 minutos.' });
+    await expect(saveSlotMinutes(null, formData({ slotMinutes: '0', version: '1' }))).resolves.toEqual({ success: false, code: 'VALIDATION', error: 'Ingresá los minutos como un número entero mayor que 0.' });
     await expect(saveSlotMinutes(null, formData({ slotMinutes: '30', version: '0' }))).resolves.toMatchObject({ code: 'STALE_VERSION' });
     expect(updateTag).toHaveBeenCalledWith('health-insurances');
   });

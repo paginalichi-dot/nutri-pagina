@@ -4,21 +4,16 @@ import { HealthInsuranceInputSchema, SlotMinutesInputSchema } from './settings.s
 
 describe('SlotMinutesInputSchema', () => {
   it.each([
-    ['15', 15],
-    ['45', 45],
-    ['120', 120],
-  ])('acepta %s minutos', (slotMinutes, expected) => {
+    ['1', 1],
+    ['7', 7],
+    [' 50 ', 50],
+    ['600', 600],
+  ])('US-44 CA-2: acepta %s minutos', (slotMinutes, expected) => {
     expect(SlotMinutesInputSchema.parse({ slotMinutes, version: '0' })).toEqual({ slotMinutes: expected, version: 0 });
   });
 
-  it.each([
-    ['10', 'La duración va de 15 a 120 minutos.'],
-    ['125', 'La duración va de 15 a 120 minutos.'],
-    ['47', 'Usá múltiplos de 5 minutos.'],
-    ['45.5', 'La duración va de 15 a 120 minutos.'],
-    ['media hora', 'La duración va de 15 a 120 minutos.'],
-  ])('rechaza %s con "%s"', (slotMinutes, message) => {
-    expect(SlotMinutesInputSchema.safeParse({ slotMinutes, version: '1' }).error?.issues[0]?.message).toBe(message);
+  it.each([[''], ['0'], ['-5'], ['45.5'], ['1e2'], ['media hora'], ['99999999999']])('US-44 CA-2: rechaza «%s»', (slotMinutes) => {
+    expect(SlotMinutesInputSchema.safeParse({ slotMinutes, version: '1' }).error?.issues[0]?.message).toBe('Ingresá los minutos como un número entero mayor que 0.');
   });
 
   it('rechaza una versión negativa', () => {

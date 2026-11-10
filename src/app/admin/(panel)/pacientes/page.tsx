@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import type { ReactElement } from 'react';
-import { PanelCard, PanelPage } from '@/components/panel/panel-page';
+import { PanelPage } from '@/components/panel/panel-page';
+import { getPatientDirectory } from '@/features/patient/actions/patient-directory-queries';
+import { PatientDirectory } from '@/features/patient/ui/admin/patient-directory';
 
 export const metadata: Metadata = { title: 'Pacientes · Panel' };
 
-export default function PatientsPage(): ReactElement {
+export default async function PatientsPage(): Promise<ReactElement> {
+  const entries = await getPatientDirectory();
   return (
-    <PanelPage title='Pacientes'>
-      <PanelCard title='Próximamente'>
-        <p className='text-muted-foreground'>Acá vas a ver la lista de tus pacientes, con sus datos y sus turnos.</p>
-      </PanelCard>
+    <PanelPage wide title='Pacientes' lead={`${entries.length} ${entries.length === 1 ? 'paciente registrado' : 'pacientes registrados'}`}>
+      <PatientDirectory entries={entries} />
     </PanelPage>
   );
 }

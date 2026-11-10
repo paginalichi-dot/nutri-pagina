@@ -2,11 +2,11 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactElement, ReactNode } from 'react';
 
-type PanelPageProps = { title: ReactNode; lead?: string; back?: { href: string; label: string }; actions?: ReactNode; children: ReactNode };
+type PanelPageProps = { title: ReactNode; lead?: string; back?: { href: string; label: string }; actions?: ReactNode; wide?: boolean; children: ReactNode };
 
-export function PanelPage({ title, lead, back, actions, children }: PanelPageProps): ReactElement {
+export function PanelPage({ title, lead, back, actions, wide = false, children }: PanelPageProps): ReactElement {
   return (
-    <main className='mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 md:px-10 md:py-10'>
+    <main className={`mx-auto flex w-full ${wide ? 'max-w-7xl' : 'max-w-5xl'} flex-1 flex-col gap-6 px-4 py-8 md:px-10 md:py-10`}>
       {back ? (
         <Link
           href={back.href}

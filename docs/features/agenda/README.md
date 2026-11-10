@@ -86,8 +86,10 @@ los ocupados, `slotGrid`), `bookingRoomLeft`,
 
 - `/admin` (US-26, wireframe del dev): saludo, «Nuevo turno», «Bloquear horario», las cuatro métricas, la agenda del
   día como línea de horas o de la semana como días × franjas de 4 horas (en el mismo lugar), «Próximo turno» con «Confirmar» o «Ver turno» y WhatsApp, y
-  el calendario del mes. Parámetros: `dia` (AAAA-MM-DD) y `vista` (`semana`).
-- `/admin/pacientes`: «Próximamente».
+  el calendario del mes. Parámetros: `dia` (AAAA-MM-DD) y `vista` (`semana`). Junto al título, «Ir a una fecha»
+  (US-45, `date-jump.tsx`): un form GET con `dia` y la `vista` actual; al elegir una fecha completa desde el año 2000
+  se envía solo, y en «Semana» muestra la semana que la contiene.
+- `/admin/pacientes` y `/admin/pacientes/[id]`: lista y ficha de pacientes (US-43, ver `docs/features/patient`).
 - `/admin/turnos/nuevo`, `/admin/turnos/[id]`, `/admin/turnos/[id]/reprogramar`, `/admin/bloqueos`,
   `/admin/solicitudes`.
 - `/reservar` (paciente, US-40): primero la modalidad; presencial Ubicación → Día → Horario → Confirmar y virtual Día →

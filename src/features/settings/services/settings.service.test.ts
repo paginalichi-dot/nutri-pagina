@@ -19,4 +19,17 @@ describe('settingsService', () => {
     expect((await service.listActiveHealthInsurances()).map(({ name }) => name)).toEqual(['Prepaga Uno']);
     expect((await service.listHealthInsurances()).map(({ name }) => name)).toEqual(['Prepaga Uno', 'Obra Dos Plus']);
   });
+
+  it('US-44 CA-3: cada obra social trae su cantidad de turnos, 0 si no tiene', async () => {
+    const counts = new Map<string, number>();
+    const service = createSettingsService(createFakeSettingsRepository(counts));
+    await service.createHealthInsurance('Prepaga Uno');
+    await service.createHealthInsurance('Obra Dos');
+    const [obra] = await service.listHealthInsurances();
+    counts.set(obra?.id ?? '', 3);
+    expect((await service.listHealthInsuranceUsage()).map(({ name, appointments }) => [name, appointments])).toEqual([
+      ['Obra Dos', 3],
+      ['Prepaga Uno', 0],
+    ]);
+  });
 });

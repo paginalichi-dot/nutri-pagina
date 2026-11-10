@@ -31,6 +31,17 @@ Decisión de base: [ADR 0006](../../adr/0006-cuentas-de-pacientes-con-email-y-co
 - **`volver`** (US-21): sin sesión, el proxy manda `/reservar` y `/mi-espacio/**` a `/login?volver=<ruta>`; al entrar, el
   paciente vuelve ahí. Sólo se aceptan rutas internas (`safeReturnPath`); el admin siempre va a `/admin`.
 - **Ícono del hero** (US-35): con o sin sesión, una tarjeta con «Iniciar sesión» y «Registrate», o «Hola, Nombre».
+- **Pacientes en el panel** (US-43, `docs/wireframes/lista-pacientes.png`): `/admin/pacientes` junta las cuentas
+  activadas y a quien tiene turnos sin cuenta, agrupados por email (en minúsculas) o, sin email, por los dígitos del
+  teléfono. Nombre y teléfono salen de la cuenta o del último turno. Por paciente: último turno (el último que pasó y
+  no se canceló), próximo turno (el próximo pendiente o confirmado) y estado: **Nuevo** (su cuenta o su primer turno
+  son del mes argentino actual), **Inactivo** (ningún turno en 6 meses y ninguno por venir) o **Activo**. Buscador
+  (nombre, email o teléfono, sin tildes), filtros Todos / Activos / Nuevos este mes / Sin turno próximo y páginas de
+  20, todo en el navegador: la lista entera viaja al componente para que no haya datos personales en la URL
+  (`shortcut`: sirve hasta unos miles de pacientes; si crece, se pagina en el servidor con búsqueda por POST).
+  «Ver» abre `/admin/pacientes/[id]` (el id de la cuenta o de uno de sus turnos) con sus datos, WhatsApp, «Nuevo
+  turno» y sus turnos por venir y anteriores, cada uno con link al turno. Sólo lectura: no hay «Nuevo paciente» ni
+  «Exportar» (decisión del dev, 2026-11-10).
 
 ## Quién lo usa
 
@@ -40,6 +51,7 @@ Decisión de base: [ADR 0006](../../adr/0006-cuentas-de-pacientes-con-email-y-co
 | Usar un link de un solo uso | Sí (el link es la credencial) | Sí | Sí |
 | Ver `/mi-espacio` y cambiar sus datos | No: va a `/login?volver=` | Sí | No: va a `/login` |
 | Reservar (`/reservar`), cancelar y reprogramar sus turnos | No: va a `/login?volver=` | Sí | No |
+| Ver la lista de pacientes y la ficha de cada uno (`/admin/pacientes`) | No: «Acceso denegado» | No | Sí |
 
 ## Server Actions
 

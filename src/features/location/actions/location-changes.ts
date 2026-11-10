@@ -4,7 +4,7 @@ import { requireAdmin } from '@/features/auth/actions/require-admin';
 import { type ActionResult, failValidation } from '@/lib/action-result';
 import { toActionFailure } from '@/lib/db-errors';
 import { formFields } from '@/lib/form-data';
-import { WeeklyHoursInputSchema } from '../domain/hours.schema';
+import { WeeklyHoursInputSchema, WeeklyHoursUpdateSchema } from '../domain/hours.schema';
 import { RecordRefSchema } from '../domain/location.schema';
 import { locationService } from '../services/location.service';
 import { refreshLocations } from './refresh-locations';
@@ -36,6 +36,15 @@ export async function addHours(_previous: ActionResult | null, formData: FormDat
     if (!parsed.success) return failValidation(parsed.error.issues[0]?.message);
     await locationService.addHours(parsed.data);
     return { success: true, message: 'Agregamos la franja.' };
+  });
+}
+
+export async function updateHours(_previous: ActionResult | null, formData: FormData): Promise<ActionResult> {
+  return run(async () => {
+    const parsed = WeeklyHoursUpdateSchema.safeParse(formFields(formData, ['id', 'version', 'start', 'end']));
+    if (!parsed.success) return failValidation(parsed.error.issues[0]?.message);
+    await locationService.updateHours(parsed.data.ref, parsed.data.range);
+    return { success: true, message: 'Guardamos la franja.' };
   });
 }
 

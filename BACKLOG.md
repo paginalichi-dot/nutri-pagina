@@ -1601,13 +1601,153 @@ vertical (1024×1366) el ancho da negativo. A 1024 de ancho, además, el ícono 
 
 - [ ] **CA-2** · El ícono de cuenta no pisa el nombre a 1024 de ancho · Estimación: 15 min · Completado: —
 
+### Iteración del panel (wireframes del dev, 2026-11-10)
+
+El dev pidió rehacer Ubicaciones, Pacientes y Ajustes según sus wireframes (`apartado-de-ubicacion.png`,
+`nueva-ubicacion1/2/3.png`, `lista-pacientes.png`, `nuevo-ajustes1/2.png`), adaptados a `DESIGN.md` (Manrope y
+controles del panel con radio 12px). Plan:
+[`docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md`](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md).
+
+Decisiones del dev (2026-11-10): sin «Exportar» por ahora; las ubicaciones no se borran (el botón rojo desactiva);
+en la ficha cada cambio de horario se guarda al instante; sin el % de asistencia; sin atajos de horarios; el link
+de la videollamada sigue obligatorio; Pacientes incluye a quien tiene turnos cargados a mano sin cuenta; sin «Nuevo
+paciente»; Ajustes sólo con «Duración de los turnos» y «Obras sociales» (la anticipación queda en 60 días); la
+duración acepta cualquier entero positivo de minutos.
+
+### US-41 · Ubicaciones según el wireframe: lista y ficha
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | M           |
+| Depende de   | US-9, US-10 |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero ver mis ubicaciones en una lista con la ficha de la elegida al lado, de forma que
+revise y cambie sus horarios sin saltar de pantalla.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · En desktop, lista a la izquierda (miniatura con pin, nombre, dirección o «Videollamada», chip Presencial/Online y «Desactivada» si corresponde) y ficha de la elegida a la derecha, con la elegida en la URL; en mobile, lista y después ficha con «Volver» · Estimación: 1 h 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-2** · La ficha muestra nombre, chip, «⋯» con «Editar datos», el mapa con «Abrir en Google Maps» (presencial) o el link (online) · Estimación: 45 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-3** · Horarios: una fila por franja de lunes a domingo («sin atención» en los días vacíos), lápiz para editar la franja y tacho para borrarla, y «+ Agregar horario»; cada cambio se guarda al instante y una franja que se pisa da `HOURS_OVERLAP` · Estimación: 1 h 15 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-4** · Abajo, «turnos este mes» (no cancelados de esa ubicación, mes argentino) y «bloqueos» (los de este mes que pisan sus horarios); sin % de asistencia · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-5** · «Desactivar ubicación» (Pimentón) y «Reactivar ubicación»; con turnos por venir da `HAS_ACTIVE_APPOINTMENTS`; sin «Guardar cambios» ni «Exportar» · Estimación: 30 min · Completado: 2026-11-10 15:31
+
+### US-42 · Nueva ubicación en un solo paso
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | M           |
+| Depende de   | US-41       |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero cargar una ubicación con sus datos, sus horarios y su visibilidad en una sola
+pantalla, de forma que quede lista para reservar de una vez.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Cuatro tarjetas numeradas: 1 Tipo de atención (Presencial / Online), 2 Datos (los de hoy, con el link obligatorio en la online), 3 Horarios (un interruptor por día y varias franjas por día) y 4 Visibilidad; título «Nuevo consultorio» o «Nuevo espacio online» · Estimación: 1 h 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-2** · Tarjeta «Vista del paciente» al costado (abajo en mobile), que se actualiza mientras se escribe: Visible/Oculta, nombre, dirección o «Por videollamada», la semana y las horas por semana · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-3** · «Guardar» crea la ubicación con sus franjas en una sola transacción: si una franja se pisa (`HOURS_OVERLAP`) o el nombre se repite (`DUPLICATE`) no se guarda nada; al guardar, lleva a la ficha · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-4** · «Editar datos» (desde «⋯») usa las tarjetas 1 y 2 con «Guardar cambios»; los horarios se editan en la ficha · Estimación: 30 min · Completado: 2026-11-10 15:31
+
+### US-43 · Lista de pacientes y ficha del paciente
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | L           |
+| Depende de   | US-26, T-8  |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero ver a todos mis pacientes con su último y su próximo turno, de forma que sepa a
+quién seguir y a quién escribirle.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · La lista junta las cuentas y a quien tiene turnos sin cuenta, agrupados por email (o por teléfono si no tiene email); «N pacientes registrados» arriba · Estimación: 1 h 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-2** · Columnas Paciente (iniciales, nombre y email), Teléfono, Último turno (el último que ya pasó y no se canceló), Próximo turno (el próximo pendiente o confirmado) y Estado; en mobile, una tarjeta por paciente · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-3** · Estado: Nuevo (primer turno o cuenta de este mes), Inactivo (sin turnos en 6 meses y ninguno por venir), Activo (el resto) · Estimación: 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-4** · Buscador por nombre, email o teléfono, filtros Todos / Activos / Nuevos este mes / Sin turno próximo y páginas de a 20, sin datos personales en la URL · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-5** · «Ver» abre la ficha (datos y turnos por venir y anteriores, cada uno con link al turno); «⋯» trae WhatsApp y «Nuevo turno»; sin «Nuevo paciente» ni «Exportar» · Estimación: 1 h 15 min · Completado: 2026-11-10 15:31
+
+### US-44 · Ajustes en pestañas
+
+| Campo        | Valor        |
+| ------------ | ------------ |
+| Estado       | En progreso  |
+| Dueño        | Claude       |
+| Inicio       | 2026-11-10   |
+| Tamaño       | M            |
+| Depende de   | US-11, US-12 |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md) |
+| Merge        | —            |
+| Horas reales | —            |
+
+**Historia**: Como Lisandro quiero los ajustes separados en pestañas, de forma que encuentre rápido la duración y
+las obras sociales.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · «Ajustes» con «Configurá cómo funciona tu agenda» y dos pestañas, «Duración de los turnos» y «Obras sociales», con la pestaña en la URL · Estimación: 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-2** · Duración: 30, 45, 60 y 90 minutos más un campo de texto de enteros positivos (placeholder en minutos) y «Guardar cambios»; cualquier entero mayor que 0 vale (la base deja de exigir 15 a 120 de a 5) · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-3** · Obras sociales: «Nueva obra social», y por fila el nombre, el chip «N turnos» (no cancelados), un interruptor activa/desactivada y el lápiz para renombrar; cada cambio se guarda al tocarlo y la desactivada se ve gris · Estimación: 1 h 15 min · Completado: 2026-11-10 15:31
+
+### US-45 · Ir a una fecha desde la agenda
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | S           |
+| Depende de   | US-26       |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md#us-45--ir-a-una-fecha-desde-la-agenda) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-10), como retoque final del panel: un calendario junto al título de la agenda.
+
+**Historia**: Como Lisandro quiero elegir una fecha en un calendario desde la agenda, de forma que llegue a ese día
+sin apretar las flechas muchas veces.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Junto al título de la agenda, un botón con calendario abre el selector de fecha del navegador; al elegir una fecha, la agenda va directo a ese día en «Día» y a la semana que lo contiene en «Semana» · Estimación: 30 min · Completado: 2026-11-10 16:05
+
+- [x] **CA-2** · Se usa con teclado (Enter va a la fecha escrita) y una fecha incompleta o anterior al año 2000 no navega · Estimación: 15 min · Completado: 2026-11-10 16:05
+
 ## Sprint 5 · Despliegue
 
 Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gmail (T-9) y recordatorio por email
 24 h antes (cron), más el cron que vence las solicitudes (T-10).
-
-Para más adelante (sin sprint, wireframes del dev del 2026-11-09): la lista de Pacientes del panel
-(`docs/wireframes/lista-pacientes.png`) y el nuevo diseño de Ubicaciones (`docs/wireframes/apartado-de-ubicacion.png`).
 
 ### T-9 · Emails por Gmail (SMTP) en lugar de Resend
 
