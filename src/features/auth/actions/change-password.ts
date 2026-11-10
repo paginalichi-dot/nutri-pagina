@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { type ActionResult, failValidation } from '@/lib/action-result';
 import { startSession } from '@/lib/auth/session-cookie';
+import { adminSession } from '../domain/admin.schema';
 import { toActionFailure } from '@/lib/db-errors';
 import { ChangePasswordInputSchema } from '../domain/account.schema';
 import { accountService } from '../services/account.service';
@@ -17,7 +18,7 @@ export async function changePassword(_previous: ActionResult | null, formData: F
       confirmPassword: formData.get('confirmPassword'),
     });
     if (!parsed.success) return failValidation(parsed.error.issues[0]?.message);
-    await startSession(await accountService.changePassword(adminId, parsed.data));
+    await startSession(adminSession(await accountService.changePassword(adminId, parsed.data)));
     revalidatePath('/admin', 'layout');
     return { success: true, message: 'Listo. Desde ahora entrás con la contraseña nueva.' };
   } catch (error) {

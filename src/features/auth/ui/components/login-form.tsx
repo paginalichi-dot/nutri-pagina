@@ -1,24 +1,43 @@
 'use client';
 
-import { useActionState } from 'react';
-import type { ReactElement } from 'react';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { type ReactElement, useActionState, useState } from 'react';
 import { login } from '../../actions/login';
-import { Field, FormFeedback, SubmitButton } from '@/components/form/form-parts';
+import { ResendForm } from './resend-form';
+import { AuthFooter } from '@/components/auth/auth-footer';
+import { FormFeedback } from '@/components/form/form-parts';
+import { PasswordField } from '@/components/form/password-field';
+import { Honeypot, PUBLIC_LINK, PUBLIC_PRIMARY, PublicField } from '@/components/form/public-form-parts';
 
-export function LoginForm(): ReactElement {
+export function LoginForm({ returnTo = null }: { returnTo?: string | null }): ReactElement {
   const [state, action, pending] = useActionState(login, null);
+  const [email, setEmail] = useState('');
+  const unverified = state?.success === false && state.code === 'EMAIL_NOT_VERIFIED';
   return (
-    <form action={action} className='flex flex-col gap-5'>
-      <Field name='email' label='Email' type='email' autoComplete='username' />
-      <Field name='password' label='Contraseña' type='password' autoComplete='current-password' />
-      <div aria-hidden='true' className='absolute -left-[9999px] h-px w-px overflow-hidden'>
-        <label>
-          No completar
-          <input name='website' tabIndex={-1} autoComplete='off' defaultValue='' />
-        </label>
-      </div>
-      <FormFeedback state={state} />
-      <SubmitButton pending={pending} idle='Entrar' busy='Entrando…' />
-    </form>
+    <div className='flex flex-col gap-5'>
+      <form
+        action={action}
+        onSubmit={(event) => setEmail(String(new FormData(event.currentTarget).get('email') ?? ''))}
+        className='flex flex-col gap-5'
+      >
+        <PublicField name='email' label='Email' type='email' autoComplete='username' placeholder='tu@email.com' />
+        <div className='flex flex-col gap-2'>
+          <PasswordField name='password' label='Contraseña' autoComplete='current-password' />
+          <Link href='/recuperar' className={`${PUBLIC_LINK} relative self-end text-[14px] text-muted-foreground after:absolute after:-inset-x-2 after:-top-2 after:-bottom-4`}>
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
+        <Honeypot />
+        {returnTo ? <input type='hidden' name='volver' value={returnTo} /> : null}
+        <FormFeedback state={state} />
+        <button type='submit' disabled={pending} className={`${PUBLIC_PRIMARY} gap-2`}>
+          {pending ? 'Entrando…' : 'Entrar'}
+          <ArrowRight aria-hidden='true' className='size-5' />
+        </button>
+      </form>
+      {unverified ? <ResendForm email={email} /> : null}
+      <AuthFooter text='¿No tenés cuenta?' href='/registro' label='Registrate' />
+    </div>
   );
 }

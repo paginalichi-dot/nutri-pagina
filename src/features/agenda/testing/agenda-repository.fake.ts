@@ -24,6 +24,8 @@ function detail(state: FakeState, row: Stored): AppointmentDetail {
 
 function fakeReads(state: FakeState): Omit<AgendaRepository, keyof ReturnType<typeof fakeAppointmentWrites> | 'inTransaction'> {
   const active = (): Stored[] => [...state.appointments.values()].filter((row) => isActiveStatus(row.status));
+  const pending = (when: (row: Stored) => boolean): Stored[] =>
+    [...state.appointments.values()].filter((row) => row.status === 'PENDING' && when(row)).sort((a, b) => +a.startsAt - +b.startsAt);
   return {
     listAppointments: async (range) => [...state.appointments.values()].filter((row) => overlaps(row, range)).sort((a, b) => +a.startsAt - +b.startsAt).map((row) => detail(state, row)),
     async findAppointment(id) {
@@ -47,7 +49,13 @@ function fakeReads(state: FakeState): Omit<AgendaRepository, keyof ReturnType<ty
       const row = active().find((candidate) => candidate.patientEmail === email && candidate.startsAt > now);
       return row ? { startsAt: row.startsAt, endsAt: row.endsAt } : null;
     },
+    listByPatientEmail: async (email) =>
+      [...state.appointments.values()].filter((row) => row.patientEmail === email).sort((a, b) => +a.startsAt - +b.startsAt).map((row) => detail(state, row)),
     countActiveAppointments: async (range) => active().filter((row) => overlaps(row, range)).length,
+    countUpcomingByEmail: async (email, now) => active().filter((row) => row.patientEmail === email && row.startsAt > now).length,
+    countPending: async (now) => pending((row) => row.startsAt > now).length,
+    listPending: async (now) => pending((row) => row.startsAt > now).map((row) => detail(state, row)),
+    listExpiringPending: async ({ startsAt, endsAt }) => pending((row) => row.startsAt > startsAt && row.startsAt <= endsAt).map((row) => detail(state, row)),
     listBlocks: async (range) => [...state.blocks.values()].filter((row) => overlaps(row, range)).map((row) => ({ ...row })),
   };
 }

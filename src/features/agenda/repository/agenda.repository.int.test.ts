@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { databaseErrorCode } from '@/lib/db-errors';
 import { resetAgendaTables } from '@/test/agenda-tables';
 import { type AgendaFixture, aNewAppointment, CENTRO, PLACE_DATA, rangeAt } from '../testing/agenda-builders';
+import { agendaPendingReadsBehavior } from '../testing/agenda-pending-reads.behavior';
 import { agendaRepositoryBehavior } from '../testing/agenda-repository.behavior';
 import { agendaSummaryReadsBehavior } from '../testing/agenda-summary-reads.behavior';
 import { agendaRepository } from './agenda.repository';
@@ -22,6 +23,7 @@ async function prismaFixture(): Promise<AgendaFixture> {
 
 agendaRepositoryBehavior('Prisma', prismaFixture);
 agendaSummaryReadsBehavior('Prisma', prismaFixture);
+agendaPendingReadsBehavior('Prisma', prismaFixture);
 
 describe('agendaRepository (integración)', () => {
   it('T-6 CA-2: dos reservas simultáneas del mismo horario: sólo una se guarda', async () => {

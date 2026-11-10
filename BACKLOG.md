@@ -1028,23 +1028,809 @@ online y al final el despliegue.
 
 ## Sprint 3 · Cuenta de pacientes
 
-A definir ítem por ítem cuando el dev confirme el Sprint 2. Previsto: login de pacientes con link mágico por email,
-en el mismo `/login` (US-27), con un ADR (hoy se reserva sin cuenta).
+Origen: descubrimiento con el dev (2026-11-08), sobre los wireframes `login.png`, `hero-animado.png`,
+`cuenta-1.png`, `cuenta-2.png` y `cambio-de-lugar-flecha(-mobile).png`. Plan único del sprint:
+[`docs/plans/sprint-3-cuenta-pacientes.md`](docs/plans/sprint-3-cuenta-pacientes.md); decisión de arquitectura:
+[ADR 0006](docs/adr/0006-cuentas-de-pacientes-con-email-y-contrasena.md).
+
+Decisiones del dev:
+
+- **Ingreso**: sólo email y contraseña (sin Google), por el mismo `/login` que Lisandro.
+- **Alta**: registro libre con consentimiento y política de privacidad; el email se verifica con un link y sin
+  verificar no se entra.
+- **Mi espacio**: próximos turnos y anteriores (los de su email) y sus datos, contraseña, email y baja. Nunca
+  historia clínica. «Pacientes» del panel sigue en «Próximamente».
+- **Olvidé mi contraseña**: link de 1 h y un solo uso.
+- **Diseño**: login según `login.png` (sin Google, textos de Lisandro), luz verde que respira, ícono de cuenta en el
+  hero, líneas a mano que se dibujan al terminar la intro y la flecha para bajar junto a la frase de apertura
+  (desktop). Los ajustes finos que pidió el dev durante el sprint están en `DESIGN.md` y en los criterios.
+- T-7 y US-20 suben del Sprint 4 porque el registro es una acción pública con datos personales.
+
+Implementación: como en el Sprint 2, el sprint entero de una y la revisión al final, en un solo commit.
+
+### T-7 · Límite de intentos en las acciones públicas
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero que nadie pueda probar emails o contraseñas sin freno, de forma que las cuentas y la casilla de Resend estén a salvo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · La tabla `rate_limit` guarda claves hasheadas (nunca una IP ni un email en claro), con incremento atómico y vencimiento · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · El schema de cada acción pública valida el honeypot y `guardPublicAction` corta con `RATE_LIMITED` al pasar el límite por IP o por email (el login, por IP y con el bloqueo de 5 intentos de cada cuenta) · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Dos pedidos simultáneos cuentan dos (integración) · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · Lo usan el login, el registro, el reenvío de la activación, «olvidé mi contraseña» y los botones de los links · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-20 · Política de privacidad
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | S           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero saber qué datos míos se guardan y para qué, de forma que pueda aceptar el registro sabiendo a qué me comprometo (Ley 25.326).
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · `/privacidad` explica finalidad, datos, plazo, derechos (acceso, rectificación y supresión) y contacto · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Lo que falta (responsable, contacto y plazo de guarda) aparece como `[Completar: …]` visible · Estimación: 10 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · El registro la enlaza junto al consentimiento · Estimación: 10 min · Completado: 2026-11-09 02:23
+
+### T-8 · Modelo de pacientes y rol en la sesión
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como dev quiero cuentas de pacientes separadas de la del admin y un rol en la sesión, de forma que un paciente nunca entre al panel.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Migración `patient_account`: email único en minúscula, tokens con hash único, un solo token activo por propósito y borrado en cascada · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · El JWT lleva el rol; uno sin rol sigue siendo de admin, así las sesiones abiertas no se caen · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Una cookie de paciente en `/admin` ve «Acceso denegado» y `requireAdmin` la rechaza · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · `requirePatient` exige rol, cuenta, `session_version` y email verificado · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-28 · El paciente se registra y activa su cuenta
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | L           |
+| Depende de   | T-7, T-8, US-20 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero crear mi cuenta con mi email, de forma que pueda ver mis turnos sin pedírselos a Lisandro.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Registro con nombre, email, teléfono, contraseña (8 a 128) y consentimiento obligatorio · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · La respuesta es la misma exista o no el email; a una cuenta ya verificada le llega «Ya tenés una cuenta» · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · El link de activación vence a las 24 h, sirve una vez y sólo actúa con el botón (abrirlo no cambia nada) · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · Registrarse de nuevo sobre una cuenta sin verificar pisa sus datos y anula el link anterior · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-29 · El paciente entra por `/login`
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-28 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero entrar con mi email y mi contraseña por la misma página que Lisandro, de forma que llegue directo a mi espacio.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · El admin va a `/admin` y el paciente a `/mi-espacio`; `/login` con sesión redirige según el rol · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Sin activar, con la contraseña correcta, ve «Activá tu cuenta con el link que te mandamos.» y «Reenviar el email» · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · El bloqueo por 5 intentos fallidos también vale para pacientes · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · Los tiempos de respuesta no delatan si el email tiene cuenta · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-30 · El paciente recupera su contraseña
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero restablecer mi contraseña si me la olvido, de forma que no pierda mi cuenta.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · «¿Olvidaste tu contraseña?» manda un link de 1 h y un solo uso; la respuesta es siempre la misma · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Restablecer cierra las otras sesiones y limpia el bloqueo por intentos · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Un link vencido, usado o reemplazado dice «El link no es válido o ya venció.» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-31 · Mi espacio: mis turnos
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero ver mis próximos turnos y los anteriores, de forma que sepa cuándo y dónde me atiendo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Próximos turnos (del más cercano) y anteriores (del más reciente), sólo los de su email · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Fecha y hora en hora argentina, con ubicación y estado · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Sin turnos dice «Todavía no tenés turnos.»; sin sesión lleva a `/login` · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+### US-32 · Mi espacio: mis datos, mi contraseña y la baja
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero corregir mis datos, cambiar mi contraseña o borrar mi cuenta, de forma que mis datos estén al día o dejen de estar.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Edita nombre y teléfono; si cambiaron en otra pestaña da `STALE_VERSION` · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Cambiar la contraseña pide la actual y cierra las otras sesiones · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · «Eliminar mi cuenta» pide la contraseña y una confirmación; borra la cuenta y deja los turnos en la agenda · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · «Cerrar sesión» · Estimación: 10 min · Completado: 2026-11-09 02:23
+
+### US-33 · Mi espacio: cambiar el email
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-32 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero cambiar mi email, de forma que los avisos me lleguen a la casilla que uso.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Pide la contraseña y manda un link al email nuevo; hasta tocarlo sigue el anterior · Estimación: 30 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · El link vence a las 24 h y sirve una vez; un email ocupado dice «Ese email ya lo usa otra cuenta.» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Al confirmar se cierran las otras sesiones · Estimación: 10 min · Completado: 2026-11-09 02:23
+
+### US-34 · Login con el diseño nuevo
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero un login claro y con la marca de Lisandro, como `docs/wireframes/login.png`, de forma que confíe en dónde dejo mis datos.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Desde 1024px, panel Verde Bosque con «Tu salud, en foco.», la bajada y los íconos Turnos e Historial; en el celular, la tarjeta con el logo arriba · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · La tarjeta tiene una luz Verde Lima detrás que se prende y se apaga cada 1 s (entre 60 % y 85 % de opacidad); queda quieta con «reducir movimiento» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Botón para mostrar la contraseña y links a «¿Olvidaste tu contraseña?» y «Registrate» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · Revisado con `impeccable` (`critique` y `polish`) en 375px y en desktop, con teclado · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-35 · Ícono de cuenta en el hero
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | M           |
+| Depende de   | US-29 |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero entrar a mi cuenta desde la home, como `docs/wireframes/cuenta-1.png` y `cuenta-2.png`, de forma que no tenga que conocer la dirección del login.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Botón redondo arriba a la derecha del hero, con tres chispas y un brillo de vidrio cada 1 s, que abre la tarjeta «Mi espacio» con «Iniciar sesión» y «Registrate» · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Con sesión de paciente dice «Hola, Nombre», con «Ir a mi espacio» y «Cerrar sesión»; con la del admin, «Hola, Lisandro» e «Ir al panel» · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-3** · Se abre con clic, toque o teclado; Escape y un clic afuera la cierran · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-4** · La home sigue prerenderizada (PPR) y el ícono no mueve nada al cargar · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+### US-36 · Líneas a mano en el hero
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | S           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como visitante quiero un hero con más vida, como `docs/wireframes/hero-animado.png`, de forma que la presentación se sienta dibujada a mano.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Trazos Verde Lima finos: en desktop, tres curvas alrededor de Lisandro, un subrayado bajo la frase de apertura y un corchete recto que se vuelve subrayado junto a la de cierre; en el celular, las tres curvas (más chicas) y un subrayado bajo cada frase · Estimación: 40 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Se dibujan al terminar la intro; con «reducir movimiento» ya están dibujados · Estimación: 20 min · Completado: 2026-11-09 02:23
+
+### US-37 · La flecha para bajar en su nuevo lugar
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-08  |
+| Tamaño       | S           |
+| Depende de   | — |
+| Plan         | [sprint-3](docs/plans/sprint-3-cuenta-pacientes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como visitante quiero ver la flecha para bajar cerca del texto, como `docs/wireframes/cambio-de-lugar-flecha.png` y su versión mobile, de forma que no se pierda en la esquina.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Desktop: a la derecha de la frase de apertura, a la altura de su última línea, entre el texto y la foto · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+- [x] **CA-2** · Celular: a la izquierda, a la altura de «la base de tu salud», sin pisar el botón flotante · Estimación: 15 min · Completado: 2026-11-09 02:23
+
+### US-38 · Iteración de diseño: Mi espacio, ingreso verde y «¡Ya casi está!»
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-09  |
+| Tamaño       | M           |
+| Depende de   | US-31, US-34 |
+| Plan         | iteración pedida por el dev en el chat (2026-11-09), con 4 wireframes |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como paciente quiero un Mi espacio y un ingreso como los wireframes `bandeja-usuario.png`,
+`componente-login-verde.png`, `planilla-creacion-cuenta.png` y `cuenta-creada.png`, de forma que la cuenta se sienta
+parte de la marca.
+
+Decisiones del dev (2026-11-09): sin Google; «Cancelar» oculto hasta el Sprint 4; «Recordatorios» dice «por email»;
+«Ver todos» lleva a `/mi-espacio/turnos`; pie «Lic. Lisandro López · Nutrición»; «foco.» relleno; todas las pantallas
+de ingreso en verde; «¡Ya casi está!» también tras «olvidé mi contraseña».
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Mi espacio como `bandeja-usuario.png`: barra con logo, «Cerrar sesión» e inicial; tarjeta Verde Bosque con hasta 2 próximos turnos y «Ver todos»; «Recordatorios»; «Mi cuenta» con pestañas que se usan con el teclado · Estimación: 1 h · Completado: 2026-11-09 12:34
+
+- [x] **CA-2** · `/mi-espacio/turnos` muestra los próximos y los anteriores · Estimación: 15 min · Completado: 2026-11-09 12:34
+
+- [x] **CA-3** · Login, registro, recuperar y los links de email en la tarjeta Verde Bosque con la luz; «foco.» relleno; el aviso de «Reenviar el email» va debajo del botón · Estimación: 45 min · Completado: 2026-11-09 12:34
+
+- [x] **CA-4** · Tras registrarse o pedir «olvidé», la página muestra «¡Ya casi está!» con el foco en el título · Estimación: 30 min · Completado: 2026-11-09 12:34
+
+- [x] **CA-5** · Anda en 375px y desktop, sin scroll horizontal, con teclado; revisado con `impeccable` · Estimación: 20 min · Completado: 2026-11-09 12:34
 
 ## Sprint 4 · El paciente reserva online
 
-Previstos: T-7 protección de acciones públicas (rate limiting + honeypot), US-20 política de privacidad, US-21
-reserva online (nace pendiente), US-22 emails de la reserva («Recibimos tu solicitud» y aviso a Lisandro), US-24 el
-paciente cancela con el link, US-25 el paciente reprograma con el link (vuelve a pendiente). US-23 (Lisandro
-confirma un pendiente) se adelantó al Sprint 2.
+Origen: descubrimiento con el dev (2026-11-09). Plan único del sprint:
+[`docs/plans/sprint-4-reserva-online.md`](docs/plans/sprint-4-reserva-online.md); decisión de arquitectura: ADR 0007
+(la reserva online pide cuenta). T-7 y US-20 subieron al Sprint 3 y US-23 (confirmar) se adelantó al Sprint 2.
+
+Decisiones del dev: reservar pide cuenta; hasta 2 turnos por venir por paciente; las solicitudes sin confirmar se
+cancelan solas 12 h antes (cron en el Sprint 5); el paciente cancela o reprograma desde Mi espacio hasta 24 h antes y
+reprogramar vuelve a pendiente; Lisandro recibe un email por cada solicitud, cancelación y reprogramación, y ve un
+contador de solicitudes; la reserva no pide datos extra.
+
+### US-21 · El paciente reserva su turno online
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | L         |
+| Depende de   | US-29, US-15 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente quiero reservar un turno desde la web, de forma que no tenga que escribirle a Lisandro para conseguir un horario.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · «Reservá tu turno» sin sesión lleva a `/login?volver=/reservar` y, al entrar, vuelve a la reserva; `volver` sólo acepta rutas internas · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · Pasos Ubicación → Día → Horario → Confirmar (obra social opcional), en la URL, mobile first y con teclado · Estimación: 1 h 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-3** · Sólo ofrece horarios libres desde 12 h y hasta 60 días; el turno nace pendiente y `ONLINE`; dos reservas simultáneas al mismo horario dan una sola (`SLOT_TAKEN`) · Estimación: 40 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-4** · Con 2 turnos por venir (contando los que cargó Lisandro) da `BOOKING_LIMIT`, también con dos pedidos a la vez · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-5** · Termina en «¡Solicitud enviada!» y el turno se ve pendiente en Mi espacio · Estimación: 20 min · Completado: 2026-11-09 20:05
+
+### US-22 · Emails de la reserva
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | M         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente y como Lisandro quiero un email por cada movimiento del turno, de forma que nadie se entere tarde.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Al paciente: «Recibimos tu solicitud» y «Recibimos tu cambio», con «Gestionar mi turno» hacia Mi espacio · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · A Lisandro (email de su cuenta): nueva solicitud, cancelación y reprogramación del paciente, con el link al turno en el panel · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-3** · Los emails salen después de responder (`after()`); si fallan, el turno queda igual · Estimación: 15 min · Completado: 2026-11-09 20:05
+
+### US-24 · El paciente cancela desde Mi espacio
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | S         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente quiero cancelar mi turno sin escribirle a Lisandro, de forma que el horario le quede libre a otro.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · «Cancelar» pide confirmación y funciona hasta 24 h antes; después da `CHANGE_TOO_LATE` y ofrece WhatsApp · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · Sólo sus turnos (por email); el de otro da `NOT_FOUND`; libera el horario · Estimación: 20 min · Completado: 2026-11-09 20:05
+
+### US-25 · El paciente reprograma desde Mi espacio
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | M         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como paciente quiero cambiar el horario de mi turno, de forma que no tenga que cancelar y reservar de nuevo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Elige otro horario público libre (cualquier ubicación) hasta 24 h antes; el turno vuelve a pendiente · Estimación: 40 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · `/mi-espacio/turnos/[id]` muestra el turno (destino de «Gestionar mi turno») con sus acciones · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+### US-39 · Lisandro ve las solicitudes por confirmar
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | S         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como Lisandro quiero saber cuántas solicitudes tengo sin confirmar, de forma que ningún paciente quede esperando.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Contador en «Agenda» (menú lateral y barra de abajo) y, si hay alguna, una tarjeta en el tablero · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · `/admin/solicitudes` lista las solicitudes por venir con «Confirmar», «Reprogramar» y «Cancelar» (al confirmarla sale de la lista) · Estimación: 40 min · Completado: 2026-11-09 20:05
+
+### T-10 · Las solicitudes sin confirmar vencen 12 h antes
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | S         |
+| Depende de   | US-21 |
+| Plan         | [sprint-4](docs/plans/sprint-4-reserva-online.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como Lisandro quiero que una solicitud que no confirmé se cancele sola antes del turno, de forma que el paciente sepa a tiempo que no va.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Servicio que cancela los pendientes que empiezan en 12 h o menos y le manda «Tu turno se canceló» a cada paciente; correrlo dos veces no duplica nada · Estimación: 30 min · Completado: 2026-11-09 20:05
+
+- [x] **CA-2** · `/api/cron/expire-pending` protegido con `CRON_SECRET` (sin él, 401); el cron de Vercel lo programa el Sprint 5 · Estimación: 20 min · Completado: 2026-11-09 20:05
+
+### US-40 · La reserva según los wireframes del dev (modalidad, pasos y «Tu turno»)
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | En revisión |
+| Dueño        | Claude    |
+| Inicio       | 2026-11-09 |
+| Tamaño       | L         |
+| Depende de   | US-21, US-25 |
+| Plan         | [US-40](docs/plans/US-40-reserva-wireframes.md) |
+| Merge        | —         |
+| Horas reales | —         |
+
+Origen: wireframes del dev del 2026-11-09 (`docs/wireframes/paso-previo-reserva.png`, `flujo-presencial-*.png` y
+`flujo-virtual-*.png`), con las correcciones que pidió en el chat.
+
+**Historia**: Como paciente quiero elegir primero si mi consulta es presencial o virtual y ver mi turno armándose al
+costado, de forma que reservar sea claro y rápido.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Pantalla previa a pantalla completa, sin barra ni pregunta y con «Cerrar sesión» arriba a la derecha: Presencial (Verde Bosque) y Virtual (Papel), cada mitad entera es el link de su modalidad (con hover y foco) y se despliega entera desde su lado (en mobile, desde arriba y abajo), en cada llegada; quietas con «reducir movimiento». Al elegir, la barra baja y el resto entra desde la izquierda; cada paso nuevo entra desde la izquierda; al terminar, el último paso queda con tilde (iteración del dev, 2026-11-10) · Estimación: 1 h 30 min · Completado: 2026-11-10 02:05
+
+- [x] **CA-2** · Presencial: Ubicación (sólo presenciales) → Día → Horario → Confirmar; virtual: Día → Horario → Confirmar, con la ubicación online por detrás · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-3** · Cada paso marca la opción y avanza con «Continuar» (gris hasta elegir); «Atrás» vuelve; todo en la URL y sin JS · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-4** · Tarjeta «Tu turno» (Lugar o Modalidad, Día, Horario, «Paso X de N», «Cambiar» y el aviso de las 24 h); en mobile, arriba y compacta · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-5** · Calendario de a un mes con flechas (L M X J V S D) y horarios en 3 columnas con los ocupados tachados · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-6** · Confirmar con filas de ícono y obra social; final «¡Solicitud enviada!» con «Ver mis turnos» y «Reservar otro turno»; reprogramar usa el mismo flujo · Estimación: 1 h · Completado: 2026-11-10 02:05
+
+- [x] **CA-7** · La intro de la home también se repite al volver navegando (SCROLL.md cambia la regla) · Estimación: 30 min · Completado: 2026-11-10 02:05
+
+### BUG-1 · Las frases del hero no se leen en pantallas de 1024px de ancho y mucho alto
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | Hecho     |
+| Dueño        | —         |
+| Inicio       | —         |
+| Tamaño       | S         |
+| Depende de   | —         |
+| Plan         | —         |
+| Merge        | —         |
+| Horas reales | —         |
+
+Encontrado en la revisión de diseño del Sprint 3 (2026-11-09). No se tocó porque cambia lo que se ve: lo decide el
+dev. **Cerrado por el dev (2026-11-09): ya está resuelto.**
+
+**Actual**: el ancho de cada frase (`--phrase-w` en `src/components/home/hero.tsx`) sale de restar el ancho de la
+foto, que crece con el alto de la pantalla. A 1024×900 las frases quedan de unos 5px, ilegibles. En un iPad Pro
+vertical (1024×1366) el ancho da negativo. A 1024 de ancho, además, el ícono de cuenta tapa la «Z» de LÓPEZ.
+
+**Esperado**: las frases se leen en cualquier pantalla desde 1024px. Por ejemplo:
+
+- un mínimo para el tamaño de letra y para el ancho;
+- o pasar a la disposición en columna cuando no entran.
+
+**Criterios de aceptación**
+
+- [ ] **CA-1** · A 1024×900 y 1024×1366 las dos frases se leen (16px o más) y nada las tapa · Estimación: 30 min · Completado: —
+
+- [ ] **CA-2** · El ícono de cuenta no pisa el nombre a 1024 de ancho · Estimación: 15 min · Completado: —
+
+### Iteración del panel (wireframes del dev, 2026-11-10)
+
+El dev pidió rehacer Ubicaciones, Pacientes y Ajustes según sus wireframes (`apartado-de-ubicacion.png`,
+`nueva-ubicacion1/2/3.png`, `lista-pacientes.png`, `nuevo-ajustes1/2.png`), adaptados a `DESIGN.md` (Manrope y
+controles del panel con radio 12px). Plan:
+[`docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md`](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md).
+
+Decisiones del dev (2026-11-10): sin «Exportar» por ahora; las ubicaciones no se borran (el botón rojo desactiva);
+en la ficha cada cambio de horario se guarda al instante; sin el % de asistencia; sin atajos de horarios; el link
+de la videollamada sigue obligatorio; Pacientes incluye a quien tiene turnos cargados a mano sin cuenta; sin «Nuevo
+paciente»; Ajustes sólo con «Duración de los turnos» y «Obras sociales» (la anticipación queda en 60 días); la
+duración acepta cualquier entero positivo de minutos.
+
+### US-41 · Ubicaciones según el wireframe: lista y ficha
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | M           |
+| Depende de   | US-9, US-10 |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero ver mis ubicaciones en una lista con la ficha de la elegida al lado, de forma que
+revise y cambie sus horarios sin saltar de pantalla.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · En desktop, lista a la izquierda (miniatura con pin, nombre, dirección o «Videollamada», chip Presencial/Online y «Desactivada» si corresponde) y ficha de la elegida a la derecha, con la elegida en la URL; en mobile, lista y después ficha con «Volver» · Estimación: 1 h 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-2** · La ficha muestra nombre, chip, «⋯» con «Editar datos», el mapa con «Abrir en Google Maps» (presencial) o el link (online) · Estimación: 45 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-3** · Horarios: una fila por franja de lunes a domingo («sin atención» en los días vacíos), lápiz para editar la franja y tacho para borrarla, y «+ Agregar horario»; cada cambio se guarda al instante y una franja que se pisa da `HOURS_OVERLAP` · Estimación: 1 h 15 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-4** · Abajo, «turnos este mes» (no cancelados de esa ubicación, mes argentino) y «bloqueos» (los de este mes que pisan sus horarios); sin % de asistencia · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-5** · «Desactivar ubicación» (Pimentón) y «Reactivar ubicación»; con turnos por venir da `HAS_ACTIVE_APPOINTMENTS`; sin «Guardar cambios» ni «Exportar» · Estimación: 30 min · Completado: 2026-11-10 15:31
+
+### US-42 · Nueva ubicación en un solo paso
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | M           |
+| Depende de   | US-41       |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero cargar una ubicación con sus datos, sus horarios y su visibilidad en una sola
+pantalla, de forma que quede lista para reservar de una vez.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Cuatro tarjetas numeradas: 1 Tipo de atención (Presencial / Online), 2 Datos (los de hoy, con el link obligatorio en la online), 3 Horarios (un interruptor por día y varias franjas por día) y 4 Visibilidad; título «Nuevo consultorio» o «Nuevo espacio online» · Estimación: 1 h 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-2** · Tarjeta «Vista del paciente» al costado (abajo en mobile), que se actualiza mientras se escribe: Visible/Oculta, nombre, dirección o «Por videollamada», la semana y las horas por semana · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-3** · «Guardar» crea la ubicación con sus franjas en una sola transacción: si una franja se pisa (`HOURS_OVERLAP`) o el nombre se repite (`DUPLICATE`) no se guarda nada; al guardar, lleva a la ficha · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-4** · «Editar datos» (desde «⋯») usa las tarjetas 1 y 2 con «Guardar cambios»; los horarios se editan en la ficha · Estimación: 30 min · Completado: 2026-11-10 15:31
+
+### US-43 · Lista de pacientes y ficha del paciente
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | L           |
+| Depende de   | US-26, T-8  |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+**Historia**: Como Lisandro quiero ver a todos mis pacientes con su último y su próximo turno, de forma que sepa a
+quién seguir y a quién escribirle.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · La lista junta las cuentas y a quien tiene turnos sin cuenta, agrupados por email (o por teléfono si no tiene email); «N pacientes registrados» arriba · Estimación: 1 h 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-2** · Columnas Paciente (iniciales, nombre y email), Teléfono, Último turno (el último que ya pasó y no se canceló), Próximo turno (el próximo pendiente o confirmado) y Estado; en mobile, una tarjeta por paciente · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-3** · Estado: Nuevo (primer turno o cuenta de este mes), Inactivo (sin turnos en 6 meses y ninguno por venir), Activo (el resto) · Estimación: 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-4** · Buscador por nombre, email o teléfono, filtros Todos / Activos / Nuevos este mes / Sin turno próximo y páginas de a 20, sin datos personales en la URL · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-5** · «Ver» abre la ficha (datos y turnos por venir y anteriores, cada uno con link al turno); «⋯» trae WhatsApp y «Nuevo turno»; sin «Nuevo paciente» ni «Exportar» · Estimación: 1 h 15 min · Completado: 2026-11-10 15:31
+
+### US-44 · Ajustes en pestañas
+
+| Campo        | Valor        |
+| ------------ | ------------ |
+| Estado       | En progreso  |
+| Dueño        | Claude       |
+| Inicio       | 2026-11-10   |
+| Tamaño       | M            |
+| Depende de   | US-11, US-12 |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md) |
+| Merge        | —            |
+| Horas reales | —            |
+
+**Historia**: Como Lisandro quiero los ajustes separados en pestañas, de forma que encuentre rápido la duración y
+las obras sociales.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · «Ajustes» con «Configurá cómo funciona tu agenda» y dos pestañas, «Duración de los turnos» y «Obras sociales», con la pestaña en la URL · Estimación: 30 min · Completado: 2026-11-10 15:31
+
+- [x] **CA-2** · Duración: 30, 45, 60 y 90 minutos más un campo de texto de enteros positivos (placeholder en minutos) y «Guardar cambios»; cualquier entero mayor que 0 vale (la base deja de exigir 15 a 120 de a 5) · Estimación: 1 h · Completado: 2026-11-10 15:31
+
+- [x] **CA-3** · Obras sociales: «Nueva obra social», y por fila el nombre, el chip «N turnos» (no cancelados), un interruptor activa/desactivada y el lápiz para renombrar; cada cambio se guarda al tocarlo y la desactivada se ve gris · Estimación: 1 h 15 min · Completado: 2026-11-10 15:31
+
+### US-45 · Ir a una fecha desde la agenda
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | S           |
+| Depende de   | US-26       |
+| Plan         | [panel-iteracion](docs/plans/panel-iteracion-ubicaciones-pacientes-ajustes.md#us-45--ir-a-una-fecha-desde-la-agenda) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-10), como retoque final del panel: un calendario junto al título de la agenda.
+
+**Historia**: Como Lisandro quiero elegir una fecha en un calendario desde la agenda, de forma que llegue a ese día
+sin apretar las flechas muchas veces.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Junto al título de la agenda, un botón con calendario abre el selector de fecha del navegador; al elegir una fecha, la agenda va directo a ese día en «Día» y a la semana que lo contiene en «Semana» · Estimación: 30 min · Completado: 2026-11-10 16:05
+
+- [x] **CA-2** · Se usa con teclado (Enter va a la fecha escrita) y una fecha incompleta o anterior al año 2000 no navega · Estimación: 15 min · Completado: 2026-11-10 16:05
+
+### US-46 · El login se despliega como la elección de modalidad
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | XS          |
+| Depende de   | US-34, US-40 |
+| Plan         | pedido del dev en el chat (2026-11-10) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-10): el mismo efecto de la elección de modalidad (US-40) en `/login`.
+
+**Historia**: Como paciente o Lisandro quiero que el login entre con el mismo despliegue que la reserva, de forma que
+el sitio se sienta uno solo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Al entrar a `/login`, las dos mitades entran enteras (fondo y contenido) desde afuera de la pantalla hasta juntarse en el centro: el panel verde desde la izquierda y la del formulario desde la derecha (debajo de 1024px sólo está la del formulario, que sube desde abajo en el celular); se repite en cada llegada y queda quieto con «reducir movimiento» · Estimación: 20 min · Completado: 2026-11-10 21:35
+
+### US-47 · Hero potenciado: los trazos a mano del wireframe
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | S           |
+| Depende de   | US-36       |
+| Plan         | [US-47](docs/plans/US-47-hero-potenciado.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-10): replicar los trazos de `docs/wireframes/hero-potenciado.png`, menos las tres líneas
+sobre la «L» de LISANDRO y la estrella de cuatro puntas.
+
+**Historia**: Como visitante quiero un hero con trazos a mano más ricos, de forma que la presentación tenga más vida
+sin tapar el contenido.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Alrededor de Lisandro: dos curvas a su izquierda (a la altura del cuello y del hombro), una curva larga a la derecha que baja desde el cuello hasta el hombro, una ramita de tres hojas a la derecha de la cabeza y, abajo, dos rayitas a la izquierda y una curva con una rayita a la derecha del botón flotante · Estimación: 40 min · Completado: 2026-11-10 21:53
+
+- [x] **CA-2** · Dos chispas arriba a la izquierda de «La alimentación…», el subrayado bajo «nuestra vida» y un subrayado bajo «la base de tu salud» en lugar del corchete; sin las líneas sobre la «L» ni la estrella · Estimación: 20 min · Completado: 2026-11-10 21:53
+
+- [x] **CA-3** · Se ven en desktop y en el celular, se dibujan al final de la intro y quedan dibujados con «reducir movimiento» · Estimación: 15 min · Completado: 2026-11-10 21:53
 
 ## Sprint 5 · Despliegue
 
-Previstos: despliegue (Vercel + Supabase + dominio verificado en Resend + admin de producción) y recordatorio por
-email 24 h antes (cron).
+Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gmail (T-9) y recordatorio por email
+24 h antes (cron), más el cron que vence las solicitudes (T-10).
+
+### T-9 · Emails por Gmail (SMTP) en lugar de Resend
+
+| Campo        | Valor     |
+| ------------ | --------- |
+| Estado       | Pendiente |
+| Dueño        | —         |
+| Inicio       | —         |
+| Tamaño       | S         |
+| Depende de   | —         |
+| Plan         | —         |
+| Merge        | —         |
+| Horas reales | —         |
+
+**Historia**: Como Lisandro quiero que los emails salgan de una cuenta de Gmail, de forma que les lleguen a todos los
+pacientes sin pagar un dominio.
+
+Decisión del dev (2026-11-09): no se compra un dominio. Sin dominio verificado, Resend sólo entrega a la casilla dueña
+de la cuenta y cae en spam. Hasta este ítem sigue Resend con la cuenta de prueba.
+
+**Criterios de aceptación**
+
+- [ ] **CA-1** · `src/lib/email/send-email.ts` manda por SMTP de Gmail (`nodemailer`) con `GMAIL_USER` y `GMAIL_APP_PASSWORD` (contraseña de aplicación, sólo en el servidor); sale `RESEND_API_KEY` y `EMAIL_FROM` queda para el nombre visible · Estimación: 40 min · Completado: —
+
+- [ ] **CA-2** · Sin credenciales o si Gmail falla, el envío devuelve `false` y sólo se loguea el motivo; la outbox de los E2E (`EMAIL_OUTBOX_DIR`) sigue igual · Estimación: 20 min · Completado: —
+
+- [ ] **CA-3** · `.env.example`, docs y un ADR que reemplaza a Resend (gratis, llega a todos, unos 500 emails por día, cuenta dedicada y nunca la personal) · Estimación: 20 min · Completado: —
+
+**Preguntas abiertas**
+
+- La cuenta de Gmail dedicada a la web, con la verificación en dos pasos y una contraseña de aplicación (la crean
+  el dev y Lisandro).
 
 **Preguntas abiertas de los sprints 2 a 5**
 
 - Ubicaciones reales, horarios, duración de la consulta, obras sociales y link de videollamada (los carga Lisandro).
-- Con la cuenta de pacientes antes que la reserva: ¿reservar va a pedir cuenta o se sigue pudiendo sin cuenta, como hoy?
 - Revisión de la política de privacidad y cuánto tiempo se guardan los datos de los pacientes (Ley 25.326).

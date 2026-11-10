@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import type { ReactElement } from 'react';
+import { HeroBodyStrokes } from './hero-strokes';
 
 export function HeroPhoto(): ReactElement {
   return (
@@ -17,6 +18,7 @@ export function HeroPhoto(): ReactElement {
         sizes='(min-width: 768px) 50vw, 92vw'
         className='h-auto w-full lg:h-full lg:w-auto'
       />
+      <HeroBodyStrokes />
       <div className='pointer-events-none absolute inset-x-0 -bottom-px h-24 bg-(image:--gradient-forest) lg:hidden' />
     </div>
   );

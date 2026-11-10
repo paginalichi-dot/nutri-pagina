@@ -42,7 +42,11 @@ export const SlotQuerySchema = z.strictObject({
 
 export const ManualAppointmentInputSchema = z.strictObject({ ...SlotChoiceSchema.shape, ...PatientInputSchema.shape });
 
+export const OnlineBookingInputSchema = z.strictObject({ ...SlotChoiceSchema.shape, healthInsuranceId: optionalUuid });
+
 export type PatientInput = z.infer<typeof PatientInputSchema>;
 export type SlotChoice = z.infer<typeof SlotChoiceSchema>;
 export type SlotQuery = z.infer<typeof SlotQuerySchema>;
 export type ManualAppointmentInput = z.infer<typeof ManualAppointmentInputSchema>;
+export type OnlineBookingInput = z.infer<typeof OnlineBookingInputSchema>;
+export type GridSlot = { startsAt: Date; free: boolean };

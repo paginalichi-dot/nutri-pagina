@@ -35,7 +35,7 @@ function Square({ appointment }: { appointment: AppointmentRow }): ReactElement 
 
 function BandCell({ blocked, appointments }: { blocked: boolean; appointments: AppointmentRow[] }): ReactElement {
   return (
-    <td className={`h-20 border-l border-border p-1.5 align-top ${blocked ? HATCH : ''}`}>
+    <td className={`h-14 border-l border-border p-1.5 align-top ${blocked ? HATCH : ''}`}>
       {blocked ? <span className='sr-only'>Bloqueado</span> : null}
       {appointments.length > 0 ? (
         <ul className='flex flex-wrap gap-1'>

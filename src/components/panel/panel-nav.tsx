@@ -11,7 +11,7 @@ import { activeSection, PANEL_SECTIONS, type PanelSection } from './panel-sectio
 const ICONS = { agenda: CalendarDays, patients: Users, locations: MapPin, settings: Settings2, account: UserRound } as const;
 const FOCUS_ON_DARK = 'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary';
 
-function NavLink({ section, current }: { section: PanelSection; current: boolean }): ReactElement {
+function NavLink({ section, current, badge }: { section: PanelSection; current: boolean; badge: number }): ReactElement {
   const Icon = ICONS[section.icon];
   const tone = current ? 'text-background md:bg-background/10' : 'text-footer-text hover:text-background';
   return (
@@ -23,6 +23,12 @@ function NavLink({ section, current }: { section: PanelSection; current: boolean
       {current ? <span aria-hidden='true' className='absolute top-0 h-1 w-8 rounded-full bg-primary md:inset-y-0 md:left-0 md:h-auto md:w-1 md:rounded-none' /> : null}
       <Icon aria-hidden='true' className='size-5 shrink-0' strokeWidth={2} />
       {section.label}
+      {badge > 0 ? (
+        <span className='absolute top-1 left-1/2 ml-2 rounded-full bg-primary px-1.5 text-[11px] leading-5 font-bold text-primary-foreground tabular-nums md:static md:ml-auto md:px-2 md:text-[12px]'>
+          {badge}
+          <span className='sr-only'>{badge === 1 ? ' solicitud por confirmar' : ' solicitudes por confirmar'}</span>
+        </span>
+      ) : null}
     </Link>
   );
 }
@@ -39,7 +45,7 @@ function Brand(): ReactElement {
   );
 }
 
-export function PanelNav({ footer }: { footer: ReactNode }): ReactElement {
+export function PanelNav({ footer, pending = 0 }: { footer: ReactNode; pending?: number }): ReactElement {
   const current = activeSection(usePathname());
   return (
     <nav
@@ -51,7 +57,7 @@ export function PanelNav({ footer }: { footer: ReactNode }): ReactElement {
         <ul className='flex gap-0.5 px-1 py-1 md:flex-col md:gap-1 md:p-0'>
           {PANEL_SECTIONS.map((section) => (
             <li key={section.href} className='flex flex-1 md:flex-none'>
-              <NavLink section={section} current={current?.href === section.href} />
+              <NavLink section={section} current={current?.href === section.href} badge={section.icon === 'agenda' ? pending : 0} />
             </li>
           ))}
         </ul>

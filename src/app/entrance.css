@@ -1,0 +1,75 @@
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-base: 500ms;
+  --dur-slow: 900ms;
+}
+
+@keyframes enter-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+}
+
+@keyframes enter-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes unfold-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes unfold-from-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes unfold-from-top {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes unfold-from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-enter] {
+    animation: var(--enter-name) var(--enter-duration, var(--dur-slow)) var(--ease-out) var(--enter-delay, 0ms) both;
+  }
+
+  [data-enter='left'] {
+    --enter-name: enter-from-left;
+  }
+
+  [data-enter='top'] {
+    --enter-name: enter-from-top;
+  }
+
+  [data-enter='unfold-left'] {
+    --enter-name: unfold-from-top;
+  }
+
+  [data-enter='unfold-right'] {
+    --enter-name: unfold-from-bottom;
+  }
+
+  @media (min-width: 768px) {
+    [data-enter='unfold-left'] {
+      --enter-name: unfold-from-left;
+    }
+
+    [data-enter='unfold-right'] {
+      --enter-name: unfold-from-right;
+    }
+  }
+}

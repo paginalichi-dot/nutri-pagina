@@ -1,5 +1,6 @@
 import { addMinutes, argentinaInstant, argentinaWeekday } from '@/lib/argentina-time';
 import type { TimeRange } from '../domain/appointment.schema';
+import type { GridSlot } from '../domain/booking.schema';
 
 export const MIN_NOTICE_HOURS = 12;
 export const HORIZON_DAYS = 60;
@@ -30,7 +31,7 @@ function rangeStarts(day: string, range: WeeklyRange, slotMinutes: number): Date
   return starts;
 }
 
-export function availableSlots({ day, hours, slotMinutes, busy, now, scope }: AvailabilityInput): Date[] {
+export function slotGrid({ day, hours, slotMinutes, busy, now, scope }: AvailabilityInput): GridSlot[] {
   const { earliest, latest } = bookingWindow(now, scope);
   const weekday = argentinaWeekday(day);
   return hours
@@ -38,5 +39,7 @@ export function availableSlots({ day, hours, slotMinutes, busy, now, scope }: Av
     .toSorted((a, b) => a.startMinute - b.startMinute)
     .flatMap((range) => rangeStarts(day, range, slotMinutes))
     .filter((startsAt) => startsAt >= earliest && startsAt <= latest)
-    .filter((startsAt) => !busy.some((taken) => overlaps({ startsAt, endsAt: addMinutes(startsAt, slotMinutes) }, taken)));
+    .map((startsAt) => ({ startsAt, free: !busy.some((taken) => overlaps({ startsAt, endsAt: addMinutes(startsAt, slotMinutes) }, taken)) }));
 }
+
+export const availableSlots = (input: AvailabilityInput): Date[] => slotGrid(input).flatMap(({ startsAt, free }) => (free ? [startsAt] : []));

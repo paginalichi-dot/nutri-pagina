@@ -59,6 +59,8 @@ export type TimeRange = { startsAt: Date; endsAt: Date };
 export type AgendaView = { appointments: AppointmentRow[]; blocks: BlockRow[] };
 export type PatientContact = { phone: string; email: string | null };
 
+export type MyAppointments = { upcoming: AppointmentDetail[]; past: AppointmentDetail[] };
+
 export type AgendaSummary = {
   today: { count: number; yesterday: number };
   week: { count: number; previous: number };

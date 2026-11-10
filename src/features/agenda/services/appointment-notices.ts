@@ -47,7 +47,10 @@ function content(kind: NoticeKind, detail: AppointmentDetail, previous: Date | n
 
 export type EmailRequest = { kind: NoticeKind; detail: AppointmentDetail; now: Date; previous?: Date | null };
 
-export function appointmentEmail({ kind, detail, now, previous = null }: EmailRequest): EmailMessage | null {
+const withoutVideo = (detail: AppointmentDetail): AppointmentDetail => ({ ...detail, place: { ...detail.place, videoUrl: null } });
+
+export function appointmentEmail({ kind, detail: stored, now, previous = null }: EmailRequest): EmailMessage | null {
+  const detail = kind === 'confirmed' || stored.status === 'CONFIRMED' ? stored : withoutVideo(stored);
   if (!detail.patientEmail) return null;
   const message = { to: detail.patientEmail, subject: SUBJECTS[kind], ...renderEmail(content(kind, detail, previous)) };
   return kind === 'cancelled' ? message : { ...message, attachments: calendarFile(detail, now) };

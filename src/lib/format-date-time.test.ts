@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { argentinaDay, argentinaHour, argentinaMonth, argentinaTime, formatDateTime } from './format-date-time';
+import { argentinaDay, argentinaHour, argentinaMonth, argentinaTime, formatDateTime, shortDate } from './format-date-time';
 
 describe('argentinaTime y argentinaHour', () => {
   it('da la hora de Buenos Aires', () => {
@@ -41,5 +41,15 @@ describe('argentinaMonth', () => {
     { utc: '2026-04-01T03:00:00Z', start: '2026-04-01', end: '2026-04-30' },
   ])('el mes de $utc en Buenos Aires va del $start al $end', ({ utc, start, end }) => {
     expect(argentinaMonth(new Date(utc))).toEqual({ start, end });
+  });
+});
+
+describe('shortDate', () => {
+  it.each([
+    ['2026-11-01T02:30:00Z', '31 oct 2026'],
+    ['2026-04-12T15:00:00Z', '12 abr 2026'],
+    ['no es una fecha', '—'],
+  ])('%s en Buenos Aires es «%s»', (value, expected) => {
+    expect(shortDate(value)).toBe(expected);
   });
 });

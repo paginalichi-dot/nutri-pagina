@@ -9,7 +9,10 @@ import { TEST_ADMIN } from '../testing/test-admin';
 import { login } from './login';
 
 vi.mock('next/navigation', async () => (await import('../testing/module-mocks')).navigationMock);
+vi.mock('next/server', async (importOriginal) => (await import('@/features/patient/testing/patient-contract')).nextServerModule(importOriginal));
 vi.mock('../repository/admin.repository', async () => (await import('../testing/module-mocks')).fakeRepositoryModule());
+vi.mock('@/features/patient/repository/patient.repository', async () => (await import('@/features/patient/testing/patient-modules')).fakePatientRepositoryModule());
+vi.mock('@/features/rate-limit/repository/rate-limit.repository', async () => (await import('@/features/rate-limit/testing/rate-limit-repository.fake')).fakeRateLimitModule());
 
 let hash = '';
 
@@ -29,8 +32,8 @@ describe('login (contrato)', () => {
     await adminRepository.upsertAdmin({ email: TEST_ADMIN.email, passwordHash: hash });
   });
 
-  it('con email y contraseña correctos deja una sesión válida y lleva a /admin', async () => {
-    await expect(login(null, form({ email: '  ADMIN@ejemplo.test ' }))).rejects.toThrow('NEXT_REDIRECT:/admin');
+  it('con email y contraseña correctos deja una sesión válida y lleva a /admin, aunque venga «volver»', async () => {
+    await expect(login(null, form({ email: '  ADMIN@ejemplo.test ', volver: '/reservar' }))).rejects.toThrow('NEXT_REDIRECT:/admin');
     const token = cookieJar.get('session')?.value ?? '';
     await expect(verifySession(token)).resolves.toMatchObject({ sessionVersion: 1 });
     expect(cookieJar.optionsOf('session')).toMatchObject({ httpOnly: true, secure: true, sameSite: 'lax' });

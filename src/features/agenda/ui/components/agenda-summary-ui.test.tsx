@@ -56,7 +56,7 @@ describe('SummaryCards', () => {
   it('muestra las cuatro métricas con sus bajadas', () => {
     render(<SummaryCards summary={SUMMARY} />);
     const cards = within(screen.getByRole('list', { name: 'Resumen' })).getAllByRole('listitem');
-    expect(cards.map((card) => card.textContent)).toEqual(['Turnos hoy6+2 que ayer', 'Esta semana28+12% vs. semana anterior', 'Pacientes nuevos3Esta semana', 'Horas libres hoy2De 10 disponibles']);
+    expect(cards.map((card) => card.textContent)).toEqual(['Turnos hoy6+2 que ayer', 'Esta semana28+12% vs. semana anterior', 'Pacientes nuevos3Esta semana', 'Horas libres hoy2:00De 10:00 disponibles']);
   });
 
   it('sin duración definida, las horas libres piden definirla', () => {

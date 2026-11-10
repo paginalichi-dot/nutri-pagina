@@ -29,7 +29,7 @@ describe('línea de horas (US-26 CA-4)', () => {
   });
 
   it('la posición sale de los minutos y un turno muy corto igual se lee', () => {
-    expect(placement({ start: 540, end: 585 }, 8)).toEqual({ top: HOUR_HEIGHT, height: 48 });
+    expect(placement({ start: 540, end: 630 }, 8)).toEqual({ top: HOUR_HEIGHT, height: HOUR_HEIGHT * 1.5 });
     expect(placement({ start: 480, end: 490 }, 8).height).toBe(34);
   });
 

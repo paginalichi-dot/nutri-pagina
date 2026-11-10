@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { connection } from 'next/server';
 import type { ReactElement } from 'react';
-import { getAgenda, getAgendaSummary } from '@/features/agenda/actions/agenda-queries';
+import { getAgenda, getAgendaSummary, getPendingCount } from '@/features/agenda/actions/agenda-queries';
 import { AgendaHeader } from '@/features/agenda/ui/components/agenda-header';
 import type { AgendaMode } from '@/features/agenda/ui/components/agenda-toolbar';
 import { AgendaBoard } from '@/features/agenda/ui/components/agenda-views';
 import { MonthCalendar, monthGrid } from '@/features/agenda/ui/components/month-calendar';
 import { NextAppointmentCard } from '@/features/agenda/ui/components/next-appointment-card';
+import { PendingRequestsCard } from '@/features/agenda/ui/components/pending-requests-card';
 import { SummaryCards } from '@/features/agenda/ui/components/summary-cards';
 import { isArgentinaDay, startOfWeek, todayInArgentina } from '@/lib/argentina-time';
 import { argentinaDay } from '@/lib/format-date-time';
@@ -23,11 +24,12 @@ export default async function AgendaPage({ searchParams }: PageProps<'/admin'>):
   const day = isArgentinaDay(single(params.dia)) ? single(params.dia) : today;
   const mode: AgendaMode = single(params.vista) === 'semana' ? 'semana' : 'dia';
   const grid = monthGrid(day);
-  const [view, summary, month] = await Promise.all([mode === 'semana' ? getAgenda(startOfWeek(day), 7) : getAgenda(day, 1), getAgendaSummary(), getAgenda(grid[0] ?? day, grid.length)]);
+  const [view, summary, month, pending] = await Promise.all([mode === 'semana' ? getAgenda(startOfWeek(day), 7) : getAgenda(day, 1), getAgendaSummary(), getAgenda(grid[0] ?? day, grid.length), getPendingCount()]);
   const busyDays = new Set(month.appointments.filter(({ status }) => status !== 'CANCELLED').map(({ startsAt }) => argentinaDay(startsAt)));
   return (
     <main className='mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-8 md:px-8'>
       <AgendaHeader now={now} day={day} />
+      <PendingRequestsCard count={pending} />
       <SummaryCards summary={summary} />
       <div className='grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:grid-rows-[auto_1fr]'>
         <div className='lg:col-start-2 lg:row-start-1'>

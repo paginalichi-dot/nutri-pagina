@@ -47,7 +47,7 @@ test.describe('panel del admin', () => {
     await signIn(page);
     const menu = page.getByRole('navigation', { name: 'Panel' });
     await expect(menu.getByRole('link', { name: 'Agenda' })).toHaveAttribute('aria-current', 'page');
-    for (const [label, heading] of [['Pacientes', 'Pacientes'], ['Ubicaciones', 'Tus ubicaciones'], ['Ajustes', 'Ajustes de la agenda'], ['Mi cuenta', 'Mi cuenta']]) {
+    for (const [label, heading] of [['Pacientes', 'Pacientes'], ['Ubicaciones', 'Tus ubicaciones'], ['Ajustes', 'Ajustes'], ['Mi cuenta', 'Mi cuenta']]) {
       await menu.getByRole('link', { name: label }).click();
       await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
       await expect(menu.getByRole('link', { name: label })).toHaveAttribute('aria-current', 'page');

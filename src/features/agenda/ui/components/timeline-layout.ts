@@ -1,7 +1,7 @@
 import { addDays, argentinaInstant, MINUTES_PER_DAY, minuteOfDay } from '@/lib/argentina-time';
 import type { TimeRange } from '../../domain/appointment.schema';
 
-export const HOUR_HEIGHT = 64;
+export const HOUR_HEIGHT = 54;
 const MIN_HEIGHT = 34;
 const DEFAULT_SPAN = { first: 8, last: 18 };
 

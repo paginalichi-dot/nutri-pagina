@@ -10,6 +10,7 @@ export type SettingsRepository = {
   createHealthInsurance(name: string): Promise<HealthInsuranceRow>;
   renameHealthInsurance(ref: RecordRef, name: string): Promise<void>;
   setHealthInsuranceActive(ref: RecordRef, active: boolean): Promise<void>;
+  appointmentsByHealthInsurance(): Promise<ReadonlyMap<string, number>>;
 };
 
 const SETTINGS_ID = 1;
@@ -53,5 +54,10 @@ export const settingsRepository: SettingsRepository = {
 
   async setHealthInsuranceActive({ id, version }, active) {
     stale((await db.healthInsurance.updateMany({ where: { id, version }, data: { active, version: { increment: 1 } } })).count);
+  },
+
+  async appointmentsByHealthInsurance() {
+    const groups = await db.appointment.groupBy({ by: ['healthInsuranceId'], where: { status: { not: 'CANCELLED' }, healthInsuranceId: { not: null } }, _count: { _all: true } });
+    return new Map(groups.flatMap(({ healthInsuranceId, _count }) => (healthInsuranceId ? [[healthInsuranceId, _count._all] as const] : [])));
   },
 };

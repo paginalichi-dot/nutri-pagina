@@ -39,3 +39,12 @@ export function argentinaMonth(value: Date): { start: string; end: string } {
   const lastDay = new Date(Date.UTC(Number(month.slice(0, 4)), Number(month.slice(5, 7)), 0)).getUTCDate();
   return { start: `${month}01`, end: `${month}${lastDay}` };
 }
+
+const shortDateFormatter = new Intl.DateTimeFormat('es-AR', { timeZone: DISPLAY_TIME_ZONE, day: 'numeric', month: 'short', year: 'numeric' });
+
+export function shortDate(value: Date | string): string {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  if (Number.isNaN(date.getTime())) return INVALID_DATE;
+  const part = (type: Intl.DateTimeFormatPartTypes): string => shortDateFormatter.formatToParts(date).find((item) => item.type === type)?.value ?? '';
+  return `${part('day')} ${part('month')} ${part('year')}`;
+}

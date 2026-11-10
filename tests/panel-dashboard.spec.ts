@@ -54,10 +54,19 @@ test.describe('panel: tablero de la agenda (US-26) y confirmar (US-23)', () => {
     await expect(page.getByRole('button', { name: 'Confirmar' })).toHaveCount(0);
   });
 
-  test('«Pacientes» muestra que llega más adelante', async ({ page }) => {
+  test('US-43: Pacientes junta cuentas y turnos sin cuenta, busca y abre la ficha', async ({ page }) => {
     await signIn(page);
     await page.getByRole('navigation', { name: 'Panel' }).getByRole('link', { name: 'Pacientes' }).click();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pacientes');
-    await expect(page.getByRole('heading', { name: 'Próximamente' })).toBeVisible();
+    const search = page.getByRole('searchbox', { name: 'Buscar por nombre, email o teléfono' });
+    const list = page.getByRole('region', { name: 'Lista de pacientes' });
+    await search.fill('paciente@ejemplo');
+    await expect(list.getByRole('link', { name: 'Ver a Paciente de Prueba' })).toBeVisible();
+    await search.fill('pendiente 1');
+    await expect(list.getByRole('link', { name: 'Ver a Paciente de Prueba' })).toHaveCount(0);
+    await list.getByRole('link', { name: 'Ver a Paciente pendiente 1' }).click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Paciente pendiente 1');
+    await expect(page.getByRole('region', { name: 'Datos del paciente' })).toContainText('Sin cuenta');
+    await expect(page.getByRole('region', { name: 'Turnos por venir' }).getByRole('link').first()).toHaveAttribute('href', /\/admin\/turnos\//);
   });
 });

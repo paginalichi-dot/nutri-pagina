@@ -6,6 +6,7 @@ export type AdminRepository = {
   findCredentialsByEmail(email: string): Promise<AdminCredentialsRow | null>;
   findCredentialsById(id: string): Promise<AdminCredentialsRow | null>;
   findSessionVersion(id: string): Promise<number | null>;
+  findEmail(): Promise<string | null>;
   saveLoginState(state: LoginState): Promise<void>;
   updateCredentials(change: CredentialsChange): Promise<void>;
   upsertAdmin(admin: { email: string; passwordHash: string }): Promise<void>;
@@ -31,6 +32,10 @@ export const adminRepository: AdminRepository = {
   async findSessionVersion(id) {
     const row = await db.adminUser.findUnique({ where: { id }, select: { sessionVersion: true } });
     return row?.sessionVersion ?? null;
+  },
+
+  async findEmail() {
+    return (await db.adminUser.findFirst({ select: { email: true }, orderBy: { createdAt: 'asc' } }))?.email ?? null;
   },
 
   saveLoginState: ({ id, version, failedAttempts, lockedUntil }) => updateVersioned(id, version, { failedAttempts, lockedUntil }),

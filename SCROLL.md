@@ -46,8 +46,9 @@ Usar siempre estas variables (o sus equivalentes en el sistema del proyecto). No
 - Preferir una revelación cinematográfica del contenido real: fades, leves desplazamientos o escalas, máscaras que se abren, textos que aparecen por líneas.
 - **Coordinar con la carga:** la animación arranca solo cuando el contenido está listo (fuentes cargadas con `document.fonts.ready`, imágenes o video principales decodificados). Nunca mostrar una pantalla vacía ni elementos a medio cargar.
   - Agregar un timeout de seguridad (~2,5 s): si algo tarda, el contenido se muestra igual.
-- **No repetir innecesariamente:** las animaciones de entrada se ejecutan una vez por sesión y no se reproducen en la navegación interna (cambio de ruta, volver atrás).
-  - Guardar ese estado en el estado global de la app o en `sessionStorage` (envuelto en `try/catch`).
+- **Se repiten en cada llegada** (decisión del dev, 2026-11-09): las animaciones de entrada corren en cada recarga y
+  cada vez que se llega a la pantalla navegando (cambio de ruta, volver atrás), también la intro de la home. Por eso
+  son cortas y nunca bloquean: el contenido ya está en el HTML y la animación sólo lo acompaña.
 
 ---
 
@@ -112,7 +113,7 @@ Cuando se busque un scroll inmersivo, las secciones se comportan como capas en e
 
 - [ ] ¿Se respetan los tokens de motion (curvas y duraciones)?
 - [ ] ¿Solo se animan `transform` y `opacity`?
-- [ ] ¿Las animaciones de entrada esperan al contenido y no se repiten en navegación interna?
+- [ ] ¿Las animaciones de entrada esperan al contenido y se repiten en cada llegada?
 - [ ] ¿Los efectos de scroll están vinculados al progreso real, sin saltos ni bloqueos?
 - [ ] ¿Funciona y se ve bien en mobile?
 - [ ] ¿Se respeta `prefers-reduced-motion`?

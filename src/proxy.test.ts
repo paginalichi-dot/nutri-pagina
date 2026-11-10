@@ -21,7 +21,7 @@ describe('proxy', () => {
   });
 
   it('al cargar una página del panel con un token válido deja pasar y renueva la cookie por 400 días', async () => {
-    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
+    const token = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'admin' });
     const response = await proxy(request('/admin/cuenta', token, { headers: { 'sec-fetch-dest': 'document' } }));
     expect(passes(response)).toBe(true);
     expect(response.cookies.get('session')).toMatchObject({ value: token, maxAge: 34_560_000, httpOnly: true, secure: true });
@@ -32,7 +32,7 @@ describe('proxy', () => {
     ['una precarga o navegación interna', { headers: { 'sec-fetch-dest': 'empty', rsc: '1' } }],
     ['un pedido sin sec-fetch-dest', {}],
   ])('en %s con token válido no renueva la cookie, para no revivir una sesión cerrada', async (_caso, init) => {
-    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
+    const token = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'admin' });
     const response = await proxy(request('/admin', token, init));
     expect(passes(response)).toBe(true);
     expect(response.cookies.get('session')).toBeUndefined();
@@ -43,8 +43,32 @@ describe('proxy', () => {
     expect(rewrittenTo(response)).toBe('http://localhost/acceso-denegado');
   });
 
+  it('T-8 CA-3: una sesión de paciente en el panel ve "Acceso denegado" y conserva su cookie', async () => {
+    const token = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'patient' });
+    const response = await proxy(request('/admin', token, { headers: { 'sec-fetch-dest': 'document' } }));
+    expect(rewrittenTo(response)).toBe('http://localhost/acceso-denegado');
+    expect(response.cookies.get('session')).toBeUndefined();
+  });
+
+  it('US-31: Mi espacio con sesión de paciente pasa y renueva la cookie; sin ella o con la del admin lleva a /login', async () => {
+    const patient = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'patient' });
+    const admin = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'admin' });
+    const page = { headers: { 'sec-fetch-dest': 'document' } };
+    const allowed = await proxy(request('/mi-espacio', patient, page));
+    expect(passes(allowed)).toBe(true);
+    expect(allowed.cookies.get('session')).toMatchObject({ value: patient });
+    for (const token of [undefined, admin]) expect((await proxy(request('/mi-espacio/datos', token))).headers.get('location')).toBe('http://localhost/login?volver=%2Fmi-espacio%2Fdatos');
+  });
+
+  it('US-21 CA-1: /reservar sin sesión de paciente lleva al login con la ruta para volver, incluidos los pasos', async () => {
+    const patient = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'patient' });
+    expect(passes(await proxy(request('/reservar', patient)))).toBe(true);
+    const response = await proxy(request('/reservar?ubicacion=x&dia=2026-11-10'));
+    expect(response.headers.get('location')).toBe('http://localhost/login?volver=%2Freservar%3Fubicacion%3Dx%26dia%3D2026-11-10');
+  });
+
   it('con un token adulterado borra la cookie y lo trata como sin sesión', async () => {
-    const token = await signSession({ adminId: ADMIN_ID, sessionVersion: 1 });
+    const token = await signSession({ subjectId: ADMIN_ID, sessionVersion: 1, role: 'admin' });
     const response = await proxy(request('/admin/agenda', `${token}x`));
     expect(rewrittenTo(response)).toBe('http://localhost/acceso-denegado');
     expect(response.cookies.get('session')?.value).toBe('');
@@ -53,7 +77,7 @@ describe('proxy', () => {
   it.each([
     ['el sitio público, aunque haya token', request('/', 'cualquiera')],
     ['una ruta que sólo empieza parecido', request('/administracion', 'cualquiera')],
-    ['/reservar, que es pública', request('/reservar', 'cualquiera')],
+    ['una ruta que sólo empieza como /reservar', request('/reservarlo', 'cualquiera')],
     ['/login, el login de todos', request('/login', 'cualquiera')],
   ])('no toca %s', async (_caso, incoming) => {
     const response = await proxy(incoming);

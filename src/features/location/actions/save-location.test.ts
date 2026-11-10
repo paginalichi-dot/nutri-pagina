@@ -21,23 +21,18 @@ describe('saveLocation (contrato)', () => {
     await expect(saveLocation(null, formData(CENTRO))).resolves.toMatchObject({ success: false, code: 'UNAUTHENTICATED' });
   });
 
-  it('US-9 CA-2: crea la ubicación, refresca la home y lleva a su ficha', async () => {
-    await signedInAdmin();
-    await expect(saveLocation(null, formData({ ...CENTRO, name: 'Sede Norte' }))).rejects.toThrow(/NEXT_REDIRECT:\/admin\/ubicaciones\/[0-9a-f-]{36}/);
-    expect(updateTag).toHaveBeenCalledWith('locations');
-    expect((await locationRepository.list()).map((row) => row.name)).toContain('Sede Norte');
-  });
-
   it('US-9 CA-3: edita una ubicación con su versión', async () => {
     await signedInAdmin();
     const { id } = await locationRepository.create({ kind: 'ONLINE', name: 'Online', videoUrl: 'https://meet.example.test/a', address: null, directions: null, mapUrl: null });
     const result = await saveLocation(null, formData({ id, version: '1', kind: 'ONLINE', name: 'Consultas online', videoUrl: 'https://meet.example.test/b' }));
     expect(result).toEqual({ success: true, message: 'Guardamos los cambios.' });
+    expect(updateTag).toHaveBeenCalledWith('locations');
     await expect(locationRepository.findById(id)).resolves.toMatchObject({ name: 'Consultas online', version: 2 });
   });
 
   it.each<{ caso: string; data: Record<string, string>; code: string; error: string }>([
     { caso: 'falta la dirección', data: { ...CENTRO, address: '' }, code: 'VALIDATION', error: 'Ingresá la dirección.' },
+    { caso: 'falta el registro', data: CENTRO, code: 'VALIDATION', error: 'El registro no es válido.' },
     { caso: 'el link de videollamada no es https', data: { kind: 'ONLINE', name: 'Online', videoUrl: 'http://x.test' }, code: 'VALIDATION', error: 'Ingresá un link que empiece con https://.' },
     { caso: 'la versión no es válida', data: { ...CENTRO, id: 'x', version: '1' }, code: 'VALIDATION', error: 'El registro no es válido.' },
     { caso: 'la versión es vieja', data: { ...CENTRO, id: '00000000-0000-4000-8000-000000000000', version: '9' }, code: 'STALE_VERSION', error: errorMessage('STALE_VERSION') },
@@ -49,7 +44,8 @@ describe('saveLocation (contrato)', () => {
   it('US-9 CA-5: un nombre repetido da DUPLICATE', async () => {
     await signedInAdmin();
     await locationRepository.create({ kind: 'IN_PERSON', name: 'Repetida', address: 'Calle 1', directions: null, mapUrl: null, videoUrl: null });
-    await expect(saveLocation(null, formData({ ...CENTRO, name: 'REPETIDA' }))).resolves.toMatchObject({ success: false, code: 'DUPLICATE' });
+    const { id } = await locationRepository.create({ kind: 'IN_PERSON', name: 'Otra', address: 'Calle 2', directions: null, mapUrl: null, videoUrl: null });
+    await expect(saveLocation(null, formData({ ...CENTRO, id, version: '1', name: 'REPETIDA' }))).resolves.toMatchObject({ success: false, code: 'DUPLICATE' });
   });
 
   it('fuzz: nunca lanza ni devuelve un error fuera del catálogo', async () => {

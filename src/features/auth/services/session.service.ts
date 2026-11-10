@@ -9,11 +9,11 @@ export function createSessionService(repository: Pick<AdminRepository, 'findSess
   return {
     async authenticate(token) {
       const claims = token ? await verifySession(token) : null;
-      if (!claims) throw new AppError('UNAUTHENTICATED');
-      const current = await repository.findSessionVersion(claims.adminId);
+      if (claims?.role !== 'admin') throw new AppError('UNAUTHENTICATED');
+      const current = await repository.findSessionVersion(claims.subjectId);
       if (current === null) throw new AppError('UNAUTHENTICATED');
       if (current !== claims.sessionVersion) throw new AppError('SESSION_EXPIRED');
-      return claims;
+      return { adminId: claims.subjectId, sessionVersion: claims.sessionVersion };
     },
   };
 }

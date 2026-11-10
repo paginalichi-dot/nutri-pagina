@@ -37,6 +37,12 @@ describe('adminRepository (integración)', () => {
     await expect(adminRepository.findCredentialsByEmail('nadie@ejemplo.test')).resolves.toBeNull();
   });
 
+  it('US-22 CA-2: findEmail da el email del admin para los avisos, o null si no hay', async () => {
+    await expect(adminRepository.findEmail()).resolves.toBeNull();
+    await createAdmin();
+    await expect(adminRepository.findEmail()).resolves.toBe(EMAIL);
+  });
+
   it('findSessionVersion devuelve sólo la versión de sesión, nunca el hash', async () => {
     const { id } = await createAdmin();
     await expect(adminRepository.findSessionVersion(id)).resolves.toBe(1);

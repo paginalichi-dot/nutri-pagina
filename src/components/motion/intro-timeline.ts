@@ -32,6 +32,8 @@ function heroEntrance(root: HTMLElement, timeline: gsap.core.Timeline): void {
     .from(opening ?? [], { x: -120, autoAlpha: 0, duration: 1.1 }, HERO_AT + 0.3)
     .from(closing ?? [], { x: 120, autoAlpha: 0, duration: 1.1 }, HERO_AT + 0.35);
   if (button) timeline.from(button, { yPercent: 160, autoAlpha: 0, duration: 0.9 }, HERO_AT + 0.8);
+  timeline.from(q('[data-account]'), { autoAlpha: 0, duration: 0.6 }, HERO_AT + 1.2);
+  timeline.from(q('[data-hero-strokes]'), { clipPath: 'inset(0 100% 0 0)', duration: 0.9, stagger: 0.1 }, HERO_AT + 1);
 }
 
 export function introTimeline(root: HTMLElement, onRevealed: () => void): gsap.core.Timeline | null {

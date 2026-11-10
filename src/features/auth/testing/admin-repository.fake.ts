@@ -24,6 +24,7 @@ export function createFakeAdminRepository(seed: FakeAdmin[] = []): FakeAdminRepo
     findCredentialsByEmail: async (email) => credentials(admins.get(email)),
     findCredentialsById: async (id) => credentials(byId(id)),
     findSessionVersion: async (id) => byId(id)?.sessionVersion ?? null,
+    findEmail: async () => [...admins.keys()][0] ?? null,
     async saveLoginState({ id, version, failedAttempts, lockedUntil }) {
       Object.assign(versioned(id, version), { failedAttempts, lockedUntil });
     },

@@ -2,9 +2,9 @@ import { addDays, argentinaInstant } from '@/lib/argentina-time';
 import { emailSenderFromEnv } from '@/lib/email/send-email';
 import { AppError } from '@/lib/errors';
 import type { RecordRef } from '@/lib/record-ref';
-import type { AgendaSummary, AgendaView, AppointmentDetail } from '../domain/appointment.schema';
+import { ACTIVE_STATUSES, type AgendaSummary, type AgendaView, type AppointmentDetail, type AppointmentRow, type MyAppointments } from '../domain/appointment.schema';
 import type { BlockInput } from '../domain/block.schema';
-import type { SlotQuery } from '../domain/booking.schema';
+import type { GridSlot, SlotQuery } from '../domain/booking.schema';
 import { agendaRepository } from '../repository/agenda.repository';
 import { agendaSummary } from './agenda-summary';
 import { type AgendaDependencies, type AppointmentCommands, appointmentCommands } from './appointment-commands';
@@ -14,11 +14,22 @@ import { mustFind, slotsFor } from './slot-check';
 export type AgendaService = AppointmentCommands & {
   agenda(day: string, days: number): Promise<AgendaView>;
   summary(): Promise<AgendaSummary>;
+  pendingCount(): Promise<number>;
+  pendingRequests(): Promise<AppointmentRow[]>;
+  mine(email: string): Promise<MyAppointments>;
   appointment(id: string): Promise<AppointmentDetail>;
   slots(query: SlotQuery, scope: AvailabilityScope, ignoreId?: string | null): Promise<Date[]>;
+  grid(query: SlotQuery): Promise<GridSlot[]>;
   createBlock(input: BlockInput): Promise<void>;
   deleteBlock(ref: RecordRef): Promise<void>;
 };
+
+const isActive = ({ status }: AppointmentDetail): boolean => ACTIVE_STATUSES.some((active) => active === status);
+
+function splitMine(rows: AppointmentDetail[], now: Date): MyAppointments {
+  const upcoming = rows.filter((row) => row.startsAt >= now && isActive(row));
+  return { upcoming, past: rows.filter((row) => !upcoming.includes(row)).reverse() };
+}
 
 export function createAgendaService(dependencies: AgendaDependencies): AgendaService {
   const { repository, clock } = dependencies;
@@ -30,8 +41,12 @@ export function createAgendaService(dependencies: AgendaDependencies): AgendaSer
       return { appointments, blocks };
     },
     summary: () => agendaSummary(repository, clock()),
+    pendingCount: () => repository.countPending(clock()),
+    pendingRequests: () => repository.listPending(clock()),
+    mine: async (email) => splitMine(await repository.listByPatientEmail(email), clock()),
     appointment: (id) => mustFind(repository, id),
     slots: async ({ locationId, day }, scope, ignoreId = null) => (await slotsFor(repository, { locationId, day, scope, now: clock(), ignoreId })).slots,
+    grid: async ({ locationId, day }) => (await slotsFor(repository, { locationId, day, scope: 'public', now: clock(), ignoreId: null })).grid,
     createBlock: (input) =>
       repository.inTransaction(async (tx) => {
         if ((await tx.countActiveAppointments(input)) > 0) throw new AppError('BLOCK_HAS_APPOINTMENTS');

@@ -7,6 +7,8 @@ const CATALOG = {
   UNAUTHENTICATED: () => 'Iniciá sesión para continuar.',
   INVALID_CREDENTIALS: () => 'El email o la contraseña no son correctos.',
   WRONG_PASSWORD: () => 'La contraseña actual no es correcta.',
+  EMAIL_NOT_VERIFIED: () => 'Activá tu cuenta con el link que te mandamos.',
+  EMAIL_IN_USE: () => 'Ese email ya lo usa otra cuenta.',
   SESSION_EXPIRED: () => 'Tu sesión venció. Volvé a iniciar sesión.',
   FORBIDDEN: () => 'No tenés permiso para hacer esto.',
   NOT_FOUND: (entity: string) => `${capitalize(entity)} ya no existe.`,
@@ -23,6 +25,8 @@ const CATALOG = {
   BLOCK_HAS_APPOINTMENTS: () => 'En ese rango hay turnos. Cancelalos o reprogramalos antes de bloquear.',
   INVALID_TRANSITION: () => 'Ese cambio no se puede hacer en el estado actual del turno.',
   NO_SLOT_DURATION: () => 'Todavía no definiste la duración de los turnos. Hacelo en Ajustes.',
+  BOOKING_LIMIT: () => 'Ya tenés dos turnos por venir. Cancelá o reprogramá uno para reservar otro.',
+  CHANGE_TOO_LATE: () => 'Faltan menos de 24 h para tu turno. Escribile a Lisandro para cambiarlo.',
   UNEXPECTED: (entity: string) => `No se pudo procesar ${entity}. Intentá de nuevo en unos minutos.`,
 } satisfies Record<string, (entity: string) => string>;
 

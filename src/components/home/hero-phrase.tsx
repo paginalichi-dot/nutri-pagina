@@ -1,4 +1,6 @@
 import type { ReactElement, ReactNode } from 'react';
+import { ClosingStrokes, OpeningStrokes } from './hero-strokes';
+import { ScrollHint } from './scroll-hint';
 
 function Mark({ children }: { children: ReactNode }): ReactElement {
   return <strong className='font-bold text-primary'>{children}</strong>;
@@ -11,6 +13,8 @@ export function HeroPhraseOpening(): ReactElement {
   return (
     <p data-intro data-hero-phrase className={`${BASE} mt-8 self-start lg:mt-0 lg:left-16`}>
       La{' '}<Mark>alimentación</Mark> nos atraviesa durante toda nuestra vida
+      <OpeningStrokes />
+      <ScrollHint tone='onDark' placement='opening' />
     </p>
   );
 }
@@ -19,6 +23,8 @@ export function HeroPhraseClosing(): ReactElement {
   return (
     <p data-intro data-hero-phrase className={`${BASE} mt-6 self-end text-right lg:mt-0 lg:right-16`}>
       Y aprender a transformarla en un buen hábito es <Mark>la base de tu{' '}salud</Mark>
+      <ClosingStrokes />
+      <ScrollHint tone='onDark' placement='phrase' />
     </p>
   );
 }

@@ -4,13 +4,13 @@ import { formData, signedInAdmin } from '@/features/auth/testing/account-actions
 import { errorMessage } from '@/lib/errors';
 import { locationRepository } from '../repository/location.repository';
 import type { FakeLocationRepository } from '../testing/location-repository.fake';
-import { addHours, deleteHours, setLocationActive } from './location-changes';
+import { addHours, deleteHours, setLocationActive, updateHours } from './location-changes';
 
 vi.mock('next/navigation', async () => (await import('@/features/auth/testing/module-mocks')).navigationMock);
 vi.mock('@/features/auth/repository/admin.repository', async () => (await import('@/features/auth/testing/module-mocks')).fakeRepositoryModule());
 vi.mock('../repository/location.repository', async () => ({ locationRepository: (await import('../testing/location-repository.fake')).createFakeLocationRepository() }));
 
-const fake = (): FakeLocationRepository => Object.assign(locationRepository, { upcoming: Reflect.get(locationRepository, 'upcoming') });
+const fake = (): FakeLocationRepository => Object.assign(locationRepository, { upcoming: Reflect.get(locationRepository, 'upcoming'), activity: Reflect.get(locationRepository, 'activity') });
 
 async function newLocation(name: string): Promise<string> {
   return (await locationRepository.create({ kind: 'IN_PERSON', name, address: 'Calle 1', directions: null, mapUrl: null, videoUrl: null })).id;
@@ -23,7 +23,7 @@ describe('acciones de ubicaciones (contrato)', () => {
 
   it('sin sesión, ninguna acción cambia nada', async () => {
     const data = formData({ id: '00000000-0000-4000-8000-000000000000', version: '1', active: 'false' });
-    for (const action of [setLocationActive, addHours, deleteHours]) await expect(action(null, data)).resolves.toMatchObject({ code: 'UNAUTHENTICATED' });
+    for (const action of [setLocationActive, addHours, updateHours, deleteHours]) await expect(action(null, data)).resolves.toMatchObject({ code: 'UNAUTHENTICATED' });
   });
 
   it('US-9 CA-4: desactiva y reactiva una ubicación', async () => {
@@ -62,12 +62,22 @@ describe('acciones de ubicaciones (contrato)', () => {
     await expect(setLocationActive(null, formData({ id: 'x', version: '1' }))).resolves.toMatchObject({ code: 'VALIDATION' });
   });
 
+  it('US-41 CA-3: edita una franja; si se pisa da HOURS_OVERLAP y con una versión vieja STALE_VERSION', async () => {
+    await signedInAdmin();
+    const locationId = await newLocation('Editar franja');
+    const { id } = await locationRepository.addHours({ locationId, weekday: 2, startMinute: 540, endMinute: 600 });
+    await locationRepository.addHours({ locationId, weekday: 2, startMinute: 720, endMinute: 780 });
+    await expect(updateHours(null, formData({ id, version: '1', start: '08:00', end: '10:30' }))).resolves.toEqual({ success: true, message: 'Guardamos la franja.' });
+    await expect(updateHours(null, formData({ id, version: '2', start: '08:00', end: '12:30' }))).resolves.toMatchObject({ code: 'HOURS_OVERLAP' });
+    await expect(updateHours(null, formData({ id, version: '1', start: '08:00', end: '09:00' }))).resolves.toMatchObject({ code: 'STALE_VERSION' });
+  });
+
   it('fuzz: ninguna entrada hace lanzar ni devuelve un error fuera del catálogo', async () => {
     await signedInAdmin();
     const fields = fc.record({ id: fc.string(), version: fc.string(), locationId: fc.string(), weekday: fc.string(), start: fc.string(), end: fc.string() });
     await fc.assert(
       fc.asyncProperty(fields, async (input) => {
-        for (const action of [setLocationActive, addHours, deleteHours]) {
+        for (const action of [setLocationActive, addHours, updateHours, deleteHours]) {
           const result = await action(null, formData(input));
           if (!result.success) expect(() => errorMessage(result.code ?? 'UNEXPECTED')).not.toThrow();
         }
