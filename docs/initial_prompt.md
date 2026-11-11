@@ -42,11 +42,11 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - Sprint 1 cerrado (`Hecho`, tag `sprint-1`):
   - Hero según el wireframe del dev (US-1 y US-6): «LISANDRO LÓPEZ» en gigante, la foto tapando la base del nombre y
     la frase del cliente a los costados.
-  - "Sobre mí" con placeholder de foto (US-2) y botón flotante "Reservá tu turno" hacia `/reservar` ("Próximamente",
-    US-4).
+  - "Sobre mí" (US-2) y botón flotante "Reservá tu turno" hacia `/reservar` ("Próximamente", US-4). Desde US-48
+    (2026-11-10), «Sobre mí» sigue el wireframe del dev: la foto real va en un marco en arco en desktop.
   - Movimiento con Lenis + GSAP (US-3), intro de marca (US-7: una caja con «Lic. Lisandro López» que se expande
     hasta ser el hero) y scroll con profundidad (US-8: cada sección se aleja al fondo y la siguiente la tapa). Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
-- Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
+- Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`; de «Sobre mí»: `public/foto-sobre-mi.jpg`.
 - Sprint 2 («Lisandro maneja su agenda») cerrado (`Hecho`, tag `sprint-2`): menú del panel, ubicaciones con
   horarios semanales, duración y obras sociales, agenda día y semana, bloqueos, disponibilidad, turnos cargados a
   mano (cancelar, asistencia, reprogramar) con email por Resend y WhatsApp (`wa.me`), y «Dónde atiendo» en la home.

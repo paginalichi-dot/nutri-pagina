@@ -147,7 +147,7 @@ Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y r
   `non-scaling-stroke` en un SVG estirado); sin intro, quedan dibujadas.
 - En notebooks bajas (p. ej. 1280×600) el marco baja hasta 520px y el nombre se limita también por alto
   (`min(8.4vw, 8.5rem, 15svh)`); el ancho de la frase se mide sobre el marco (`cqw`), no sobre la ventana, para que
-  la barra de scroll no la empuje afuera. «Sobre mí» limita su arco y su padding al alto de la pantalla y, con la variante `short` (desktop de
+  la barra de scroll no la empuje afuera. «Sobre mí» limita su marco y su padding al alto de la pantalla y, con la variante `short` (desktop de
   hasta 760px de alto), achica títulos y texto para entrar entera; si igual no entra, no hace la pausa. El `body`
   lleva `overflow-x: clip` como red contra cualquier desborde horizontal.
 
@@ -175,13 +175,24 @@ que gira 45° al pasar el mouse. 64px de alto en mobile y 72px en desktop, con u
 el área segura de iOS. Lleva a `/reservar`. Es la única píldora Verde Lima de la home. La home deja abajo un espacio
 Hueso más alto que el botón para que nunca tape el final. El foco suma un halo blanco y un anillo Verde Bosque.
 
-### Sobre mí (US-6)
-Banda Hueso con borde curvo arriba. A la izquierda, la foto en un marco en arco (arriba redondo, abajo radio 30px),
-sólo desde 768px: en mobile no se muestra (pedido del dev, 2026-11-07);
-mientras falta, el placeholder `[Completar: foto Sobre mí]` con borde punteado. A la derecha: el `h2` «Sobre **mí**»
-con un subrayado Verde Lima dibujado a mano y una flecha Zanahoria a mano que baja hacia la foto (desde 1024px); el
-primer párrafo en display (28px/38.4px, 500, con «Licenciado en Nutrición» y «Universidad Favaloro» en 700) y el
-resto del texto en dos columnas desde 768px, con menos de 75 caracteres por línea.
+### Sobre mí (US-6, rehecho en US-48 según `docs/wireframes/seccion-sobre-mi.png`)
+Banda Hueso con borde curvo arriba; desde 768px, foto (5/12) y texto (7/12).
+- **Foto** (`public/foto-sobre-mi.jpg`, `about-photo.tsx`): en un marco en arco (arriba redondo, abajo radio 30px),
+  4:5, de hasta 480px de ancho y limitado al alto de la pantalla, recortada con `object-cover` cerca de la cara. Detrás,
+  un contorno Verde Lima de 2px con la misma forma, corrido hacia arriba a la izquierda. En mobile no se muestra
+  (pedido del dev, 2026-11-07). Se probó la foto a sangre en toda la mitad y el dev la descartó por invasiva
+  (2026-11-10).
+- **Disco «Lic. en Nutrición»:** Verde Lima de 112px (96px con `short`), texto Verde Bosque 15px/600 y `shadow-halo`,
+  montado sobre la esquina de abajo a la derecha del marco.
+- **Texto, a la derecha:** el `h2` «SOBRE MÍ» como etiqueta (13px/700, mayúsculas, +1px; en Verde Bosque: el
+  wireframe lo pone en Verde Lima, que sobre Hueso no se lee); el título display «Soy Lisandro López, **Licenciado en
+  Nutrición** por la **Universidad Favaloro**.» (500 con las palabras clave en 700; 28px mobile, 26/32/38.4px en
+  768/1024/1280) con el subrayado Verde Lima a mano bajo «Universidad Favaloro»; los cuatro párrafos del cliente (en
+  dos columnas desde 1280px, con menos de 75 caracteres por línea) y la fila Universidad Favaloro · Atención
+  personalizada · Seguimiento continuo (`about-highlights.tsx`): discos Verde Lima de 48px con íconos Lucide
+  `GraduationCap`, `UserRound` y `CalendarCheck`, texto 15px/600, separadores Línea Salvia desde 1280px y apilados
+  más angosto. El padding de abajo deja libre el lugar del botón flotante.
+- Sin la píldora «Reservá tu turno» del wireframe y sin la flecha Zanahoria (decisión del dev, 2026-11-10).
 
 ### Flecha para bajar (US-19, movida en US-37)
 Una flecha dibujada a mano, con el rulo de la de «Sobre mí» pero apuntando derecho hacia abajo (trazo de 3, 32×56px
@@ -517,8 +528,8 @@ acompaña el scroll.
 - **Escena del hero al scrollear** (dentro de la misma profundidad): la foto sigue creciendo (hasta 1.08, desde
   abajo) y el nombre sube más rápido y se apaga a 0.25. La frase no se mueve: el texto no lleva parallax.
 - **"Sobre mí"** (`about-motion.tsx`): el título sube palabra por palabra y el párrafo display línea por línea, con
-  máscara (SplitText); el marco en arco se revela de abajo hacia arriba con `clip-path`; el subrayado Verde Lima y la
-  flecha Zanahoria se dibujan con el scroll (DrawSVG): es "el hilo".
+  máscara (SplitText); el marco con la foto se revela de abajo hacia arriba con `clip-path`; el subrayado Verde Lima se dibuja con
+  el scroll (DrawSVG): es "el hilo".
 - **Sin parpadeo y sin contenido perdido**: un script mínimo en `<head>`, sólo en `/` y sin ancla en la URL, marca
   `motion-pending`: el CSS muestra la caja y oculta lo marcado con `data-intro` desde el primer pintado, antes de que
   cargue el JS. La intro toma el control al montar (`data-intro-state='playing'`) y, si el JS no llega, el gate se

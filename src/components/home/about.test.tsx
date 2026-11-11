@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { About } from './about';
 
@@ -20,17 +20,25 @@ describe('Sobre mí', () => {
     expect(paragraphs[4]).toBe('Mi compromiso es acompañarte en cada etapa de ese proceso, con atención, dedicación y profesionalismo.');
   });
 
-  it('mientras no llegue la foto, muestra el placeholder visible en el marco en arco', () => {
-    render(<About />);
-    const frame = screen.getByText('[Completar: foto Sobre mí]');
-    expect(frame.className).toMatch(/rounded-t-full/);
-    expect(frame.parentElement?.className).toMatch(/^hidden .*md:block/);
+  it('la foto de Lisandro ocupa su mitad desde 768px y no se muestra en el celular', () => {
+    const { container } = render(<About />);
+    const photo = screen.getByRole('img', { name: /Lisandro López/ });
+    expect(photo.getAttribute('src')).toMatch(/foto-sobre-mi/);
+    expect(container.querySelector('[data-about-frame]')?.className).toMatch(/^hidden .*md:block/);
+    expect(screen.queryByText('[Completar: foto Sobre mí]')).toBeNull();
   });
 
-  it('los trazos a mano son decorativos', () => {
+  it('lleva el disco «Lic. en Nutrición» y los tres ítems', () => {
+    render(<About />);
+    expect(screen.getByText('Lic. en Nutrición')).toBeTruthy();
+    const items = within(screen.getByRole('list')).getAllByRole('listitem').map((item) => item.textContent);
+    expect(items).toEqual(['Universidad Favaloro', 'Atención personalizada', 'Seguimiento continuo']);
+  });
+
+  it('subraya «Universidad Favaloro» y los trazos a mano son decorativos', () => {
     const { container } = render(<About />);
+    expect(container.querySelector('[data-about-lead] strong:last-of-type svg')).not.toBeNull();
     const strokes = [...container.querySelectorAll('svg')];
-    expect(strokes.length).toBeGreaterThan(0);
     expect(strokes.every((svg) => svg.getAttribute('aria-hidden') === 'true')).toBe(true);
   });
 });

@@ -300,7 +300,7 @@ El texto es el del pedido, textual, con una sola corrección: «López» con til
 **Preguntas abiertas**
 
 - Título de la sección: se usó la propuesta «Sobre mí»; se cambia si Lisandro prefiere otro.
-- Falta la foto de Lisandro para esta sección (hoy, placeholder visible por decisión del dev).
+- ~~Falta la foto de Lisandro para esta sección~~: llegó el 2026-11-10 (`public/foto-sobre-mi.jpg`, US-48).
 
 ### US-3 · Scroll suave y secciones que aparecen al bajar
 
@@ -1792,6 +1792,37 @@ sin tapar el contenido.
 - [x] **CA-2** · Dos chispas arriba a la izquierda de «La alimentación…», el subrayado bajo «nuestra vida» y un subrayado bajo «la base de tu salud» en lugar del corchete; sin las líneas sobre la «L» ni la estrella · Estimación: 20 min · Completado: 2026-11-10 21:53
 
 - [x] **CA-3** · Se ven en desktop y en el celular, se dibujan al final de la intro y quedan dibujados con «reducir movimiento» · Estimación: 15 min · Completado: 2026-11-10 21:53
+
+### US-48 · «Sobre mí» con la foto de Lisandro, según el wireframe
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | S           |
+| Depende de   | US-2        |
+| Plan         | [US-48](docs/plans/US-48-sobre-mi-con-foto.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-10): «Sobre mí» como `docs/wireframes/seccion-sobre-mi.png`, con `public/foto-sobre-mi.jpg`
+ocupando la mitad de la pantalla. Se mantiene el texto del cliente; no va la píldora «Reservá tu turno»; en el
+celular la foto sigue oculta. Tras verla a sangre en toda la mitad, el dev la volvió al marco en arco del wireframe,
+con el contorno Verde Lima («muy invasivo», 2026-11-10).
+
+**Historia**: Como paciente que baja por la home quiero ver a Lisandro junto a su presentación, de forma que lo
+reconozca y confíe en él.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Desde 768px la foto va a la izquierda en el marco en arco, con el contorno Verde Lima corrido detrás, `next/image` y `alt` descriptivo; en el celular no se muestra · Estimación: 40 min · Completado: 2026-11-10 23:05
+
+- [x] **CA-2** · A la derecha: la etiqueta `h2` «SOBRE MÍ» en Verde Bosque, el título «Soy Lisandro López, Licenciado en Nutrición por la Universidad Favaloro.» con el subrayado Verde Lima bajo «Universidad Favaloro» y los cuatro párrafos del cliente en dos columnas, sin la flecha Zanahoria · Estimación: 30 min · Completado: 2026-11-10 22:45
+
+- [x] **CA-3** · El disco Verde Lima «Lic. en Nutrición» sobre la foto y la fila Universidad Favaloro · Atención personalizada · Seguimiento continuo con íconos en discos Verde Lima · Estimación: 30 min · Completado: 2026-11-10 22:45
+
+- [x] **CA-4** · Siguen la revelación, la pausa y la profundidad; en 1280×600 la sección entra en la pantalla y sin scroll horizontal en 375px · Estimación: 20 min · Completado: 2026-11-10 22:45
 
 ## Sprint 5 · Despliegue
 
