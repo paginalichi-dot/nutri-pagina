@@ -78,7 +78,7 @@ test.describe('home', () => {
     await expect(page.locator('[data-hero-frame] [data-scroll-hint]:visible')).toHaveCount(1);
     await expect(page.locator('#sobre-mi [data-scroll-hint]')).toHaveCount(1);
     await expect(page.locator('#sucursales [data-scroll-hint]')).toHaveCount(0);
-    const [hint, button] = await Promise.all([hints.first().boundingBox(), page.getByRole('link', { name: 'Reservá tu turno' }).boundingBox()]);
+    const [hint, button] = await Promise.all([hints.first().boundingBox(), page.locator('[data-booking-button]').boundingBox()]);
     const apart = !hint || !button || hint.x >= button.x + button.width || hint.x + hint.width <= button.x || hint.y >= button.y + button.height || hint.y + hint.height <= button.y;
     expect(apart).toBe(true);
   });

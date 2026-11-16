@@ -1824,6 +1824,39 @@ reconozca y confíe en él.
 
 - [x] **CA-4** · Siguen la revelación, la pausa y la profundidad; en 1280×600 la sección entra en la pantalla y sin scroll horizontal en 375px · Estimación: 20 min · Completado: 2026-11-10 22:45
 
+### US-49 · Footer, «Sobre mí» corto y entrada al ingresar
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-16  |
+| Tamaño       | S           |
+| Depende de   | US-48, US-40 |
+| Plan         | [US-49](docs/plans/US-49-footer-sobre-mi-y-entrada.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-16, con capturas en el chat): footer al final de la home, entrada suave al iniciar sesión,
+«Sobre mí» en un párrafo y el título grande de vuelta.
+
+**Historia**: Como paciente quiero una home más corta de leer y con un cierre claro, y que al entrar a mi cuenta todo
+aparezca con el mismo movimiento que la reserva, de forma que el sitio se sienta uno solo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Debajo de «Dónde atiendo», un footer Hueso centrado con el ícono LLN, «¿Empezamos?», la píldora Verde Lima «Reservá tu turno», los contactos WhatsApp, Instagram y email con su texto al costado y «© {año} Lisandro López · Nutrición», con el año que cambia solo (sin «kinesiología»); al verlo, el botón flotante se oculta · Estimación: 50 min · Completado: 2026-11-16 10:57
+
+- [x] **CA-2** · Al llegar a Mi espacio o al panel, la UI entra suave desde la izquierda como la reserva (escalonada); quieta con «reducir movimiento» · Estimación: 25 min · Completado: 2026-11-16 10:57
+
+- [x] **CA-3** · «Sobre mí» tiene un solo párrafo que conserva la idea del texto del cliente · Estimación: 15 min · Completado: 2026-11-16 10:57
+
+- [x] **CA-4** · Vuelve el título grande «Sobre **mí**» con el subrayado Verde Lima bajo «mí» y la flecha Zanahoria desde 1024px · Estimación: 20 min · Completado: 2026-11-16 10:57
+
+**Preguntas abiertas**
+
+- WhatsApp, Instagram y email reales para el footer (hoy van de ejemplo).
+
 ## Sprint 5 · Despliegue
 
 Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gmail (T-9) y recordatorio por email

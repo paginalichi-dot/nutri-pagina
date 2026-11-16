@@ -7,7 +7,7 @@ const GLOW = 'shadow-[0_14px_36px_-10px_var(--primary)] hover:shadow-[0_18px_44p
 
 export function FloatingBookingButton(): ReactElement {
   return (
-    <div className='pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-[max(16px,env(safe-area-inset-bottom))]'>
+    <div data-booking-dock className='pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-[max(16px,env(safe-area-inset-bottom))]'>
       <Link
         href='/reservar'
         data-booking-button

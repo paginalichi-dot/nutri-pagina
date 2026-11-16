@@ -50,6 +50,7 @@ export function PanelNav({ footer, pending = 0 }: { footer: ReactNode; pending?:
   return (
     <nav
       aria-label='Panel'
+      data-enter='left'
       className='fixed inset-x-0 bottom-0 z-40 bg-foreground pb-[env(safe-area-inset-bottom)] md:sticky md:top-0 md:flex md:h-svh md:w-60 md:shrink-0 md:flex-col md:justify-between md:py-6'
     >
       <div className='flex flex-col gap-10'>

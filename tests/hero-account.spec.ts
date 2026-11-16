@@ -30,7 +30,7 @@ test.describe('hero de la home (Sprint 3)', () => {
     const [hint, text, button] = await Promise.all([
       page.locator('[data-hero-frame] [data-scroll-hint]:visible').boundingBox(),
       page.locator('[data-hero-frame] strong', { hasText: 'la base de tu' }).boundingBox(),
-      page.getByRole('link', { name: 'Reservá tu turno' }).boundingBox(),
+      page.locator('[data-booking-button]').boundingBox(),
     ]);
     expect(hint && text && button).toBeTruthy();
     expect((hint?.y ?? 0) < (text?.y ?? 0) + (text?.height ?? 0) && (hint?.y ?? 0) + (hint?.height ?? 0) > (text?.y ?? 0)).toBe(true);

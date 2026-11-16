@@ -37,3 +37,27 @@
 [data-preloader-name] {
   animation: intro-name-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards;
 }
+
+@keyframes booking-dock-out {
+  to {
+    opacity: 0;
+    transform: translateY(24px);
+    visibility: hidden;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  [data-reveal-mask] {
+    timeline-scope: --site-footer;
+  }
+
+  [data-site-footer] {
+    view-timeline-name: --site-footer;
+  }
+
+  [data-booking-dock] {
+    animation: booking-dock-out linear both;
+    animation-timeline: --site-footer;
+    animation-range: entry 0% entry 40%;
+  }
+}

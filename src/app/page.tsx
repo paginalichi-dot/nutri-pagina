@@ -2,6 +2,7 @@ import { type ReactElement, Suspense } from 'react';
 import { About } from '@/components/home/about';
 import { FloatingBookingButton } from '@/components/home/floating-booking-button';
 import { Hero } from '@/components/home/hero';
+import { SiteFooter } from '@/components/home/site-footer';
 import { AboutMotion } from '@/components/motion/about-motion';
 import { HeroMotion } from '@/components/motion/hero-motion';
 import { IntroPreloader } from '@/components/motion/intro-preloader';
@@ -11,9 +12,10 @@ import { LocationsSection } from '@/features/location/ui/components/locations-se
 import { getActiveHealthInsurances } from '@/features/settings/actions/settings-queries';
 import { AccountMenu } from '@/features/patient/ui/components/account-menu';
 import { AccountStatus } from '@/features/patient/ui/components/account-status';
+import { currentYear } from '@/lib/current-year';
 
 export default async function Home(): Promise<ReactElement> {
-  const [locations, insurances] = await Promise.all([getPublicLocations(), getActiveHealthInsurances()]);
+  const [locations, insurances, year] = await Promise.all([getPublicLocations(), getActiveHealthInsurances(), currentYear()]);
   return (
     <>
       <IntroPreloader />
@@ -33,7 +35,7 @@ export default async function Home(): Promise<ReactElement> {
           <About />
         </AboutMotion>
         <LocationsSection locations={locations} insurances={insurances} />
-        <div aria-hidden='true' data-testid='espacio-boton-flotante' className={`h-28 md:h-36 ${locations.length > 0 ? 'bg-background' : 'bg-muted'}`} />
+        <SiteFooter year={year} />
       </main>
     </>
   );

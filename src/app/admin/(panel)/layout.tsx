@@ -15,7 +15,7 @@ export default async function PanelLayout({ children }: Readonly<{ children: Rea
   return (
     <div className='flex flex-1 bg-panel'>
       <PanelNav footer={<LogoutButton onDark />} pending={pending} />
-      <div className='flex min-w-0 flex-1 flex-col pb-24 md:pb-0'>{children}</div>
+      <div data-enter='left' className='flex min-w-0 flex-1 flex-col pb-24 [--enter-delay:120ms] md:pb-0'>{children}</div>
     </div>
   );
 }
