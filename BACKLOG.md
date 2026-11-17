@@ -1923,6 +1923,32 @@ Pedido del dev (2026-11-17): email `lisandroiglopez@gmail.com`, WhatsApp +54 9 2
 
 - [x] **CA-4** · `docs/deploy.md` con los pasos del despliegue: variables de Vercel, secretos de GitHub, migraciones y admin · Estimación: 20 min · Completado: 2026-11-17 14:40
 
+### US-50 · Política de privacidad completa
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-17  |
+| Tamaño       | XS          |
+| Depende de   | US-20       |
+| Plan         | — (texto dictado por el dev, nivel 1) |
+| Merge        | —           |
+| Horas reales | 0.2         |
+
+**Historia**: Como paciente quiero leer una política de privacidad terminada, de forma que sepa quién cuida mis
+datos y quién los procesa.
+
+Pedido del dev (2026-11-17), con el texto exacto en el chat.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · La bajada dice sólo «Cuidamos tus datos personales según la Ley 25.326 de Protección de los Datos Personales.», sin fecha de actualización · Estimación: 5 min · Completado: 2026-11-17 16:20
+
+- [x] **CA-2** · «Quién es el responsable» dice «Lisandro López, Licenciado en Nutrición.», sin corchetes; sale «Cuánto tiempo los guardamos» · Estimación: 5 min · Completado: 2026-11-17 16:20
+
+- [x] **CA-3** · «Quién los ve» nombra los 3 proveedores: la base de datos, los emails y el alojamiento de la web · Estimación: 5 min · Completado: 2026-11-17 16:20
+
 **Preguntas abiertas de los sprints 2 a 5**
 
 - Ubicaciones reales, horarios, duración de la consulta, obras sociales y link de videollamada (los carga Lisandro).
