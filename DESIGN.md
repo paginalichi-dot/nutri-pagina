@@ -506,7 +506,7 @@ como **nutricionista**.
   sin `referrer`. Una sola píldora Verde Lima por pantalla.
 - **Política de privacidad (US-20):** `/privacidad`, indexable. Banda Hueso con una tarjeta Papel (radio 30px) y texto
   de hasta 70 caracteres por línea; `h1` «Política de **privacidad**» con subrayado Verde Lima y un `h2` de 20px/600 por
-  tema. Lo que falta va como `[Completar: …]` visible.
+  tema. Sin fecha de actualización ni datos por completar (US-50).
 - **Acceso denegado (T-3):** la ve cualquiera que entre a `/admin/**` sin sesión, así que usa el lenguaje del sitio
   público: banda Hueso, tarjeta Papel, título "Acceso **denegado**" con subrayado Verde Lima, la línea "Esta sección
   es privada." y la píldora Verde Lima "Volver al inicio" con disco de flecha. Ningún link al login.

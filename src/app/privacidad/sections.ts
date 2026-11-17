@@ -1,7 +1,7 @@
 export const PRIVACY_SECTIONS: ReadonlyArray<{ title: string; body: ReadonlyArray<string> }> = [
   {
     title: 'Quién es el responsable',
-    body: ['Lisandro López, Licenciado en Nutrición. [Completar: nombre completo y domicilio del responsable]'],
+    body: ['Lisandro López, Licenciado en Nutrición.'],
   },
   {
     title: 'Qué datos pedimos',
@@ -19,13 +19,9 @@ export const PRIVACY_SECTIONS: ReadonlyArray<{ title: string; body: ReadonlyArra
     body: ['En tu consentimiento, que nos das al crear tu cuenta o al reservar un turno.'],
   },
   {
-    title: 'Cuánto tiempo los guardamos',
-    body: ['[Completar: plazo de guarda]'],
-  },
-  {
     title: 'Quién los ve',
     body: [
-      'Sólo Lisandro. Para que la web funcione usamos dos proveedores: uno que guarda la base de datos y otro que envía los emails.',
+      'Sólo Lisandro. El uso del sitio web utiliza 3 proveedores: uno que guarda la base de datos, otro que envía los emails, y uno que aloja la web en un servidor.',
     ],
   },
   {

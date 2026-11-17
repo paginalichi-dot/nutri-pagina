@@ -16,7 +16,7 @@ export default function PrivacyPage(): ReactElement {
           Política de <Emphasis>privacidad</Emphasis>
         </h1>
         <p className='max-w-[70ch] text-[16px] text-muted-foreground'>
-          Cuidamos tus datos personales según la Ley 25.326 de Protección de los Datos Personales. Última actualización: 8 de noviembre de 2026.
+          Cuidamos tus datos personales según la Ley 25.326 de Protección de los Datos Personales.
         </p>
         {PRIVACY_SECTIONS.map(({ title, body }) => (
           <section key={title} className='flex max-w-[70ch] flex-col gap-3'>
