@@ -46,7 +46,7 @@ export const adminRepository: AdminRepository = {
     await db.adminUser.upsert({
       where: { email },
       create: { email, passwordHash },
-      update: { passwordHash, failedAttempts: 0, lockedUntil: null, version: { increment: 1 } },
+      update: { passwordHash, failedAttempts: 0, lockedUntil: null, sessionVersion: { increment: 1 }, version: { increment: 1 } },
     });
   },
 };

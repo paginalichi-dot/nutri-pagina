@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
-const button = (page: Page): Locator => page.getByRole('link', { name: 'Reservá tu turno' });
+const button = (page: Page): Locator => page.locator('[data-booking-button]');
 
 async function isBottomCenter(page: Page, locator: Locator): Promise<boolean> {
   const box = await locator.boundingBox();
@@ -11,16 +11,13 @@ async function isBottomCenter(page: Page, locator: Locator): Promise<boolean> {
 }
 
 test.describe('botón flotante "Reservá tu turno"', () => {
-  test('está abajo al centro al cargar y al llegar al final, sin tapar lo último de la página', async ({ page }) => {
+  test('está abajo al centro al cargar y se oculta al llegar al footer, que trae su propia píldora', async ({ page }) => {
     await page.goto('/');
     await expect(button(page)).toBeVisible();
     expect(await isBottomCenter(page, button(page))).toBe(true);
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    await expect(button(page)).toBeVisible();
-    expect(await isBottomCenter(page, button(page))).toBe(true);
-    const last = page.locator('main section').last().locator('p, li').last();
-    const [lastBox, buttonBox] = await Promise.all([last.boundingBox(), button(page).boundingBox()]);
-    expect((lastBox?.y ?? 0) + (lastBox?.height ?? 0)).toBeLessThanOrEqual(buttonBox?.y ?? 0);
+    await expect(button(page)).toBeHidden();
+    await expect(page.locator('footer').getByRole('link', { name: 'Reservá tu turno' })).toBeInViewport();
   });
 
   test('se alcanza con Tab, tiene un área táctil de al menos 44px y lleva a /reservar (sin sesión, por el login)', async ({ page }) => {

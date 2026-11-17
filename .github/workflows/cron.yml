@@ -1,0 +1,23 @@
+name: Cron de solicitudes
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  expire-pending:
+    name: Vencer solicitudes y mantener viva Supabase
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Llamar a /api/cron/expire-pending
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          test -n "$APP_URL" && test -n "$CRON_SECRET" || { echo "Faltan APP_URL (variable) o CRON_SECRET (secreto)."; exit 1; }
+          curl --fail-with-body --silent --show-error --max-time 60 --retry 2 \
+            -H "Authorization: Bearer $CRON_SECRET" "$APP_URL/api/cron/expire-pending"

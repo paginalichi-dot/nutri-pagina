@@ -14,13 +14,12 @@ describe('/privacidad (US-20)', () => {
   it('nombra los derechos de acceso, rectificación y supresión y el contacto', () => {
     render(<PrivacyPage />);
     expect(screen.getByText(/pedir acceso a tus datos, corregirlos o que los eliminemos/)).toBeTruthy();
-    expect(screen.getByText(/escribinos a/)).toBeTruthy();
+    expect(screen.getByText(/escribinos a lisandroiglopez@gmail\.com\./)).toBeTruthy();
   });
 
   it('deja los datos que faltan como [Completar: …] visibles', () => {
     render(<PrivacyPage />);
     expect(screen.getByText('[Completar: plazo de guarda]')).toBeTruthy();
-    expect(screen.getByText(/\[Completar: email de contacto\]/)).toBeTruthy();
     expect(screen.getByText(/\[Completar: nombre completo y domicilio del responsable\]/)).toBeTruthy();
   });
 });

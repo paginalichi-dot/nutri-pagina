@@ -42,14 +42,14 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - Sprint 1 cerrado (`Hecho`, tag `sprint-1`):
   - Hero según el wireframe del dev (US-1 y US-6): «LISANDRO LÓPEZ» en gigante, la foto tapando la base del nombre y
     la frase del cliente a los costados.
-  - "Sobre mí" con placeholder de foto (US-2) y botón flotante "Reservá tu turno" hacia `/reservar` ("Próximamente",
-    US-4).
+  - "Sobre mí" (US-2) y botón flotante "Reservá tu turno" hacia `/reservar` ("Próximamente", US-4). Desde US-48
+    (2026-11-10), «Sobre mí» sigue el wireframe del dev: la foto real va en un marco en arco en desktop.
   - Movimiento con Lenis + GSAP (US-3), intro de marca (US-7: una caja con «Lic. Lisandro López» que se expande
     hasta ser el hero) y scroll con profundidad (US-8: cada sección se aleja al fondo y la siguiente la tapa). Todo en `src/components/motion/`; los componentes de la home, en `src/components/home/`.
-- Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`.
+- Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`; de «Sobre mí»: `public/foto-sobre-mi.jpg`.
 - Sprint 2 («Lisandro maneja su agenda») cerrado (`Hecho`, tag `sprint-2`): menú del panel, ubicaciones con
   horarios semanales, duración y obras sociales, agenda día y semana, bloqueos, disponibilidad, turnos cargados a
-  mano (cancelar, asistencia, reprogramar) con email por Resend y WhatsApp (`wa.me`), y «Dónde atiendo» en la home.
+  mano (cancelar, asistencia, reprogramar) con email por Gmail y WhatsApp (`wa.me`), y «Dónde atiendo» en la home.
   Features nuevos: `location`, `settings` y `agenda`
   ([ADR 0005](adr/0005-agenda-choque-global-y-horarios-en-hora-argentina.md)).
 - Iteración del Sprint 2 (2026-11-08, rama `feat/sprint-2-iteracion-panel`): el panel según el wireframe del dev
@@ -75,8 +75,8 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
     pendiente) y, después, «Escribile a Lisandro» (`LISANDRO_WHATSAPP`);
   - emails «Recibimos tu solicitud / tu cambio» al paciente y avisos a Lisandro; en el panel, contador de
     solicitudes y `/admin/solicitudes`;
-  - las solicitudes sin confirmar vencen 12 h antes (`/api/cron/expire-pending` con `CRON_SECRET`; el cron, en el
-    Sprint 5);
+  - las solicitudes sin confirmar vencen 12 h antes (`/api/cron/expire-pending` con `CRON_SECRET`; lo llama cada hora
+    una GitHub Action, que también mantiene despierta a Supabase);
   - las animaciones de entrada (también la intro de la home) se repiten en cada llegada (SCROLL.md).
 - Iteración del panel (US-41 a US-45, rama `feat/panel-iteracion`, wireframes del dev del 2026-11-10):
   - Ubicaciones con lista y ficha lado a lado (horarios que se editan al instante, turnos y bloqueos del mes) y
@@ -114,9 +114,8 @@ mostradas en Argentina, cero datos personales en logs, sólo tokens de `DESIGN.m
   reserva con 12 h de anticipación como mínimo y hasta 60 días, con hasta 2 turnos por venir; el panel, desde ahora.
 - Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario. La reserva online (Sprint 4)
   nace pendiente y la confirma Lisandro (si no, vence 12 h antes); el turno que carga él nace confirmado.
-- El paciente cancela o reprograma desde Mi espacio hasta 24 h antes (Sprint 4). Emails con Resend (cuenta de
-  prueba) hasta el despliegue (Sprint 5), donde pasan a una cuenta de Gmail dedicada (T-9, sin dominio propio) y
-  llegan el recordatorio y el cron de las solicitudes.
+- El paciente cancela o reprograma desde Mi espacio hasta 24 h antes (Sprint 4). Emails por Gmail
+  (T-9, ADR 0008, sin dominio propio): salen de la casilla de Lisandro, que es también el email del admin.
 - Cuenta de pacientes (Sprint 3, ADR 0006): optativa. «Mis turnos» muestra los turnos cuyo email coincide con el
   de la cuenta.
 
@@ -146,6 +145,8 @@ npm run lint && npm run typecheck
 npm run test:watch
 npm run verify
 ```
+
+Despliegue (Vercel + Supabase, emails por Gmail, admin de producción y el cron de cada hora): `docs/deploy.md`.
 
 ## 11. Qué leer y en qué orden
 

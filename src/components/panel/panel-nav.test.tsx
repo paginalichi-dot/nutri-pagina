@@ -38,4 +38,9 @@ describe('PanelNav', () => {
     render(<PanelNav footer={null} />);
     for (const link of screen.getAllByRole('link')) expect(link.className).toContain('min-h-11 min-w-11');
   });
+
+  it('US-49 CA-2: entra desde la izquierda al llegar al panel', () => {
+    render(<PanelNav footer={null} />);
+    expect(screen.getByRole('navigation', { name: 'Panel' }).getAttribute('data-enter')).toBe('left');
+  });
 });

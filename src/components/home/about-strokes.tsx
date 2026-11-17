@@ -12,7 +12,7 @@ export function HandUnderline(): ReactElement {
 
 export function HandArrow(): ReactElement {
   return (
-    <svg aria-hidden='true' viewBox='0 0 160 120' className='pointer-events-none absolute top-6 -left-36 hidden h-28 w-36 text-scribble lg:block'>
+    <svg aria-hidden='true' viewBox='0 0 160 120' className='pointer-events-none absolute top-3 -left-26 hidden h-20 w-24 text-scribble lg:block'>
       <path data-draw d='M152 14C116 6 70 14 52 44c-14 24-6 52 10 58 14 6 22-12 8-24C56 66 30 74 12 98' strokeWidth={3} {...STROKE} />
       <path data-draw d='M10 82l2 18 18-4' strokeWidth={3} {...STROKE} />
     </svg>

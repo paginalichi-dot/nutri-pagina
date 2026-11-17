@@ -9,7 +9,7 @@ const MESSAGE = { to: 'ana@ejemplo.test', subject: 'Activá tu cuenta', html: '<
 describe('outbox de archivos (E2E)', () => {
   it('con EMAIL_OUTBOX_DIR cada email queda como un JSON en esa carpeta', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'outbox-'));
-    await expect(emailSenderFromEnv({ EMAIL_OUTBOX_DIR: directory, RESEND_API_KEY: 're_x' })(MESSAGE)).resolves.toBe(true);
+    await expect(emailSenderFromEnv({ EMAIL_OUTBOX_DIR: directory, GMAIL_USER: 'x', GMAIL_APP_PASSWORD: 'y' })(MESSAGE)).resolves.toBe(true);
     const [file = ''] = await readdir(directory);
     expect(JSON.parse(await readFile(join(directory, file), 'utf8'))).toEqual(MESSAGE);
     await rm(directory, { recursive: true });

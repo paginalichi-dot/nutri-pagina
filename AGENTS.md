@@ -61,7 +61,7 @@ Detalle completo en `docs/features/agenda/README.md`, `docs/features/location/RE
 - **Sin doble reserva.** Lisandro es uno solo: dos turnos activos nunca se pisan en el tiempo, en ninguna ubicación. Se garantiza en la base (`EXCLUDE` en `appointment`), y el turno se crea o se mueve en una transacción `Serializable` (que también lo cuida contra un bloqueo simultáneo). Si hay choque ⇒ `SLOT_TAKEN`. Las franjas semanales tampoco se pisan entre ubicaciones ⇒ `HOURS_OVERLAP`.
 - **Disponibilidad.** Se calcula a partir de las franjas semanales de cada ubicación (hora argentina), una duración única para todos los turnos, los turnos activos y los bloqueos. Es lógica de `service` (`availableSlots`), con tests de nivel 3.
 - **Límites de reserva.** El paciente no puede reservar en el pasado ni con menos de 12 horas ⇒ `SLOT_TOO_SOON`, ni a más de 60 días. Tiene como mucho 2 turnos por venir (pendientes o confirmados, también los que cargó Lisandro con su email) ⇒ `BOOKING_LIMIT`. Lisandro, desde el panel, puede cargar turnos desde ahora.
-- **Solicitudes que vencen (T-10).** Una reserva pendiente que Lisandro no confirmó se cancela sola 12 h antes del turno (`/api/cron/expire-pending`, protegido con `CRON_SECRET`; el cron llega en el Sprint 5).
+- **Solicitudes que vencen (T-10).** Una reserva pendiente que Lisandro no confirmó se cancela sola 12 h antes del turno (`/api/cron/expire-pending`, protegido con `CRON_SECRET`; lo llama cada hora una GitHub Action, `.github/workflows/cron.yml`, que de paso mantiene despierta a Supabase; T-11).
 - **Estados.** `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`, y `CANCELADO` desde `PENDIENTE` o `CONFIRMADO` (en el código: `PENDING`, `CONFIRMED`, `ATTENDED`, `NO_SHOW`, `CANCELLED`). La reserva online nace pendiente y la confirma Lisandro; el turno que carga él nace confirmado. Un turno cancelado libera el horario.
 - **Gestión por el paciente (Sprint 4, ADR 0007).** Desde Mi espacio cancela o reprograma sus turnos (los de su email) hasta 24 h antes ⇒ `CHANGE_TOO_LATE`; el reprogramado vuelve a pendiente. Los emails traen «Gestionar mi turno», que abre el turno en Mi espacio. Reservar, cancelar y reprogramar piden sesión de paciente y llevan límite de intentos por cuenta.
 - **Acciones públicas (sin sesión).** Solo estas: leer ubicaciones, horarios y obras sociales; iniciar sesión (`login`, admin y pacientes); registrarse y reenviar la activación; pedir el link para restablecer la contraseña; y usar un link de un solo uso (activar la cuenta, restablecer la contraseña, confirmar un email nuevo). Llevan límite de intentos por IP y por email (`guardPublicAction`, T-7), honeypot y, el login, bloqueo por intentos.
@@ -93,6 +93,7 @@ npm run test:e2e         # Playwright en Chromium (mobile 375px y desktop)
 npm run test:mutation    # Stryker (score ≥ 70)
 npm run db:migrate       # prisma migrate dev (crear y aplicar una migración en local)
 npm run db:generate      # prisma generate (también corre en postinstall)
+npm run admin:create     # crea o actualiza el admin con ADMIN_EMAIL y ADMIN_PASSWORD (producción: docs/deploy.md)
 npm run verify           # lint, tipos, cobertura, integración, mutación y build. Obligatorio en nivel 3 y al cerrar el sprint.
 ```
 
@@ -129,7 +130,7 @@ La base se elige con `APP_ENV`, nunca con `NODE_ENV` (ADR 0002):
 
 `DESIGN.md` · `docs/initial_prompt.md` (contexto completo para arrancar) · `docs/architecture.md` · `docs/workflow.md` ·
 `docs/git.md` · `docs/testing.md` · `docs/definition-of-done.md` · `docs/conventions/` · `docs/features/` ·
-`docs/adr/` · `docs/how-to-document.md` · `docs/filosofia-de-trabajo.md`
+`docs/adr/` · `docs/deploy.md` · `docs/how-to-document.md` · `docs/filosofia-de-trabajo.md`
 
 ## Skills del repo
 

@@ -300,7 +300,7 @@ El texto es el del pedido, textual, con una sola corrección: «López» con til
 **Preguntas abiertas**
 
 - Título de la sección: se usó la propuesta «Sobre mí»; se cambia si Lisandro prefiere otro.
-- Falta la foto de Lisandro para esta sección (hoy, placeholder visible por decisión del dev).
+- ~~Falta la foto de Lisandro para esta sección~~: llegó el 2026-11-10 (`public/foto-sobre-mi.jpg`, US-48).
 
 ### US-3 · Scroll suave y secciones que aparecen al bajar
 
@@ -1793,6 +1793,70 @@ sin tapar el contenido.
 
 - [x] **CA-3** · Se ven en desktop y en el celular, se dibujan al final de la intro y quedan dibujados con «reducir movimiento» · Estimación: 15 min · Completado: 2026-11-10 21:53
 
+### US-48 · «Sobre mí» con la foto de Lisandro, según el wireframe
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-10  |
+| Tamaño       | S           |
+| Depende de   | US-2        |
+| Plan         | [US-48](docs/plans/US-48-sobre-mi-con-foto.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-10): «Sobre mí» como `docs/wireframes/seccion-sobre-mi.png`, con `public/foto-sobre-mi.jpg`
+ocupando la mitad de la pantalla. Se mantiene el texto del cliente; no va la píldora «Reservá tu turno»; en el
+celular la foto sigue oculta. Tras verla a sangre en toda la mitad, el dev la volvió al marco en arco del wireframe,
+con el contorno Verde Lima («muy invasivo», 2026-11-10).
+
+**Historia**: Como paciente que baja por la home quiero ver a Lisandro junto a su presentación, de forma que lo
+reconozca y confíe en él.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Desde 768px la foto va a la izquierda en el marco en arco, con el contorno Verde Lima corrido detrás, `next/image` y `alt` descriptivo; en el celular no se muestra · Estimación: 40 min · Completado: 2026-11-10 23:05
+
+- [x] **CA-2** · A la derecha: la etiqueta `h2` «SOBRE MÍ» en Verde Bosque, el título «Soy Lisandro López, Licenciado en Nutrición por la Universidad Favaloro.» con el subrayado Verde Lima bajo «Universidad Favaloro» y los cuatro párrafos del cliente en dos columnas, sin la flecha Zanahoria · Estimación: 30 min · Completado: 2026-11-10 22:45
+
+- [x] **CA-3** · El disco Verde Lima «Lic. en Nutrición» sobre la foto y la fila Universidad Favaloro · Atención personalizada · Seguimiento continuo con íconos en discos Verde Lima · Estimación: 30 min · Completado: 2026-11-10 22:45
+
+- [x] **CA-4** · Siguen la revelación, la pausa y la profundidad; en 1280×600 la sección entra en la pantalla y sin scroll horizontal en 375px · Estimación: 20 min · Completado: 2026-11-10 22:45
+
+### US-49 · Footer, «Sobre mí» corto y entrada al ingresar
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-16  |
+| Tamaño       | S           |
+| Depende de   | US-48, US-40 |
+| Plan         | [US-49](docs/plans/US-49-footer-sobre-mi-y-entrada.md) |
+| Merge        | —           |
+| Horas reales | —           |
+
+Pedido del dev (2026-11-16, con capturas en el chat): footer al final de la home, entrada suave al iniciar sesión,
+«Sobre mí» en un párrafo y el título grande de vuelta.
+
+**Historia**: Como paciente quiero una home más corta de leer y con un cierre claro, y que al entrar a mi cuenta todo
+aparezca con el mismo movimiento que la reserva, de forma que el sitio se sienta uno solo.
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · Debajo de «Dónde atiendo», un footer Hueso centrado con el ícono LLN, «¿Empezamos?», la píldora Verde Lima «Reservá tu turno», los contactos WhatsApp, Instagram y email con su texto al costado y «© {año} Lisandro López · Nutrición», con el año que cambia solo (sin «kinesiología»); al verlo, el botón flotante se oculta · Estimación: 50 min · Completado: 2026-11-16 10:57
+
+- [x] **CA-2** · Al llegar a Mi espacio o al panel, la UI entra suave desde la izquierda como la reserva (escalonada); quieta con «reducir movimiento» · Estimación: 25 min · Completado: 2026-11-16 10:57
+
+- [x] **CA-3** · «Sobre mí» tiene un solo párrafo que conserva la idea del texto del cliente · Estimación: 15 min · Completado: 2026-11-16 10:57
+
+- [x] **CA-4** · Vuelve el título grande «Sobre **mí**» con el subrayado Verde Lima bajo «mí» y la flecha Zanahoria desde 1024px · Estimación: 20 min · Completado: 2026-11-16 10:57
+
+**Preguntas abiertas**
+
+- ~~WhatsApp, Instagram y email reales para el footer~~: los pasó el dev el 2026-11-17 (T-11).
+
 ## Sprint 5 · Despliegue
 
 Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gmail (T-9) y recordatorio por email
@@ -1802,14 +1866,14 @@ Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gma
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
-| Tamaño       | S         |
-| Depende de   | —         |
-| Plan         | —         |
-| Merge        | —         |
-| Horas reales | —         |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-17  |
+| Tamaño       | S           |
+| Depende de   | —           |
+| Plan         | [`sprint-5-preparar-despliegue.md`](docs/plans/sprint-5-preparar-despliegue.md) |
+| Merge        | 8db331f     |
+| Horas reales | 0.7         |
 
 **Historia**: Como Lisandro quiero que los emails salgan de una cuenta de Gmail, de forma que les lleguen a todos los
 pacientes sin pagar un dominio.
@@ -1819,16 +1883,45 @@ de la cuenta y cae en spam. Hasta este ítem sigue Resend con la cuenta de prueb
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · `src/lib/email/send-email.ts` manda por SMTP de Gmail (`nodemailer`) con `GMAIL_USER` y `GMAIL_APP_PASSWORD` (contraseña de aplicación, sólo en el servidor); sale `RESEND_API_KEY` y `EMAIL_FROM` queda para el nombre visible · Estimación: 40 min · Completado: —
+- [x] **CA-1** · `src/lib/email/send-email.ts` manda por SMTP de Gmail (`nodemailer`) con `GMAIL_USER` y `GMAIL_APP_PASSWORD` (contraseña de aplicación, sólo en el servidor); sale `RESEND_API_KEY` y `EMAIL_FROM` queda para el nombre visible · Estimación: 40 min · Completado: 2026-11-17 14:20
 
-- [ ] **CA-2** · Sin credenciales o si Gmail falla, el envío devuelve `false` y sólo se loguea el motivo; la outbox de los E2E (`EMAIL_OUTBOX_DIR`) sigue igual · Estimación: 20 min · Completado: —
+- [x] **CA-2** · Sin credenciales o si Gmail falla, el envío devuelve `false` y sólo se loguea el motivo; la outbox de los E2E (`EMAIL_OUTBOX_DIR`) sigue igual · Estimación: 20 min · Completado: 2026-11-17 14:20
 
-- [ ] **CA-3** · `.env.example`, docs y un ADR que reemplaza a Resend (gratis, llega a todos, unos 500 emails por día, cuenta dedicada y nunca la personal) · Estimación: 20 min · Completado: —
+- [x] **CA-3** · `.env.example`, docs y el ADR 0008 que reemplaza a Resend (gratis, llega a todos, unos 500 emails por día). Decisión del dev (2026-11-17): la casilla es la de Lisandro, `lisandroiglopez@gmail.com`, no una dedicada · Estimación: 20 min · Completado: 2026-11-17 14:30
 
 **Preguntas abiertas**
 
-- La cuenta de Gmail dedicada a la web, con la verificación en dos pasos y una contraseña de aplicación (la crean
-  el dev y Lisandro).
+- La contraseña de aplicación de Google (con la verificación en dos pasos) la crea Lisandro y va sólo en Vercel y en
+  `.env.prod`. La prueba con un email real queda para después del despliegue.
+
+### T-11 · Datos reales, admin de producción y Supabase despierta
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-17  |
+| Tamaño       | S           |
+| Depende de   | T-9         |
+| Plan         | [`sprint-5-preparar-despliegue.md`](docs/plans/sprint-5-preparar-despliegue.md) |
+| Merge        | —           |
+| Horas reales | 0.9         |
+
+**Historia**: Como Lisandro quiero que la web publicada muestre mis contactos reales, que mi cuenta de admin use mi
+email y que la base no se pause, de forma que el sitio funcione solo desde el primer día.
+
+Pedido del dev (2026-11-17): email `lisandroiglopez@gmail.com`, WhatsApp +54 9 280 497-8101 e Instagram
+`nutri.lopez`. La acción corre cada hora (decisión del dev).
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · El footer muestra el WhatsApp, el Instagram y el email reales, y la política de privacidad, el email de contacto · Estimación: 15 min · Completado: 2026-11-17 14:40
+
+- [x] **CA-2** · `npm run admin:create` crea o actualiza el admin con `ADMIN_EMAIL` y `ADMIN_PASSWORD` (validados con Zod, al menos 8 caracteres), guarda sólo el hash y se corre contra `.env.prod` · Estimación: 30 min · Completado: 2026-11-17 14:40
+
+- [x] **CA-3** · Una GitHub Action llama cada hora (y a mano) a `/api/cron/expire-pending` con `CRON_SECRET`: cancela las solicitudes vencidas y mantiene despierta a Supabase; si no responde 200, falla · Estimación: 20 min · Completado: 2026-11-17 14:40
+
+- [x] **CA-4** · `docs/deploy.md` con los pasos del despliegue: variables de Vercel, secretos de GitHub, migraciones y admin · Estimación: 20 min · Completado: 2026-11-17 14:40
 
 **Preguntas abiertas de los sprints 2 a 5**
 

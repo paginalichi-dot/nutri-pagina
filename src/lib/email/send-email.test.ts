@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createResendSender, type EmailMessage, emailSenderFromEnv } from './send-email';
+import { describe, expect, it, vi } from 'vitest';
+import { createGmailSender, type EmailMessage, emailSenderFromEnv } from './send-email';
 
 const MESSAGE: EmailMessage = {
   to: 'paciente@ejemplo.test',
@@ -9,62 +9,50 @@ const MESSAGE: EmailMessage = {
   attachments: [{ filename: 'turno.ics', content: 'QkVHSU4=' }],
 };
 
-const okFetcher = vi.fn(async () => ({ ok: true, status: 200 }));
+const FROM = { name: 'Lisandro López', address: 'turnos@ejemplo.test' };
 
-describe('createResendSender', () => {
-  afterEach(() => {
-    okFetcher.mockClear();
-  });
+const failing = (error: unknown): { sendMail: () => Promise<never> } => ({ sendMail: async () => Promise.reject(error) });
 
-  it('manda el email a la API de Resend con la clave y el remitente', async () => {
-    const send = createResendSender({ apiKey: 're_prueba', from: 'Lisandro <hola@ejemplo.test>', fetcher: okFetcher });
-    await expect(send(MESSAGE)).resolves.toBe(true);
-    expect(okFetcher).toHaveBeenCalledWith('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { Authorization: 'Bearer re_prueba', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: 'Lisandro <hola@ejemplo.test>', to: ['paciente@ejemplo.test'], subject: 'Turno confirmado', html: '<p>Hola</p>', text: 'Hola', attachments: MESSAGE.attachments }),
+describe('createGmailSender', () => {
+  it('manda el email por el transporte con el remitente y el adjunto en base64', async () => {
+    const sendMail = vi.fn(async () => ({}));
+    await expect(createGmailSender({ from: FROM, transport: { sendMail } })(MESSAGE)).resolves.toBe(true);
+    expect(sendMail).toHaveBeenCalledWith({
+      from: FROM,
+      to: 'paciente@ejemplo.test',
+      subject: 'Turno confirmado',
+      html: '<p>Hola</p>',
+      text: 'Hola',
+      attachments: [{ filename: 'turno.ics', content: 'QkVHSU4=', encoding: 'base64' }],
     });
   });
 
-  it('si Resend responde con error devuelve false y loguea sin datos del paciente', async () => {
+  it('sin adjuntos manda la lista vacía', async () => {
+    const sendMail = vi.fn(async () => ({}));
+    await createGmailSender({ from: FROM, transport: { sendMail } })({ ...MESSAGE, attachments: undefined });
+    expect(sendMail).toHaveBeenCalledWith(expect.objectContaining({ attachments: [] }));
+  });
+
+  it.each([
+    { error: Object.assign(new Error('paciente@ejemplo.test'), { code: 'EAUTH' }), reason: 'EAUTH' },
+    { error: new TypeError('paciente@ejemplo.test'), reason: 'TypeError' },
+    { error: 'texto', reason: 'desconocido' },
+  ])('si Gmail falla devuelve false y loguea sólo $reason', async ({ error, reason }) => {
     const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    const send = createResendSender({ apiKey: 'k', from: 'f', fetcher: async () => ({ ok: false, status: 422 }) });
-    await expect(send(MESSAGE)).resolves.toBe(false);
-    expect(log).toHaveBeenCalledWith('No se pudo mandar un email:', { reason: 'Resend respondió 422' });
+    await expect(createGmailSender({ from: FROM, transport: failing(error) })(MESSAGE)).resolves.toBe(false);
+    expect(log).toHaveBeenCalledWith('No se pudo mandar un email:', { reason });
     expect(JSON.stringify(log.mock.calls)).not.toContain('paciente@ejemplo.test');
-  });
-
-  it('si la red falla devuelve false y loguea sólo el nombre del error', async () => {
-    const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    const send = createResendSender({ apiKey: 'k', from: 'f', fetcher: async () => Promise.reject(new TypeError('paciente@ejemplo.test')) });
-    await expect(send(MESSAGE)).resolves.toBe(false);
-    expect(log).toHaveBeenCalledWith('No se pudo mandar un email:', { reason: 'TypeError' });
-  });
-
-  it('si lo que falla no es un Error, lo loguea como desconocido', async () => {
-    const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    const send = createResendSender({ apiKey: 'k', from: 'f', fetcher: async () => Promise.reject('texto') });
-    await expect(send(MESSAGE)).resolves.toBe(false);
-    expect(log).toHaveBeenCalledWith('No se pudo mandar un email:', { reason: 'desconocido' });
   });
 });
 
 describe('emailSenderFromEnv', () => {
-  it('sin RESEND_API_KEY no manda nada y avisa que falta la clave', async () => {
+  it.each([{}, { GMAIL_USER: 'turnos@ejemplo.test' }, { GMAIL_APP_PASSWORD: 'clave' }])('sin las dos credenciales no manda nada (%o)', async (env) => {
     const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    await expect(emailSenderFromEnv({})(MESSAGE)).resolves.toBe(false);
-    expect(log).toHaveBeenCalledWith('No se pudo mandar un email:', { reason: 'falta RESEND_API_KEY' });
+    await expect(emailSenderFromEnv(env)(MESSAGE)).resolves.toBe(false);
+    expect(log).toHaveBeenCalledWith('No se pudo mandar un email:', { reason: 'faltan GMAIL_USER o GMAIL_APP_PASSWORD' });
   });
 
-  it('con la clave usa Resend y el remitente de prueba si falta EMAIL_FROM', async () => {
-    const fetcher = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 200 }));
-    await expect(emailSenderFromEnv({ RESEND_API_KEY: 're_x' })(MESSAGE)).resolves.toBe(true);
-    expect(String(fetcher.mock.calls[0]?.[1]?.body)).toContain('"from":"Lisandro López <onboarding@resend.dev>"');
-  });
-
-  it('con EMAIL_FROM usa ese remitente', async () => {
-    const fetcher = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 200 }));
-    await emailSenderFromEnv({ RESEND_API_KEY: 're_x', EMAIL_FROM: 'Turnos <turnos@ejemplo.test>' })(MESSAGE);
-    expect(String(fetcher.mock.calls[0]?.[1]?.body)).toContain('"from":"Turnos <turnos@ejemplo.test>"');
+  it('con las credenciales arma un remitente de Gmail', () => {
+    expect(emailSenderFromEnv({ GMAIL_USER: 'turnos@ejemplo.test', GMAIL_APP_PASSWORD: 'clave' })).toBeTypeOf('function');
   });
 });

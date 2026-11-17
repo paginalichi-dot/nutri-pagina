@@ -54,7 +54,7 @@ flowchart LR
 | Validación | Zod 4: el formulario y la action validan con el **mismo** schema |
 | Datos | PostgreSQL 15 (Docker en local, Supabase en producción) + Prisma 7 con `@prisma/adapter-pg` |
 | Autenticación | Login propio con JWT (`jose`), sólo para el panel (T-3, ADR 0004) |
-| Email | Resend por su API REST, sin SDK (`src/lib/email/`). Sprint 2: desde local, sin dominio propio |
+| Email | Gmail por SMTP con `nodemailer` (`src/lib/email/`, ADR 0008), sin dominio propio |
 | Calidad | ESLint 9 (`eslint-config-next` + reglas duras en `eslint/`), Prettier, lefthook, commitlint y GitHub Actions |
 | Tests | Vitest 5, Testing Library, fast-check, Stryker y Playwright. Ver [`testing.md`](testing.md) |
 
@@ -112,7 +112,7 @@ panel llaman a `guardAdminPage()`; las públicas usan `'use cache'` con un tag q
 | `prisma.config.ts` | URL de las migraciones: `LOCAL_DATABASE_URL` en local y en tests; `DIRECT_URL` con `APP_ENV=production`. |
 | `src/lib/db/index.ts` | Cliente Prisma único (`db`) con el adaptador de `pg`. La URL sale de `database-config.ts`: `LOCAL_DATABASE_URL`, o `DATABASE_URL` (pooler) con `APP_ENV=production`. |
 | `src/lib/db/transaction.ts` | `withTransaction(work)`, `withSerializableTransaction(work)` y `DbTransaction`. La agenda la usa por `agendaRepository.inTransaction`, así el service no conoce Prisma y el fake corre igual. |
-| `src/lib/email/` | `emailSenderFromEnv` (Resend por `fetch`), `renderEmail` (plantilla con los colores de `tokens.css`, verificados por test). Nunca se loguea el destinatario ni el contenido. |
+| `src/lib/email/` | `emailSenderFromEnv` (Gmail por SMTP, `GMAIL_USER` y `GMAIL_APP_PASSWORD`), `renderEmail` (plantilla con los colores de `tokens.css`, verificados por test). Nunca se loguea el destinatario ni el contenido. |
 | `src/lib/argentina-time.ts`, `src/lib/ics.ts`, `src/lib/whatsapp.ts` | Hora argentina ↔ UTC (`argentinaInstant`, `whenText`), archivo `.ics` y link `wa.me`. |
 | `src/lib/errors/` | Catálogo de códigos (`codes.ts`) con su mensaje en español y `AppError(code)`. |
 | `src/lib/action-result.ts` | `ActionResult<T>` y `fail(code)`: resultado tipado de toda action. |

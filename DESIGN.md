@@ -147,7 +147,7 @@ Sección a todo el ancho con un borde Papel sólido de 35px (16px en mobile) y r
   `non-scaling-stroke` en un SVG estirado); sin intro, quedan dibujadas.
 - En notebooks bajas (p. ej. 1280×600) el marco baja hasta 520px y el nombre se limita también por alto
   (`min(8.4vw, 8.5rem, 15svh)`); el ancho de la frase se mide sobre el marco (`cqw`), no sobre la ventana, para que
-  la barra de scroll no la empuje afuera. «Sobre mí» limita su arco y su padding al alto de la pantalla y, con la variante `short` (desktop de
+  la barra de scroll no la empuje afuera. «Sobre mí» limita su marco y su padding al alto de la pantalla y, con la variante `short` (desktop de
   hasta 760px de alto), achica títulos y texto para entrar entera; si igual no entra, no hace la pausa. El `body`
   lleva `overflow-x: clip` como red contra cualquier desborde horizontal.
 
@@ -172,16 +172,29 @@ intro la página empieza siempre arriba.
 Píldora Verde Lima fija abajo al centro de la home durante todo el scroll, como en el wireframe: ícono de calendario
 (Lucide `CalendarCheck`), "Reservá tu turno" en 600 y un disco Verde Bosque con una flecha `ArrowUpRight` Verde Lima
 que gira 45° al pasar el mouse. 64px de alto en mobile y 72px en desktop, con un halo Verde Lima suave hacia abajo y
-el área segura de iOS. Lleva a `/reservar`. Es la única píldora Verde Lima de la home. La home deja abajo un espacio
-Hueso más alto que el botón para que nunca tape el final. El foco suma un halo blanco y un anillo Verde Bosque.
+el área segura de iOS. Lleva a `/reservar`. Es la única píldora Verde Lima de la home hasta el footer: cuando el
+footer entra en pantalla, el flotante baja y se funde (US-49; CSS Scroll-Driven Animations con `timeline-scope`, en
+`motion.css`, dentro de `@supports`). Donde no hay soporte se queda, y el footer deja aire abajo para que nunca tape el
+final. El foco suma un halo blanco y un anillo Verde Bosque.
 
-### Sobre mí (US-6)
-Banda Hueso con borde curvo arriba. A la izquierda, la foto en un marco en arco (arriba redondo, abajo radio 30px),
-sólo desde 768px: en mobile no se muestra (pedido del dev, 2026-11-07);
-mientras falta, el placeholder `[Completar: foto Sobre mí]` con borde punteado. A la derecha: el `h2` «Sobre **mí**»
-con un subrayado Verde Lima dibujado a mano y una flecha Zanahoria a mano que baja hacia la foto (desde 1024px); el
-primer párrafo en display (28px/38.4px, 500, con «Licenciado en Nutrición» y «Universidad Favaloro» en 700) y el
-resto del texto en dos columnas desde 768px, con menos de 75 caracteres por línea.
+### Sobre mí (US-6, rehecho en US-48 según `docs/wireframes/seccion-sobre-mi.png`)
+Banda Hueso con borde curvo arriba; desde 768px, foto (5/12) y texto (7/12).
+- **Foto** (`public/foto-sobre-mi.jpg`, `about-photo.tsx`): en un marco en arco (arriba redondo, abajo radio 30px),
+  4:5, de hasta 480px de ancho y limitado al alto de la pantalla, recortada con `object-cover` cerca de la cara. Detrás,
+  un contorno Verde Lima de 2px con la misma forma, corrido hacia arriba a la izquierda. En mobile no se muestra
+  (pedido del dev, 2026-11-07). Se probó la foto a sangre en toda la mitad y el dev la descartó por invasiva
+  (2026-11-10).
+- **Disco «Lic. en Nutrición»:** Verde Lima de 112px (96px con `short`), texto Verde Bosque 15px/600 y `shadow-halo`,
+  montado sobre la esquina de abajo a la derecha del marco.
+- **Texto, a la derecha:** el `h2` «Sobre **mí**» (US-49, pedido del dev: vuelve el título grande; 500 con «mí» en
+  700, 28/38.4px, 28px con `short`) con el subrayado Verde Lima a mano bajo «mí» y, desde 1024px, la flecha Zanahoria
+  que sale de su izquierda y apunta a la foto; la presentación «Soy Lisandro López, **Licenciado en Nutrición** por la
+  **Universidad Favaloro**.» (500 con las palabras clave en 700; 28px mobile, 24/32/38.4px en 768/1024/1280); un solo
+  párrafo (US-49: el texto del cliente resumido, hasta 55ch, menos de 75 caracteres por línea) y la fila Universidad Favaloro · Atención
+  personalizada · Seguimiento continuo (`about-highlights.tsx`): discos Verde Lima de 48px con íconos Lucide
+  `GraduationCap`, `UserRound` y `CalendarCheck`, texto 15px/600, separadores Línea Salvia desde 1280px y apilados
+  más angosto. El padding de abajo deja libre el lugar del botón flotante.
+- Sin la píldora «Reservá tu turno» del wireframe (decisión del dev, 2026-11-10).
 
 ### Flecha para bajar (US-19, movida en US-37)
 Una flecha dibujada a mano, con el rulo de la de «Sobre mí» pero apuntando derecho hacia abajo (trazo de 3, 32×56px
@@ -212,7 +225,9 @@ Verde Bosque con borde `line-on-dark`, radio 25px, padding 20px, 18rem de ancho 
   reemplaza, ya con la sesión leída, sin cambiar de tamaño. Lleva `data-intro`: aparece al final de la intro.
 
 ### Mi espacio (US-31 a US-33, rediseñado en US-38 según `docs/wireframes/bandeja-usuario.png`)
-Página `/mi-espacio` del paciente sobre Hueso, contenido de hasta 1100px.
+Página `/mi-espacio` del paciente sobre Hueso, contenido de hasta 1100px. Entra como la reserva (US-49): la barra
+baja desde arriba y el saludo, la columna de turnos y «Mi cuenta» entran desde la izquierda (80, 160 y 240 ms), en cada
+llegada.
 - Barra superior: logo LLN y «LIC. LISANDRO LÓPEZ» (link al inicio), la píldora Verde Bosque «Cerrar sesión» con
   ícono `LogOut` y un disco Verde Lima con la inicial.
 - «Hola, Nombre» en 700, grande (48px desktop / 34px mobile), con el nombre subrayado en Verde Lima, y «← Volver al
@@ -282,8 +297,14 @@ Fila a todo el ancho con la pregunta Verde Bosque 20px/500, una línea de 2px `r
 ### Bloque CTA con foto en arco
 Foto a todo el ancho con el borde superior en arco y Fundido Bosque hacia `#1f3d2b` abajo: Lisandro en consultorio, conversando con un paciente o cocinando. Título Hueso 38.4px/500 a la izquierda con las palabras clave en Verde Lima 700 ("Empecemos por **algo simple**"), píldora Verde Lima a la derecha y una línea `1px rgba(255,255,255,0.39)` que da paso al footer.
 
-### Footer Verde Bosque
-Fondo `#1f3d2b` con cuatro columnas: Lisandro y una bio breve · Sucursales (direcciones) · Navegación · Contacto (WhatsApp, email, Instagram). Títulos de columna en blanco 19px/500 y links en Niebla 14px/500. Discos Verde Lima redondos para redes sociales. En el texto legal (12.8px/500), la **matrícula profesional (MN/MP)** y la política de privacidad.
+### Footer (US-49, captura del dev del 2026-11-16; `site-footer.tsx`)
+Al final de la home, debajo de «Dónde atiendo»: banda Hueso centrada con el logo LLN (`icon.png`, 80px, redondo),
+«¿Empezamos?» (Manrope 500, 28/38.4px; la captura usa una serifa), la píldora Verde Lima «Reservá tu turno» con disco
+Papel de flecha y `shadow-halo`, los contactos con su texto al costado (WhatsApp `MessageCircle`, Instagram con un
+glifo propio de línea y email `Mail`, cada ícono en un disco de 44px con borde Verde Bosque al 40%; en fila desde
+640px, apilados más angosto) y «© {año} Lisandro López · Nutrición» (12.8px/500, Gris Piedra; el año sale solo, en hora
+argentina, `currentYear`). Los contactos son de ejemplo hasta tener los reales (`CONTACTS`). Reemplaza a la propuesta
+original del footer Verde Bosque de cuatro columnas.
 
 ### Disco Verde Lima de carrusel
 Círculo Verde Lima de unos 92px (56px en mobile) con flecha Verde Bosque, superpuesto al borde derecho del carrusel. Sin borde ni sombra.
@@ -382,6 +403,8 @@ como **nutricionista**.
   Ubicaciones, Ajustes y Mi cuenta (ícono Lucide + texto 15px/600 en Niebla); el activo en blanco, con fondo blanco al
   10% a todo el ancho y una barra Verde Lima pegada al borde izquierdo. Al pie, una línea `line-on-dark` y «Cerrar
   sesión». El foco sobre Verde Bosque es un anillo Verde Lima (7.9:1). El contenido va sobre Hueso Panel (`bg-panel`).
+  Al llegar al panel (US-49), la barra y el contenido entran desde la izquierda (0 y 120 ms, en el layout: no se repite
+  al pasar de una sección a otra).
 - **Mobile:** la sidebar pasa a una barra inferior fija con 5 íconos y su texto (11px; la barrita del activo, arriba).
   «Cerrar sesión» va dentro de Mi cuenta.
 - **Agenda (US-26):** vista `max-w-7xl`.
@@ -517,8 +540,8 @@ acompaña el scroll.
 - **Escena del hero al scrollear** (dentro de la misma profundidad): la foto sigue creciendo (hasta 1.08, desde
   abajo) y el nombre sube más rápido y se apaga a 0.25. La frase no se mueve: el texto no lleva parallax.
 - **"Sobre mí"** (`about-motion.tsx`): el título sube palabra por palabra y el párrafo display línea por línea, con
-  máscara (SplitText); el marco en arco se revela de abajo hacia arriba con `clip-path`; el subrayado Verde Lima y la
-  flecha Zanahoria se dibujan con el scroll (DrawSVG): es "el hilo".
+  máscara (SplitText); el marco con la foto se revela de abajo hacia arriba con `clip-path`; el subrayado Verde Lima se dibuja con
+  el scroll (DrawSVG): es "el hilo".
 - **Sin parpadeo y sin contenido perdido**: un script mínimo en `<head>`, sólo en `/` y sin ancla en la URL, marca
   `motion-pending`: el CSS muestra la caja y oculta lo marcado con `data-intro` desde el primer pintado, antes de que
   cargue el JS. La intro toma el control al montar (`data-intro-state='playing'`) y, si el JS no llega, el gate se
@@ -570,7 +593,7 @@ Todas las imágenes llevan `alt` descriptivo y se sirven con `next/image`.
 8. Sucursales: tarjetas con mapa
 9. FAQ en dos columnas
 10. CTA con foto en arco
-11. Footer Verde Bosque
+11. Footer Hueso con «¿Empezamos?», la píldora de reserva y los contactos (US-49)
 
 Las secciones alternan Papel y Hueso con bordes curvos amplios. Los títulos van a la izquierda con el lead a la derecha, o centrados.
 
