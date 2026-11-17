@@ -75,8 +75,8 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
     pendiente) y, después, «Escribile a Lisandro» (`LISANDRO_WHATSAPP`);
   - emails «Recibimos tu solicitud / tu cambio» al paciente y avisos a Lisandro; en el panel, contador de
     solicitudes y `/admin/solicitudes`;
-  - las solicitudes sin confirmar vencen 12 h antes (`/api/cron/expire-pending` con `CRON_SECRET`; el cron, en el
-    Sprint 5);
+  - las solicitudes sin confirmar vencen 12 h antes (`/api/cron/expire-pending` con `CRON_SECRET`; lo llama cada hora
+    una GitHub Action, que también mantiene despierta a Supabase);
   - las animaciones de entrada (también la intro de la home) se repiten en cada llegada (SCROLL.md).
 - Iteración del panel (US-41 a US-45, rama `feat/panel-iteracion`, wireframes del dev del 2026-11-10):
   - Ubicaciones con lista y ficha lado a lado (horarios que se editan al instante, turnos y bloqueos del mes) y
@@ -145,6 +145,8 @@ npm run lint && npm run typecheck
 npm run test:watch
 npm run verify
 ```
+
+Despliegue (Vercel + Supabase, emails por Gmail, admin de producción y el cron de cada hora): `docs/deploy.md`.
 
 ## 11. Qué leer y en qué orden
 

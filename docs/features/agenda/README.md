@@ -52,7 +52,8 @@ y [ADR 0007](../../adr/0007-la-reserva-online-pide-cuenta.md).
 - **Solicitudes que vencen** (T-10, `expirePending`): cancela los pendientes que empiezan entre ahora y 12 h, y le
   manda «Tu turno se canceló» a cada paciente. Si Lisandro lo tocó mientras tanto (`version`), no lo pisa; correrlo dos
   veces no duplica nada. Lo dispara `GET /api/cron/expire-pending` con `Authorization: Bearer ${CRON_SECRET}` (sin el
-  secreto ⇒ 401); el cron de Vercel llega en el Sprint 5.
+  secreto ⇒ 401). Lo llama cada hora la GitHub Action `.github/workflows/cron.yml` (T-11), que además mantiene despierta
+  a Supabase.
 - **Solicitudes en el panel** (US-39): contador en «Agenda», tarjeta en el tablero y `/admin/solicitudes`.
 - **Emails** (T-5, `src/lib/email/`): Gmail por SMTP (`GMAIL_USER`, `GMAIL_APP_PASSWORD` y `EMAIL_FROM` para el
   nombre visible; ADR 0008). Si el email falla, el turno queda guardado y el panel lo avisa. Nunca se loguea el destinatario ni el contenido.

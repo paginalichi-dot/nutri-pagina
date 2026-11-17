@@ -31,7 +31,7 @@ export const PRIVACY_SECTIONS: ReadonlyArray<{ title: string; body: ReadonlyArra
   {
     title: 'Tus derechos',
     body: [
-      'Podés pedir acceso a tus datos, corregirlos o que los eliminemos. Si tenés cuenta, podés usar «Eliminar mi cuenta» en Mi espacio; si no, escribinos a [Completar: email de contacto].',
+      'Podés pedir acceso a tus datos, corregirlos o que los eliminemos. Si tenés cuenta, podés usar «Eliminar mi cuenta» en Mi espacio; si no, escribinos a lisandroiglopez@gmail.com.',
       'La Agencia de Acceso a la Información Pública (AAIP) es el órgano de control de la Ley 25.326 y atiende las denuncias y reclamos por incumplimientos.',
     ],
   },

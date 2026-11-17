@@ -10,14 +10,15 @@ describe('SiteFooter', () => {
     expect(screen.getByRole('link', { name: 'Reservá tu turno' }).getAttribute('href')).toBe('/reservar');
   });
 
-  it('muestra WhatsApp, Instagram y email con su texto al costado', () => {
+  it.each([
+    { name: 'WhatsApp: +54 9 280 497-8101', href: 'https://wa.me/5492804978101' },
+    { name: 'Instagram: @nutri.lopez', href: 'https://www.instagram.com/nutri.lopez/' },
+    { name: 'Email: lisandroiglopez@gmail.com', href: 'mailto:lisandroiglopez@gmail.com' },
+  ])('muestra los contactos reales de Lisandro con su texto al costado ($name)', ({ name, href }) => {
     render(<SiteFooter year={2026} />);
-    const hrefs = ['WhatsApp', 'Instagram', 'Email'].map((label) => {
-      const link = screen.getByRole('link', { name: new RegExp(`^${label}: `) });
-      expect(link.textContent?.trim()).not.toBe('');
-      return link.getAttribute('href');
-    });
-    expect(hrefs).toEqual([expect.stringMatching(/^https:\/\/wa\.me\//), expect.stringMatching(/instagram\.com/), expect.stringMatching(/^mailto:/)]);
+    const link = screen.getByRole('link', { name });
+    expect(link.getAttribute('href')).toBe(href);
+    expect(link.textContent).toBe(name.split(': ')[1]);
   });
 
   it('dice sólo «Nutrición», sin kinesiología', () => {

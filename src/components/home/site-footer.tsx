@@ -18,9 +18,9 @@ function InstagramGlyph(props: SVGProps<SVGSVGElement>): ReactElement {
 }
 
 export const CONTACTS = [
-  { label: 'WhatsApp', text: '+54 9 11 0000-0000', href: 'https://wa.me/5491100000000', Icon: MessageCircle },
-  { label: 'Instagram', text: '@ejemplo.nutricion', href: 'https://www.instagram.com/ejemplo.nutricion', Icon: InstagramGlyph },
-  { label: 'Email', text: 'hola@ejemplo.com', href: 'mailto:hola@ejemplo.com', Icon: Mail },
+  { label: 'WhatsApp', text: '+54 9 280 497-8101', href: 'https://wa.me/5492804978101', Icon: MessageCircle },
+  { label: 'Instagram', text: '@nutri.lopez', href: 'https://www.instagram.com/nutri.lopez/', Icon: InstagramGlyph },
+  { label: 'Email', text: 'lisandroiglopez@gmail.com', href: 'mailto:lisandroiglopez@gmail.com', Icon: Mail },
 ] as const;
 
 function Contacts(): ReactElement {

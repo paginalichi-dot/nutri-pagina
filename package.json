@@ -20,6 +20,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx --conditions=react-server prisma/seed.ts",
+    "admin:create": "tsx --conditions=react-server prisma/create-admin.ts",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "skills:sync": "node scripts/skills.mjs sync",

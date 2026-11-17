@@ -1855,7 +1855,7 @@ aparezca con el mismo movimiento que la reserva, de forma que el sitio se sienta
 
 **Preguntas abiertas**
 
-- WhatsApp, Instagram y email reales para el footer (hoy van de ejemplo).
+- ~~WhatsApp, Instagram y email reales para el footer~~: los pasó el dev el 2026-11-17 (T-11).
 
 ## Sprint 5 · Despliegue
 
@@ -1872,7 +1872,7 @@ Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gma
 | Tamaño       | S           |
 | Depende de   | —           |
 | Plan         | [`sprint-5-preparar-despliegue.md`](docs/plans/sprint-5-preparar-despliegue.md) |
-| Merge        | —           |
+| Merge        | 8db331f     |
 | Horas reales | 0.7         |
 
 **Historia**: Como Lisandro quiero que los emails salgan de una cuenta de Gmail, de forma que les lleguen a todos los
@@ -1893,6 +1893,35 @@ de la cuenta y cae en spam. Hasta este ítem sigue Resend con la cuenta de prueb
 
 - La contraseña de aplicación de Google (con la verificación en dos pasos) la crea Lisandro y va sólo en Vercel y en
   `.env.prod`. La prueba con un email real queda para después del despliegue.
+
+### T-11 · Datos reales, admin de producción y Supabase despierta
+
+| Campo        | Valor       |
+| ------------ | ----------- |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-17  |
+| Tamaño       | S           |
+| Depende de   | T-9         |
+| Plan         | [`sprint-5-preparar-despliegue.md`](docs/plans/sprint-5-preparar-despliegue.md) |
+| Merge        | —           |
+| Horas reales | 0.9         |
+
+**Historia**: Como Lisandro quiero que la web publicada muestre mis contactos reales, que mi cuenta de admin use mi
+email y que la base no se pause, de forma que el sitio funcione solo desde el primer día.
+
+Pedido del dev (2026-11-17): email `lisandroiglopez@gmail.com`, WhatsApp +54 9 280 497-8101 e Instagram
+`nutri.lopez`. La acción corre cada hora (decisión del dev).
+
+**Criterios de aceptación**
+
+- [x] **CA-1** · El footer muestra el WhatsApp, el Instagram y el email reales, y la política de privacidad, el email de contacto · Estimación: 15 min · Completado: 2026-11-17 14:40
+
+- [x] **CA-2** · `npm run admin:create` crea o actualiza el admin con `ADMIN_EMAIL` y `ADMIN_PASSWORD` (validados con Zod, al menos 8 caracteres), guarda sólo el hash y se corre contra `.env.prod` · Estimación: 30 min · Completado: 2026-11-17 14:40
+
+- [x] **CA-3** · Una GitHub Action llama cada hora (y a mano) a `/api/cron/expire-pending` con `CRON_SECRET`: cancela las solicitudes vencidas y mantiene despierta a Supabase; si no responde 200, falla · Estimación: 20 min · Completado: 2026-11-17 14:40
+
+- [x] **CA-4** · `docs/deploy.md` con los pasos del despliegue: variables de Vercel, secretos de GitHub, migraciones y admin · Estimación: 20 min · Completado: 2026-11-17 14:40
 
 **Preguntas abiertas de los sprints 2 a 5**
 
