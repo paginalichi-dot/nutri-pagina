@@ -54,8 +54,8 @@ y [ADR 0007](../../adr/0007-la-reserva-online-pide-cuenta.md).
   veces no duplica nada. Lo dispara `GET /api/cron/expire-pending` con `Authorization: Bearer ${CRON_SECRET}` (sin el
   secreto ⇒ 401); el cron de Vercel llega en el Sprint 5.
 - **Solicitudes en el panel** (US-39): contador en «Agenda», tarjeta en el tablero y `/admin/solicitudes`.
-- **Emails** (T-5, `src/lib/email/`): Resend por su API (`RESEND_API_KEY`, `EMAIL_FROM`). Si el email falla, el turno
-  queda guardado y el panel lo avisa. Nunca se loguea el destinatario ni el contenido.
+- **Emails** (T-5, `src/lib/email/`): Gmail por SMTP (`GMAIL_USER`, `GMAIL_APP_PASSWORD` y `EMAIL_FROM` para el
+  nombre visible; ADR 0008). Si el email falla, el turno queda guardado y el panel lo avisa. Nunca se loguea el destinatario ni el contenido.
 
 ## Quién lo usa
 

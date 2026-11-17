@@ -49,7 +49,7 @@ Fuera de alcance por ahora: pagos online, historia clínica, app móvil, varios 
 - Ícono de la app: `src/app/icon.png` (logo LLN). Foto del hero: `public/foto-cabecera.png`; de «Sobre mí»: `public/foto-sobre-mi.jpg`.
 - Sprint 2 («Lisandro maneja su agenda») cerrado (`Hecho`, tag `sprint-2`): menú del panel, ubicaciones con
   horarios semanales, duración y obras sociales, agenda día y semana, bloqueos, disponibilidad, turnos cargados a
-  mano (cancelar, asistencia, reprogramar) con email por Resend y WhatsApp (`wa.me`), y «Dónde atiendo» en la home.
+  mano (cancelar, asistencia, reprogramar) con email por Gmail y WhatsApp (`wa.me`), y «Dónde atiendo» en la home.
   Features nuevos: `location`, `settings` y `agenda`
   ([ADR 0005](adr/0005-agenda-choque-global-y-horarios-en-hora-argentina.md)).
 - Iteración del Sprint 2 (2026-11-08, rama `feat/sprint-2-iteracion-panel`): el panel según el wireframe del dev
@@ -114,9 +114,8 @@ mostradas en Argentina, cero datos personales en logs, sólo tokens de `DESIGN.m
   reserva con 12 h de anticipación como mínimo y hasta 60 días, con hasta 2 turnos por venir; el panel, desde ahora.
 - Estados: `PENDIENTE → CONFIRMADO → ASISTIO | AUSENTE`; `CANCELADO` libera el horario. La reserva online (Sprint 4)
   nace pendiente y la confirma Lisandro (si no, vence 12 h antes); el turno que carga él nace confirmado.
-- El paciente cancela o reprograma desde Mi espacio hasta 24 h antes (Sprint 4). Emails con Resend (cuenta de
-  prueba) hasta el despliegue (Sprint 5), donde pasan a una cuenta de Gmail dedicada (T-9, sin dominio propio) y
-  llegan el recordatorio y el cron de las solicitudes.
+- El paciente cancela o reprograma desde Mi espacio hasta 24 h antes (Sprint 4). Emails por Gmail
+  (T-9, ADR 0008, sin dominio propio): salen de la casilla de Lisandro, que es también el email del admin.
 - Cuenta de pacientes (Sprint 3, ADR 0006): optativa. «Mis turnos» muestra los turnos cuyo email coincide con el
   de la cuenta.
 

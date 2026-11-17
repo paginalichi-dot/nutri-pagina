@@ -1,3 +1,4 @@
+import { createTransport } from 'nodemailer';
 import { createFileOutbox } from './file-outbox';
 export type EmailAttachment = { filename: string; content: string };
 
@@ -5,31 +6,34 @@ export type EmailMessage = { to: string; subject: string; html: string; text: st
 
 export type EmailSender = (message: EmailMessage) => Promise<boolean>;
 
-type Fetcher = (url: string, init: RequestInit) => Promise<{ ok: boolean; status: number }>;
+export type MailTransport = { sendMail(mail: object): Promise<unknown> };
 
-type ResendConfig = { apiKey: string; from: string; fetcher?: Fetcher };
+type GmailConfig = { from: { name: string; address: string }; transport: MailTransport };
 
-const RESEND_URL = 'https://api.resend.com/emails';
-const DEFAULT_FROM = 'Lisandro López <onboarding@resend.dev>';
+const DEFAULT_NAME = 'Lisandro López';
 
 function logFailure(reason: string): void {
   console.error('No se pudo mandar un email:', { reason });
 }
 
-function resendBody(from: string, message: EmailMessage): string {
-  const { to, subject, html, text, attachments } = message;
-  return JSON.stringify({ from, to: [to], subject, html, text, attachments });
+function failureReason(error: unknown): string {
+  if (!(error instanceof Error)) return 'desconocido';
+  return 'code' in error && typeof error.code === 'string' ? error.code : error.name;
 }
 
-export function createResendSender({ apiKey, from, fetcher = fetch }: ResendConfig): EmailSender {
+function gmailMail(from: GmailConfig['from'], message: EmailMessage): object {
+  const { to, subject, html, text, attachments = [] } = message;
+  const files = attachments.map(({ filename, content }) => ({ filename, content, encoding: 'base64' }));
+  return { from, to, subject, html, text, attachments: files };
+}
+
+export function createGmailSender({ from, transport }: GmailConfig): EmailSender {
   return async (message) => {
     try {
-      const headers = { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
-      const response = await fetcher(RESEND_URL, { method: 'POST', headers, body: resendBody(from, message) });
-      if (!response.ok) logFailure(`Resend respondió ${response.status}`);
-      return response.ok;
+      await transport.sendMail(gmailMail(from, message));
+      return true;
     } catch (error) {
-      logFailure(error instanceof Error ? error.name : 'desconocido');
+      logFailure(failureReason(error));
       return false;
     }
   };
@@ -40,12 +44,13 @@ export function emailSenderFromEnv(env: Readonly<Record<string, string | undefin
     if (env.APP_ENV === 'production') throw new Error('EMAIL_OUTBOX_DIR no se puede usar en producción.');
     return createFileOutbox(env.EMAIL_OUTBOX_DIR);
   }
-  const apiKey = env.RESEND_API_KEY;
-  if (!apiKey) {
+  const { GMAIL_USER: user, GMAIL_APP_PASSWORD: pass } = env;
+  if (!user || !pass) {
     return async () => {
-      logFailure('falta RESEND_API_KEY');
+      logFailure('faltan GMAIL_USER o GMAIL_APP_PASSWORD');
       return false;
     };
   }
-  return createResendSender({ apiKey, from: env.EMAIL_FROM || DEFAULT_FROM });
+  const transport = createTransport({ service: 'gmail', auth: { user, pass } });
+  return createGmailSender({ from: { name: env.EMAIL_FROM || DEFAULT_NAME, address: user }, transport });
 }

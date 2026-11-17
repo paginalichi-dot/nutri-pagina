@@ -1866,14 +1866,14 @@ Previstos: despliegue (Vercel + Supabase + admin de producción), emails por Gma
 
 | Campo        | Valor     |
 | ------------ | --------- |
-| Estado       | Pendiente |
-| Dueño        | —         |
-| Inicio       | —         |
-| Tamaño       | S         |
-| Depende de   | —         |
-| Plan         | —         |
-| Merge        | —         |
-| Horas reales | —         |
+| Estado       | En revisión |
+| Dueño        | Claude      |
+| Inicio       | 2026-11-17  |
+| Tamaño       | S           |
+| Depende de   | —           |
+| Plan         | [`sprint-5-preparar-despliegue.md`](docs/plans/sprint-5-preparar-despliegue.md) |
+| Merge        | —           |
+| Horas reales | 0.7         |
 
 **Historia**: Como Lisandro quiero que los emails salgan de una cuenta de Gmail, de forma que les lleguen a todos los
 pacientes sin pagar un dominio.
@@ -1883,16 +1883,16 @@ de la cuenta y cae en spam. Hasta este ítem sigue Resend con la cuenta de prueb
 
 **Criterios de aceptación**
 
-- [ ] **CA-1** · `src/lib/email/send-email.ts` manda por SMTP de Gmail (`nodemailer`) con `GMAIL_USER` y `GMAIL_APP_PASSWORD` (contraseña de aplicación, sólo en el servidor); sale `RESEND_API_KEY` y `EMAIL_FROM` queda para el nombre visible · Estimación: 40 min · Completado: —
+- [x] **CA-1** · `src/lib/email/send-email.ts` manda por SMTP de Gmail (`nodemailer`) con `GMAIL_USER` y `GMAIL_APP_PASSWORD` (contraseña de aplicación, sólo en el servidor); sale `RESEND_API_KEY` y `EMAIL_FROM` queda para el nombre visible · Estimación: 40 min · Completado: 2026-11-17 14:20
 
-- [ ] **CA-2** · Sin credenciales o si Gmail falla, el envío devuelve `false` y sólo se loguea el motivo; la outbox de los E2E (`EMAIL_OUTBOX_DIR`) sigue igual · Estimación: 20 min · Completado: —
+- [x] **CA-2** · Sin credenciales o si Gmail falla, el envío devuelve `false` y sólo se loguea el motivo; la outbox de los E2E (`EMAIL_OUTBOX_DIR`) sigue igual · Estimación: 20 min · Completado: 2026-11-17 14:20
 
-- [ ] **CA-3** · `.env.example`, docs y un ADR que reemplaza a Resend (gratis, llega a todos, unos 500 emails por día, cuenta dedicada y nunca la personal) · Estimación: 20 min · Completado: —
+- [x] **CA-3** · `.env.example`, docs y el ADR 0008 que reemplaza a Resend (gratis, llega a todos, unos 500 emails por día). Decisión del dev (2026-11-17): la casilla es la de Lisandro, `lisandroiglopez@gmail.com`, no una dedicada · Estimación: 20 min · Completado: 2026-11-17 14:30
 
 **Preguntas abiertas**
 
-- La cuenta de Gmail dedicada a la web, con la verificación en dos pasos y una contraseña de aplicación (la crean
-  el dev y Lisandro).
+- La contraseña de aplicación de Google (con la verificación en dos pasos) la crea Lisandro y va sólo en Vercel y en
+  `.env.prod`. La prueba con un email real queda para después del despliegue.
 
 **Preguntas abiertas de los sprints 2 a 5**
 
